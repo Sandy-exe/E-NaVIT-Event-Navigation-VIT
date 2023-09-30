@@ -2,7 +2,7 @@ Event explorer
 
 
 
-1. Login page
+1. login page
         1. Approver login
         2. Participant login
         3. Sign up
