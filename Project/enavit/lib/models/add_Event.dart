@@ -1,46 +1,47 @@
 import 'package:flutter/material.dart';
-import 'event.dart';
+import '../models/event.dart';
 
-class AddEvent extends ChangeNotifier{
-  List<Event> Eventlist = [
+class AddEvent extends ChangeNotifier {
+  List<Event> eventlist = [
     Event(
       name: "GOJO",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
       venue: "Jujutsu High",
-      date: DateTime.now(), 
+      date: DateTime.now(),
       imagePath: "lib/images/GOJO.jpg",
     ),
-
     Event(
       name: "Shinobu",
       description: "Arah Arah!",
       fee: "Hotness",
       venue: "ButteryFly Mansion",
-      date: DateTime.now(), 
+      date: DateTime.now(),
       imagePath: "lib/images/butterfly.jpg",
     ),
-
   ];
 
-  List<Event> UserEventlist = [];
-  
+  List<Event> userEventlist = [];
+
   List<Event> getEventList() {
-    return Eventlist;
+    return eventlist;
   }
 
   List<Event> getUserEventList() {
-    return UserEventlist;
+    return userEventlist;
   }
 
   void addEventToUser(Event event) {
-    UserEventlist.add(event);
+    userEventlist.add(event);
     notifyListeners();
+    print(userEventlist);
   }
 
   void removeEventFromUser(Event event) {
-    UserEventlist.remove(event);
+    print(userEventlist);
+    userEventlist.remove(event);
+    notifyListeners();
+    print("removed?");
+    print(userEventlist);
   }
-
-
 }

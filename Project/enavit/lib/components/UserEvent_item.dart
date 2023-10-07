@@ -5,7 +5,7 @@ import '../models/add_Event.dart';
 
 class UserEventitem extends StatefulWidget {
   Event event;
-  const UserEventitem({super.key,required this.event});
+  UserEventitem({super.key,required this.event});
 
   @override
   State<UserEventitem> createState() => _UserEventitemState();
@@ -15,6 +15,7 @@ class _UserEventitemState extends State<UserEventitem> {
 
   void removeEventFromUser() {
     Provider.of<AddEvent>(context, listen: false).removeEventFromUser(widget.event);
+    print("shit");
   }
 
   @override
@@ -31,10 +32,8 @@ class _UserEventitemState extends State<UserEventitem> {
         trailing: IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () {
-            //delete event
-            setState(() {
-              widget.event.remove();
-            });
+            removeEventFromUser();
+            print("oik");
           },
         )
       ),

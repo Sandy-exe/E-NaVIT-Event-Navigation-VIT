@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'models/add_Event.dart';
 import 'package:enavit/pages/Intro_page.dart';
-
+import 'package:provider/provider.dart';
 void main() {
   runApp(const Enavit());
 }
@@ -15,6 +15,7 @@ class Enavit extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AddEvent(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Enavit',
         theme: ThemeData(
           primarySwatch: Colors.blue,

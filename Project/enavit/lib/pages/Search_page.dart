@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/Event_tile.dart';
 import '../models/event.dart';
 import '../models/add_Event.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -18,7 +19,7 @@ class _SearchPageState extends State<SearchPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Successfully Added'),
+        title: const  Text('Successfully Added'),
         content: Text('You have successfully added ${event.name} to your list'),
       ),
     );
