@@ -19,6 +19,14 @@ class AddEvent extends ChangeNotifier {
       date: DateTime.now(),
       imagePath: "lib/images/GOJO.jpg",
     ),
+    Event(
+      name: "GOJO",
+      description: "Daijobhu desu, tatakimi yowai mo!!",
+      fee: "Limitless",
+      venue: "Jujutsu High",
+      date: DateTime.now(),
+      imagePath: "lib/images/GOJO.jpg",
+    ),
   ];
 
   List<Event> userEventlist = [];

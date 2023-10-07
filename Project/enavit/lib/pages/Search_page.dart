@@ -58,7 +58,7 @@ class _SearchPageState extends State<SearchPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Hot Picks',
+                  'Available Events',
                   style: TextStyle(
                     fontSize: 24.0, 
                     fontWeight: FontWeight.bold
@@ -77,8 +77,9 @@ class _SearchPageState extends State<SearchPage> {
           const SizedBox(height: 10.0,),
           
           //Event List
-          Expanded(child: ListView.builder(
-            itemCount: 2,
+          Expanded(
+            child: ListView.builder(
+            itemCount: 3,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context,index) {
               // get a Event from Event list
