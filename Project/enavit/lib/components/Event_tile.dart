@@ -4,7 +4,7 @@ import '../models/event.dart';
 class EventTile extends StatelessWidget {
   Event event;
   void Function()? onTap;
-  EventTile({super.key,required this.event,required this.onTap});
+  EventTile({super.key, required this.event, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class EventTile extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-          
+
                     //event fee
                     Text(
                       '\$' + event.fee,
@@ -63,7 +63,6 @@ class EventTile extends StatelessWidget {
                     ),
                   ],
                 ),
-          
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
@@ -88,12 +87,6 @@ class EventTile extends StatelessWidget {
             ),
           ),
 
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Divider(
-              color: Colors.white,
-            ),
-          ),
         ],
       ),
     );
