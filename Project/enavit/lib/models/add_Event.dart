@@ -12,12 +12,12 @@ class AddEvent extends ChangeNotifier {
       imagePath: "lib/images/GOJO.jpg",
     ),
     Event(
-      name: "Shinobu",
-      description: "Arah Arah!",
-      fee: "Hotness",
-      venue: "ButteryFly Mansion",
+      name: "GOJO",
+      description: "Daijobhu desu, tatakimi yowai mo!!",
+      fee: "Limitless",
+      venue: "Jujutsu High",
       date: DateTime.now(),
-      imagePath: "lib/images/butterfly.jpg",
+      imagePath: "lib/images/GOJO.jpg",
     ),
   ];
 

@@ -9,8 +9,8 @@ class EventTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 25),
-      width: 280,
+      margin: const EdgeInsets.only(left: 8),
+      width: 225,
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(12.0),
@@ -26,7 +26,7 @@ class EventTile extends StatelessWidget {
 
           //Description
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               event.description,
               style: TextStyle(
@@ -37,7 +37,7 @@ class EventTile extends StatelessWidget {
 
           //fee+details
           Padding(
-            padding: const EdgeInsets.only(left: 25.0),
+            padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +86,7 @@ class EventTile extends StatelessWidget {
           ),
 
           const Padding(
-            padding: EdgeInsets.only(top: 25.0),
+            padding: EdgeInsets.only(top: 8.0),
             child: Divider(
               color: Colors.white,
             ),
