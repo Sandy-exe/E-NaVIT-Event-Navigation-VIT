@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/event.dart';
 import '../models/add_Event.dart';
-import '../components/UserEvent_item.dart';
+import '../components/user_event_item.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {

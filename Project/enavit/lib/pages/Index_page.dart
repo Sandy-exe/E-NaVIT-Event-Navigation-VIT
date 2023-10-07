@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/bottom_nav_bar.dart';
 import 'Profile_page.dart';
 import 'Search_page.dart';
-import 'Home_page.dart';
+import 'home_page.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});

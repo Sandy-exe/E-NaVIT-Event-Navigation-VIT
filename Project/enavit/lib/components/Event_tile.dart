@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/event.dart';
 
 class EventTile extends StatelessWidget {
-  Event event;
-  void Function()? onTap;
-  EventTile({super.key, required this.event, required this.onTap});
+  final Event event;
+  final void Function()? onTap;
+  const EventTile({super.key, required this.event, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

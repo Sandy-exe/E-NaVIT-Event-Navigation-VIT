@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/add_Event.dart';
 
 class UserEventitem extends StatefulWidget {
-  Event event;
-  UserEventitem({super.key,required this.event});
+  final Event event;
+  const UserEventitem({super.key,required this.event});
 
   @override
   State<UserEventitem> createState() => _UserEventitemState();

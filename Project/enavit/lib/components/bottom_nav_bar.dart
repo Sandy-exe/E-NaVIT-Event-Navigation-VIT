@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class NavBar extends StatelessWidget {
-  void Function(int)? onTabChange;
-  NavBar({super.key, this.onTabChange});
+  final void Function(int)? onTabChange;
+  const NavBar({super.key, this.onTabChange});
   
 
   @override

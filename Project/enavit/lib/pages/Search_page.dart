@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/Event_tile.dart';
+import '../components/event_tile.dart';
 import '../models/event.dart';
 import '../models/add_Event.dart';
 import 'package:provider/provider.dart';
