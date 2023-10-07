@@ -1,0 +1,90 @@
+Approver:
+
+Email id String
+Password String
+First name String
+Last name String
+Faculty ID (primary key)
+Number
+Areas of interest
+DOB
+Club ID (optional)
+Profile pic
+Club Event IDs
+//Registered event IDs
+
+
+
+
+
+
+
+Participant:
+
+Email id
+Password
+First name
+Last name
+Register Num (primary key)
+Number
+Areas of interest
+DOB
+Club ID (optional)
+Profile pic
+Registered event IDs
+Organiser value Bool
+Club head Bool
+
+
+
+
+
+
+
+Event:
+
+Name
+Poster
+Time
+Venue
+Register link
+Description
+Updates
+Whatsapp link (hidden)
+Sponsor details
+Member only or open Bool
+Registered students IDs
+
+
+
+
+
+
+
+
+
+
+Important:
+
+Approver sign in page
+Participant sign in
+Sign up page
+Event tab
+Check profile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
