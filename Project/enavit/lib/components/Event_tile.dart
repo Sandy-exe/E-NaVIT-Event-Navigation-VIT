@@ -10,7 +10,7 @@ class EventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 8),
-      width: 225,
+      width: 213,
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(12.0),
@@ -64,20 +64,23 @@ class EventTile extends StatelessWidget {
                   ],
                 ),
           
-                GestureDetector(
-                  onTap: onTap,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12.0),
-                        bottomRight: Radius.circular(12.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          bottomRight: Radius.circular(12.0),
+                        ),
                       ),
-                    ),
-                    child: const Icon(
-                      Icons.add,
-                      color: Colors.white,
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
