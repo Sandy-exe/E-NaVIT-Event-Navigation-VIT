@@ -4,6 +4,7 @@ import '../models/event.dart';
 import '../models/add_Event.dart';
 import 'package:provider/provider.dart';
 
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -61,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
                   'Available Events',
                   style: TextStyle(
                     fontSize: 24.0, 
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
                     ),
                 ),
                 Text(

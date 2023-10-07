@@ -1,5 +1,6 @@
 import 'index_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -25,9 +26,9 @@ class IntroPage extends StatelessWidget {
                 const SizedBox(height: 48,),
         
                 //title
-                const Text(
+                Text(
                   'Woof!! Woof!!',
-                  style: TextStyle(
+                  style: GoogleFonts.telex(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   )
@@ -36,9 +37,9 @@ class IntroPage extends StatelessWidget {
                 const SizedBox(height: 24,),
                 
                 //sub title
-                const Text(
+                Text(
                   'Ore no goru!..Sore wa...Muneda!!',
-                  style: TextStyle(
+                  style: GoogleFonts.telex(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
