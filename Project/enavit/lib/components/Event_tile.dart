@@ -22,6 +22,7 @@ class EventTile extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12.0),
             child: Image.asset(event.imagePath),
+
           ),
 
           //Description
