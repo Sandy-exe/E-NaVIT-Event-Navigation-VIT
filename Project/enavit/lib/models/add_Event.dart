@@ -9,7 +9,7 @@ class AddEvent extends ChangeNotifier {
       fee: "Very Expensive",
       venue: "Jujutsu High",
       date: DateTime.now(),
-      imagePath: "lib/images/GOJO.jpg",
+      imagePath: 'lib/images/GOJO.jpg',
     ),
     Event(
       name: "GOJO",
@@ -17,7 +17,7 @@ class AddEvent extends ChangeNotifier {
       fee: "Limitless",
       venue: "Jujutsu High",
       date: DateTime.now(),
-      imagePath: "lib/images/GOJO.jpg",
+      imagePath: 'lib/images/GOJO.jpg',
     ),
     Event(
       name: "GOJO",
@@ -25,7 +25,7 @@ class AddEvent extends ChangeNotifier {
       fee: "Limitless",
       venue: "Jujutsu High",
       date: DateTime.now(),
-      imagePath: "lib/images/GOJO.jpg",
+      imagePath: 'lib/images/GOJO.jpg',
     ),
   ];
 
