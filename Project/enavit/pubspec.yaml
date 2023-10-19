@@ -36,41 +36,8 @@ dependencies:
   flutter_svg: ^0.22.0
   google_nav_bar: ^5.0.6
   provider:
-  google_fonts: ^4.0.4
-  auto_size_text:
-  cached_network_image: 3.1.0+1
-  chewie:
-  collection:
-  emoji_flag_converter:
-  fl_chart:
-  flutter_credit_card:
-  flutter_google_places:
-  font_awesome_flutter:
-  google_api_headers:
-  google_maps_flutter:
-  google_maps_webservice:
-  internet_file: 1.0.0+2
-  intl:
-  json_path:
-  json_serializable:
-  mapbox_search:
-  mime_type:
-  page_transition:
-  pdfx:
-  rive:
-  rxdart:
-  shared_preferences:
-  table_calendar:
-  timeago:
-  url_launcher:
-  video_player:
-  webviewx:
-  youtube_plyr_iframe:
-
-  # For assets_audio_player
-  uuid: ^3.0.5
-  http: ^0.13.4 # to download / cache network files
-  path_provider: ^2.0.8 # removed this because it cancel flutter/android/ios on pub.dev path_provider: ^1.6.10
+  google_fonts: ^6.1.0
+  
 
 dev_dependencies:
   flutter_test:
