@@ -14,7 +14,7 @@ class AddEvent extends ChangeNotifier {
     ),
     Event(
       id: 2,
-      name: "GOJO",
+      name: "GOJO 2",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
       venue: "Jujutsu High",
@@ -23,7 +23,7 @@ class AddEvent extends ChangeNotifier {
     ),
     Event(
       id: 3,
-      name: "GOJO",
+      name: "GOJO 3",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
       venue: "Jujutsu High",

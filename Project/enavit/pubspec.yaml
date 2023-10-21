@@ -37,6 +37,9 @@ dependencies:
   google_nav_bar: ^5.0.6
   provider:
   google_fonts: ^6.1.0
+  simple_animations: ^5.0.2
+  
+
   
 
 dev_dependencies:
