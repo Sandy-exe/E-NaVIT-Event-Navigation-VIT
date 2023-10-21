@@ -1,4 +1,5 @@
 class Event {
+  final int id;
   final String name;
   final String description;
   final String fee;
@@ -7,6 +8,7 @@ class Event {
   final String imagePath;
 
   Event({
+  required this.id,
   required this.name,
   required this.description,
   required this.fee,

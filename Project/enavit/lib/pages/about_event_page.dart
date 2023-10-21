@@ -1,13 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:enavit/models/event.dart';
+import '../models/add_Event.dart';
+import 'package:provider/provider.dart';
 
 class AboutEvent extends StatefulWidget {
-  const AboutEvent({super.key});
-
+  final Event event;
+  final int ok = 1;
+  const AboutEvent({Key? key, required this.event}) : super(key: key);
   @override
   State<AboutEvent> createState() => _AboutEventState();
 }
 
 class _AboutEventState extends State<AboutEvent> {
+
+  void addEventToUser(Event event,) {
+    Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
+    print("blah");
+    // get a Event from Event list
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Successfully Added'),
+        content: Text('You have successfully added ${event.name} to your list'),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,21 +38,21 @@ class _AboutEventState extends State<AboutEvent> {
           stretch: true,
           backgroundColor: Colors.grey.shade50,
           flexibleSpace: FlexibleSpaceBar(
-              stretchModes: [
+              stretchModes: const [
                 StretchMode.zoomBackground,
               ],
               background: Image.network(
-                // widget.product.imageURL,
-                "",
+                // widget.product.imageURL,r
+                widget.event.imagePath,
                 fit: BoxFit.cover,
               )),
           bottom: PreferredSize(
-              preferredSize: Size.fromHeight(45),
+              preferredSize: const Size.fromHeight(45),
               child: Transform.translate(
-                offset: Offset(0, 1),
+                offset: const Offset(0, 1),
                 child: Container(
                   height: 45,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -59,7 +76,7 @@ class _AboutEventState extends State<AboutEvent> {
           Container(
               height: MediaQuery.of(context).size.height * 0.55,
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -71,15 +88,14 @@ class _AboutEventState extends State<AboutEvent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            // widget.product.name,
-                            "",
-                            style: TextStyle(
+                            widget.event.name,
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
@@ -92,124 +108,46 @@ class _AboutEventState extends State<AboutEvent> {
                           ),
                         ],
                       ),
-                      Text(
-                        // "\$ " + widget.product.price.toString() + '.00',
+                      const Text(
                         "",style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    "Take a break from jeans with the parker long straight pant. These lightweight, pleat front pants feature a flattering high waist and loose, straight legs.",
+                    widget.event.description,
                     style: TextStyle(
                       height: 1.5,
                       color: Colors.grey.shade800,
                       fontSize: 15,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Text(
-                    "Color",
+                    widget.event.venue,
                     style: TextStyle(color: Colors.grey.shade400, fontSize: 18),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
-                  ),
-                  Container(
-                    height: 60,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      // itemCount: colors.length,
-                      itemCount: 0,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              // _selectedColor = index;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 300),
-                            margin: EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                                // color: _selectedColor == index
-                                //     ? colors[index]
-                                //     : colors[index].withOpacity(0.5),
-                                shape: BoxShape.circle),
-                            width: 40,
-                            height: 40,
-                            // child: Center(
-                            //   // child: _selectedColor == index
-                            //       ? Icon(
-                            //           Icons.check,
-                            //           color: Colors.white,
-                            //         )
-                            //       : Container(),
-                            // ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   Text(
-                    'Size',
+                    widget.event.fee,
                     style: TextStyle(color: Colors.grey.shade400, fontSize: 18),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 60,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      // itemCount: size.length,
-
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              // _selectedSize = index;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 500),
-                            margin: EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                                // color: _selectedSize == index
-                                //     ? Colors.yellow[800]
-                                //     : Colors.grey.shade200,
-                                shape: BoxShape.circle),
-                            width: 40,
-                            height: 40,
-                            child: Center(
-                              child: Text(
-                                "okok"
-                                // size[index],
-                                // style: TextStyle(
-                                //     color: _selectedSize == index
-                                //         ? Colors.white
-                                //         : Colors.black,
-                                //     fontSize: 15),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   MaterialButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      addEventToUser(widget.event);
+                      print("ok");        
                     },
                     height: 50,
                     elevation: 0,
@@ -217,9 +155,9 @@ class _AboutEventState extends State<AboutEvent> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     color: Colors.yellow[800],
-                    child: Center(
+                    child: const Center(
                       child: Text(
-                        "Add to Cart",
+                        "Select Event",
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),

@@ -1,6 +1,5 @@
 import 'package:enavit/pages/about_event_page.dart';
 import 'package:flutter/material.dart';
-
 import 'models/add_Event.dart';
 import 'package:enavit/pages/intro_page.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class Enavit extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const AboutEvent(),
+        home: const IntroPage(),
       ),
     );
   }

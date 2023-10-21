@@ -4,6 +4,7 @@ import '../models/event.dart';
 class AddEvent extends ChangeNotifier {
   List<Event> eventlist = [
     Event(
+      id: 1,
       name: "GOJO",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Very Expensive",
@@ -12,6 +13,7 @@ class AddEvent extends ChangeNotifier {
       imagePath: 'lib/images/GOJO.jpg',
     ),
     Event(
+      id: 2,
       name: "GOJO",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
@@ -20,6 +22,7 @@ class AddEvent extends ChangeNotifier {
       imagePath: 'lib/images/GOJO.jpg',
     ),
     Event(
+      id: 3,
       name: "GOJO",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
@@ -52,4 +55,10 @@ class AddEvent extends ChangeNotifier {
     print("removed?");
     print(userEventlist);
   }
+
+  String selectedEvent = "";
+
+  
+
+
 }
