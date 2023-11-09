@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // temp packages
-import 'package:enavit/pages/club_pages/event_feed_page.dart';
+import 'package:enavit/pages/club_pages/my_club_page.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -16,38 +16,38 @@ class IntroPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal:25.0),
           child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
               children:[
                 //logo
-                Padding(
-                  padding: const EdgeInsets.all(25.0),
+                Center(
                   child: Image.asset(
-                    'lib/images/Denji.jpg',
+                    'lib/images/Denji_pochita.png',
                     height: 300,
                     ),
                 ),
                 
-                const SizedBox(height: 48,),
+                // const SizedBox(height: 48,),
         
                 //title
-                Text(
-                  'Woof!! Woof!!',
-                  style: GoogleFonts.telex(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
+                // Text(
+                //   'Woof!! Woof!!',
+                //   style: GoogleFonts.telex(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.bold,
+                //   )
+                // ),
         
-                const SizedBox(height: 24,),
+                // const SizedBox(height: 40,),
                 
                 //sub title
-                Text(
-                  'Ore no goru!..Sore wa...Muneda!!',
-                  style: GoogleFonts.telex(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                // Text(
+                //   'Ore no goru!..Sore wa...Muneda!!',
+                //   style: GoogleFonts.telex(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
                 
                 //start button
                 GestureDetector(
@@ -55,7 +55,7 @@ class IntroPage extends StatelessWidget {
                     Navigator.push(
                       context, 
                       MaterialPageRoute(
-                        builder: (context) => const FeedPage(),
+                        builder: (context) => const ClubBio(),
                         ),
                       );
                   },
