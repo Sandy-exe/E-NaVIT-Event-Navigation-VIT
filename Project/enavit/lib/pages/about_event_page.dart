@@ -12,10 +12,10 @@ class AboutEvent extends StatefulWidget {
 }
 
 class _AboutEventState extends State<AboutEvent> {
-
   void addEventToUser(Event event,) {
     Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
     print("blah");
+    print(event.imagePath);
     // get a Event from Event list
     showDialog(
       context: context,
@@ -41,7 +41,7 @@ class _AboutEventState extends State<AboutEvent> {
               stretchModes: const [
                 StretchMode.zoomBackground,
               ],
-              background: Image.network(
+              background: Image.asset(
                 // widget.product.imageURL,r
                 widget.event.imagePath,
                 fit: BoxFit.cover,

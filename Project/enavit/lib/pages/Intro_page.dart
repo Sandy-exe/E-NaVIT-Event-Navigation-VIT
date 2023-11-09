@@ -2,6 +2,9 @@ import 'index_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// temp packages
+import 'package:enavit/pages/club_pages/event_feed_page.dart';
+
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
@@ -52,7 +55,7 @@ class IntroPage extends StatelessWidget {
                     Navigator.push(
                       context, 
                       MaterialPageRoute(
-                        builder: (context) => const IndexPage(),
+                        builder: (context) => const FeedPage(),
                         ),
                       );
                   },

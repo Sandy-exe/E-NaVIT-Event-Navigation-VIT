@@ -38,9 +38,6 @@ dependencies:
   provider:
   google_fonts: ^6.1.0
   simple_animations: ^5.0.2
-  
-
-  
 
 dev_dependencies:
   flutter_test:

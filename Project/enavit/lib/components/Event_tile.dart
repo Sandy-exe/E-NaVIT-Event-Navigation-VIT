@@ -11,7 +11,6 @@ class EventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        print(event.id);
         Navigator.push(
         context,
         MaterialPageRoute(

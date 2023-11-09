@@ -55,7 +55,9 @@ Sponsor details
 Member only or open Bool
 Registered students IDs
 
-
+CLubs:
+1) Club about page has like button(comman), comment,dislike(Only for participants) buttons
+2) normal event list page tiles has share, like alone and about page 
 
 
 

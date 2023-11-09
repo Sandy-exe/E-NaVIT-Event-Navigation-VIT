@@ -5,6 +5,7 @@ class AddEvent extends ChangeNotifier {
   List<Event> eventlist = [
     Event(
       id: 1,
+      clubid: 1,
       name: "GOJO",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Very Expensive",
@@ -14,6 +15,7 @@ class AddEvent extends ChangeNotifier {
     ),
     Event(
       id: 2,
+      clubid: 2,
       name: "GOJO 2",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
@@ -23,6 +25,7 @@ class AddEvent extends ChangeNotifier {
     ),
     Event(
       id: 3,
+      clubid: 2,
       name: "GOJO 3",
       description: "Daijobhu desu, tatakimi yowai mo!!",
       fee: "Limitless",
