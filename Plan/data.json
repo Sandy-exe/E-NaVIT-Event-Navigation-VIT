@@ -82,11 +82,11 @@
     "Participants": {
         "part_1": {
             "UserID": "Den_1",
-            "EventID": "Event_1",
+            "EventID": "Event_1"
         },
         "part_2": {
             "UserID": "Ji_1",
-            "EventID": "Event_2",
+            "EventID": "Event_2"
         }
     },
     "Users": {
@@ -104,7 +104,7 @@
             "Name": "Janani",
             "Organiser": true,
             "PhoneNO": 556465,
-            "RegNo": "21DB1294",
+            "RegNo": "21DB1294"
         }
     }
 }
