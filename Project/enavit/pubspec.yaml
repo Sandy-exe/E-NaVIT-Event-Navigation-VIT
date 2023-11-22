@@ -41,6 +41,8 @@ dependencies:
   flutter_animate: ^4.2.0+1
   font_awesome_flutter: ^10.6.0
   shared_preferences: ^2.0.8
+  cloud_firestore:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:
