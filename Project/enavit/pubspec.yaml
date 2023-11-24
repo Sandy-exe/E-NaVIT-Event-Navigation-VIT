@@ -41,8 +41,20 @@ dependencies:
   flutter_animate: ^4.2.0+1
   font_awesome_flutter: ^10.6.0
   shared_preferences: ^2.0.8
-  cloud_firestore:
-  firebase_core:
+  firebase_auth: ^4.7.3
+  firebase_core: ^2.15.1
+  cloud_firestore: ^4.9.0
+  firebase_storage: ^11.2.6
+  firebase_analytics: ^10.5.1
+
+  flutter_local_notifications: ^15.1.0+1
+  lottie: ^2.6.0
+  iconsax: ^0.0.8
+  awesome_icons: ^1.1.0
+
+  image_picker: ^1.0.2
+  image_cropper: ^5.0.0
+
 
 dev_dependencies:
   flutter_test:
