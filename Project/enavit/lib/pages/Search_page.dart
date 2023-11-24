@@ -81,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
             child: ListView.builder(
             itemCount: 3,
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             itemBuilder: (context,index) {
               // get a Event from Event list
               Event event = value.getEventList()[index];

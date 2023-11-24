@@ -59,6 +59,8 @@ CLubs:
 1) Club about page has like button(comman), comment,dislike(Only for participants) buttons
 2) normal event list page tiles has share, like alone and about page 
 3) add different sections in club bio page
+4) add the plus button properly
+5) set the dimensions of the images that can be uploaded(set a exact dimesnion or crop it by default)
 
 
 reference LINKS:
