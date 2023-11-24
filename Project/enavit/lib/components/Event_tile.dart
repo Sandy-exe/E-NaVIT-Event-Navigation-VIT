@@ -32,11 +32,29 @@ class EventTile extends StatelessWidget {
             //Event Image
               Padding(
                 padding: const EdgeInsets.only(left: 4.0 , top:5, bottom:5),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: SizedBox(
-                    width: 250.0, // desired width
-                    child: Image.asset(event.imagePath),
+                child: Container(
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: SizedBox(
+                          width: 250.0, // desired width
+                          child: Image.asset(event.imagePath),
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      GestureDetector(
+                      onTap: onTap,
+                      child: Container(
+                        padding: const EdgeInsets.all(1),
+                        child: const Icon(
+                          Icons.favorite_border_outlined,
+                          color: Color.fromARGB(255, 90, 88, 88),
+                          size: 30.0,
+                        ),
+                      ),
+                    ),
+                    ],
                   ),
                 ),
               ),
@@ -59,7 +77,7 @@ class EventTile extends StatelessWidget {
             //         //   child: Text(
             //         //     event.name,
             //         //     style: const TextStyle(
-            //         //       fontSize: 20.0,
+            //         //       fontsize: 30.0,
             //         //       fontWeight: FontWeight.bold,
             //         //     ),
             //         //   ),
@@ -117,12 +135,12 @@ class EventTile extends StatelessWidget {
                             child: const Icon(
                               Icons.bookmark_border_outlined,
                               color: Color.fromARGB(255, 90, 88, 88),
-                              size: 40.0,
+                              size: 30.0,
                             ),
                           ),
                         ),
               
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 10,),
                     
                     GestureDetector(
                             onTap: onTap,
@@ -131,12 +149,12 @@ class EventTile extends StatelessWidget {
                               child: const Icon(
                                 Icons.favorite_border_outlined,
                                 color: Color.fromARGB(255, 90, 88, 88),
-                                size: 40.0,
+                                size: 30.0,
                               ),
                             ),
                           ),
                 
-                    const SizedBox(height: 20,),
+                    const SizedBox(height: 10,),
               
                     
                      GestureDetector(
@@ -146,13 +164,13 @@ class EventTile extends StatelessWidget {
                             child: const Icon(
                               Icons.comment_outlined,
                               color: Color.fromARGB(255, 90, 88, 88),
-                              size: 40.0,
+                              size: 30.0,
                             ),
                           ),
                         ),
               
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
               
                     
@@ -164,22 +182,22 @@ class EventTile extends StatelessWidget {
                         child: const Icon(
                           Icons.info_outline_rounded,
                           color: Color.fromARGB(255, 90, 88, 88),
-                          size: 40.0,
+                          size: 30.0,
                         ),
                       ),
                     ),
 
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     GestureDetector(
                       onTap: onTap,
                       child: Container(
                         padding: const EdgeInsets.all(1),
                         child: const Icon(
-                          Icons.thumb_down_alt_outlined,
+                          Icons.send_outlined,
                           color: Color.fromARGB(255, 90, 88, 88),
-                          size: 40.0,
+                          size: 30.0,
                         ),
                       ),
                     ),
