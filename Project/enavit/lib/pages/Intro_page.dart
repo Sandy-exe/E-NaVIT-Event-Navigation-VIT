@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 // temp packages
-import 'package:enavit/pages/club_pages/event_feed_page.dart';
-import 'package:enavit/pages/index_page.dart';
+
+import 'package:enavit/pages/my_events_page.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -55,7 +55,7 @@ class IntroPage extends StatelessWidget {
                     Navigator.push(
                       context, 
                       MaterialPageRoute(
-                        builder: (context) => const IndexPage(),
+                        builder: (context) => const MyEvents(),
                         ),
                       );
                   },

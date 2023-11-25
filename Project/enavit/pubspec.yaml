@@ -47,6 +47,7 @@ dependencies:
   animate_do: ^3.0.2
   dotted_border: ^2.1.0
   carousel_slider: ^4.2.1
+  timeline_tile: ^2.0.0
 
   flutter_local_notifications: ^15.1.0+1
   lottie: ^2.6.0
