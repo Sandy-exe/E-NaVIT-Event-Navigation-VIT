@@ -61,7 +61,7 @@ CLubs:
 3) add different sections in club bio page
 4) add the plus button properly
 5) set the dimensions of the images that can be uploaded(set a exact dimesnion or crop it by default)
-
+6) Announcements like profile page
 
 reference LINKS:
 1) https://www.youtube.com/watch?v=7RnYcmmg2-c&list=RDCMUCWiC79M4FJ-Ylvk7lkk3n5A&index=3

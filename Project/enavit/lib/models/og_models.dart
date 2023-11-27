@@ -67,7 +67,6 @@ class LikesComments {
 class Participant {
   final String userId;
   final String eventId;
-
   Participant({
     required this.userId,
     required this.eventId,
