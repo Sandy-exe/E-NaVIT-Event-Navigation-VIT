@@ -1,9 +1,10 @@
+
+
 class Approval {
   final String userId;
   final String clubId;
   final String approvalId;
   final String status;
-
   Approval({
     required this.userId,
     required this.clubId,
