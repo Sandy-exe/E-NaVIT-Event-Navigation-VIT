@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ApproverLoginPage extends StatefulWidget {
@@ -65,8 +66,22 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                       height: 32,
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         print(_emailTEC.text);
+
+                        try {
+                          final credential = await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _emailTEC.text, password: "abcdef");
+                          print("successful");
+                        } on FirebaseAuthException catch (e) {
+                          print("UNsuccessful");
+                          if (e.code == 'user-not-found') {
+                            print('No user found for that email.');
+                          } else if (e.code == 'wrong-password') {
+                            print('Wrong password provided for that user.');
+                          }
+                        }
                       },
                       child: const Text("Sign in"),
                     ),
