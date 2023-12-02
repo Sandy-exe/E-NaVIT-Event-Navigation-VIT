@@ -1,4 +1,5 @@
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'models/add_Event.dart';
 import 'package:enavit/pages/intro_page.dart';
@@ -8,7 +9,14 @@ import 'package:provider/provider.dart';
 
 
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyB3xdXpZ_CWyvqnHe6PjaEVz-dYsCpRyd",
+            appId: "1:1084741784734:android:e31ef7588490b9b9e2978f",
+            messagingSenderId: "1084741784734",
+            projectId: "e-navit"));
   runApp(const Enavit());
 }
 
