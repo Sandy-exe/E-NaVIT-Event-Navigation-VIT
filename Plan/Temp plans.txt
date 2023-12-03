@@ -61,7 +61,10 @@ CLubs:
 3) add different sections in club bio page
 4) add the plus button properly
 5) set the dimensions of the images that can be uploaded(set a exact dimesnion or crop it by default)
-6) Announcements like profile page
+6) Announcements in profile page
+7) organize all the files 
+8) create new files for different components/widgets and import when needed
+9) format the document properly
 
 reference LINKS:
 1) https://www.youtube.com/watch?v=7RnYcmmg2-c&list=RDCMUCWiC79M4FJ-Ylvk7lkk3n5A&index=3
