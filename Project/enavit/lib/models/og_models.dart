@@ -109,4 +109,19 @@ class User {
     required this.organizedEvents,
     required this.clubs,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'name': name,
+      'role': role,
+      'phoneNo': phoneNo,
+      'regNo': regNo,
+      'userId': userId,
+      'events': events,
+      'organizedEvents': organizedEvents,
+      'clubs': clubs,
+    };
+  }
+
 }

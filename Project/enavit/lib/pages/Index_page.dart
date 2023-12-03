@@ -1,8 +1,11 @@
+
 import 'package:flutter/material.dart';
 import '../components/bottom_nav_bar.dart';
-import 'Profile_page.dart';
-import 'Search_page.dart';
+import 'profile_page.dart';
+import 'history_page.dart';
 import 'home_page.dart';
+import 'my_events_page.dart';
+import 'package:enavit/services/authentication_service.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -12,6 +15,8 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
+
+  final AuthenticationService _firebaseAuth = AuthenticationService();
 
   int selectedIndex = 0 ;
 
@@ -24,8 +29,9 @@ class _IndexPageState extends State<IndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
-    const SearchPage(),
+    const HistoryPage(),
     const ProfilePage(),
+    const MyEvents(),
   ];
 
   @override
@@ -109,18 +115,24 @@ class _IndexPageState extends State<IndexPage> {
               ],
             ), 
               
-              const Padding(
-                padding: EdgeInsets.only(left:25.0,bottom: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                    ),
-                  title: Text(
-                    'logout',
-                    style: TextStyle(color: Colors.white),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left:25.0,bottom: 25.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _firebaseAuth.signOut();
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child:  const ListTile(
+                    leading: Icon(
+                      Icons.logout,
+                      color: Colors.white,
                       ),
+                    title: Text(
+                      'logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                        ),
+                ),
               ),
           ]
         ),

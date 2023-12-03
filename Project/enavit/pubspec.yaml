@@ -55,7 +55,6 @@ dependencies:
   lottie: ^2.6.0
   iconsax: ^0.0.8
   awesome_icons: ^1.1.0
-
   image_picker: ^1.0.2
   #image_cropper: ^5.0.0
 

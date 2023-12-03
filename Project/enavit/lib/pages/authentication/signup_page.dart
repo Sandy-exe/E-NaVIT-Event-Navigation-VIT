@@ -2,6 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:enavit/services/authentication_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -11,6 +13,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+
+  final AuthenticationService _firebaseAuth = AuthenticationService();
+
   final TextEditingController _passwordTEC = TextEditingController();
   final TextEditingController _confirmPasswordTEC = TextEditingController();
   final TextEditingController _emailTEC = TextEditingController();
@@ -157,31 +162,32 @@ class _SignUpPageState extends State<SignUpPage> {
                           return;
                         }
                         ;
-                        try {
-                          final credential = await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                            email: _emailTEC.text,
-                            password: _passwordTEC.text,
-                          );
-                          print("succesful");
-                        } on FirebaseAuthException catch (e) {
-                          print("UNsuccesful");
-                          if (e.code == "invalid-email") {
-                            _showToast(context, "Invalid email address");
-                          }
-                          if (e.code == 'weak-password') {
-                            print('The password provided is too weak.');
-                            _showToast(
-                                context, "The password provided is too weak");
-                          } else if (e.code == 'email-already-in-use') {
-                            print('The account already exists for that email.');
-                            _showToast(context,
-                                "The account already exists for that email");
-                          }
-                        } catch (e) {
-                          print("UNsuccesful");
-                          print(e);
-                        }
+                        // try {
+                        //   final credential = await FirebaseAuth.instance
+                        //       .createUserWithEmailAndPassword(
+                        //     email: _emailTEC.text,
+                        //     password: _passwordTEC.text,
+                        //   );
+                        //   print("succesful");
+                        // } on FirebaseAuthException catch (e) {
+                        //   print("UNsuccesful");
+                        //   if (e.code == "invalid-email") {
+                        //     _showToast(context, "Invalid email address");
+                        //   }
+                        //   if (e.code == 'weak-password') {
+                        //     print('The password provided is too weak.');
+                        //     _showToast(
+                        //         context, "The password provided is too weak");
+                        //   } else if (e.code == 'email-already-in-use') {
+                        //     print('The account already exists for that email.');
+                        //     _showToast(context,
+                        //         "The account already exists for that email");
+                        //   }
+                        // } catch (e) {
+                        //   print("UNsuccesful");
+                        //   print(e);
+                        // }
+                        signup();
                       },
                       child: const Text("Sign up"),
                     )
@@ -203,4 +209,24 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
+  void signup() async {
+    final String email = _emailTEC.text;
+    final String password = _passwordTEC.text;
+    
+    final String result = await _firebaseAuth.signUp(
+        email: email,
+        password: password,);
+    print(result);
+
+    if (result == "success") {
+      print("successful");
+      Navigator.pushNamed(context, '/login');
+    } else {
+      print("UNsuccessful");
+      _showToast(context, result);
+    }
+  }
+
+
 }

@@ -8,8 +8,8 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
       child: GNav(
         color: Colors.grey[400],
         activeColor: Colors.grey.shade700,
@@ -18,18 +18,23 @@ class NavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         tabBorderRadius: 16,
         onTabChange: (value) => onTabChange!(value),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         tabs: const [
         GButton(
           icon: Icons.home,
            text: 'Home',
         ),
         GButton(
-          icon: Icons.search,
-          text: 'Search',
+          icon: Icons.history,
+          text: 'History',
         ),
         GButton(
           icon: Icons.person,
           text: 'Profile',
+        ),
+        GButton(
+          icon: Icons.event,
+          text: 'My Events',
         ),
       ]
       ),

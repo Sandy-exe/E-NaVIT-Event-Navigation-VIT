@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:enavit/services/authentication_service.dart';
 
 class ApproverLoginPage extends StatefulWidget {
   const ApproverLoginPage({super.key});
@@ -9,7 +11,10 @@ class ApproverLoginPage extends StatefulWidget {
 }
 
 class _ApproverLoginPageState extends State<ApproverLoginPage> {
+  final AuthenticationService _firebaseAuth = AuthenticationService();
+
   final TextEditingController _emailTEC = TextEditingController();
+  final TextEditingController _passwordTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +57,11 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    const TextField(
+                    TextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      controller: _passwordTEC,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.key),
                           labelText: 'Password',
@@ -67,27 +74,31 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        print(_emailTEC.text);
+                        signIn();
 
-                        try {
-                          final credential = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: _emailTEC.text, password: "abcdef");
-                          print("successful");
-                        } on FirebaseAuthException catch (e) {
-                          print("UNsuccessful");
-                          if (e.code == 'user-not-found') {
-                            print('No user found for that email.');
-                          } else if (e.code == 'wrong-password') {
-                            print('Wrong password provided for that user.');
-                          }
-                        }
+                        // try {
+                        //   final credential = await FirebaseAuth.instance
+                        //       .signInWithEmailAndPassword(
+                        //           email: _emailTEC.text, password: "abcdef");
+                        //   print("successful");
+                        //   print(credential.user);
+                        // } on FirebaseAuthException catch (e) {
+                        //   print("UNsuccessful");
+                        //   if (e.code == 'user-not-found') {
+                        //     print('No user found for that email.');
+                        //   } else if (e.code == 'wrong-password') {
+                        //     print('Wrong password provided for that user.');
+                        //   }
+                        // }
                       },
                       child: const Text("Sign in"),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        signOut();
+                      },
                       child: const Text("Forgot Password"),
+
                     ),
                   ],
                 ),
@@ -96,4 +107,44 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
           ),
         ));
   }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+            label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  void signIn() async {
+    final String email = _emailTEC.text;
+    final String password = _passwordTEC.text;
+
+    final String result = await _firebaseAuth.signIn(
+      email: email,
+      password: password,
+    );
+    if (result == "success") {
+      print("successful");
+      
+      Navigator.pushNamed(context, '/index');
+
+    } else {
+      print("UNsuccessful");
+      print(result);
+      _showToast(context, result);
+    }
+  }
+
+  void signOut() async {
+    print("signing out fuck");
+    _firebaseAuth.signOut();
+    print("signed out fuck");
+  }
+
+
 }
+
