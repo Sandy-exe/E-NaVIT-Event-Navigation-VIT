@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +29,7 @@ class ChipStyle {
 }
 
 class FlutterFlowChoiceChips extends StatefulWidget {
-  const FlutterFlowChoiceChips({
+  const FlutterFlowChoiceChips({super.key, 
     this.initiallySelected,
     required this.options,
     required this.onChanged,
@@ -122,7 +124,7 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
                 ),
               );
             },
-          ).toList(),
+          ),
         ],
       );
 }

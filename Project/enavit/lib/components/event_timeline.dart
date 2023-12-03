@@ -97,7 +97,7 @@ class _EventTimelineState extends State<EventTimeline> {
       child: Row(
         children: [
           _buildTimeline(),
-          Container(
+          SizedBox(
             height: 100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +157,7 @@ class _EventTimelineState extends State<EventTimeline> {
   }
 
   Widget _buildTimeline() {
-    return Container(
+    return SizedBox(
       height: 100,
       width: 20,
       child: TimelineTile(

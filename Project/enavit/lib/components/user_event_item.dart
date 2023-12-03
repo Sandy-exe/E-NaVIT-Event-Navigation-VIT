@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:enavit/models/event.dart';
 import 'package:provider/provider.dart';
-import '../models/add_Event.dart';
+import '../models/add_event.dart';
 
 class UserEventitem extends StatefulWidget {
   final Event event;
@@ -15,7 +15,6 @@ class _UserEventitemState extends State<UserEventitem> {
 
   void removeEventFromUser() {
     Provider.of<AddEvent>(context, listen: false).removeEventFromUser(widget.event);
-    print("shit");
   }
 
   @override
@@ -33,7 +32,6 @@ class _UserEventitemState extends State<UserEventitem> {
           icon: const Icon(Icons.delete),
           onPressed: () {
             removeEventFromUser();
-            print("oik");
           },
         )
       ),

@@ -32,30 +32,28 @@ class EventTile extends StatelessWidget {
             //Event Image
               Padding(
                 padding: const EdgeInsets.only(left: 4.0 , top:5, bottom:5),
-                child: Container(
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: SizedBox(
-                          width: 250.0, // desired width
-                          child: Image.asset(event.imagePath),
-                        ),
-                      ),
-                      const SizedBox(height: 10,),
-                      GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        child: const Icon(
-                          Icons.favorite_border_outlined,
-                          color: Color.fromARGB(255, 90, 88, 88),
-                          size: 30.0,
-                        ),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: SizedBox(
+                        width: 250.0, // desired width
+                        child: Image.asset(event.imagePath),
                       ),
                     ),
-                    ],
+                    const SizedBox(height: 10,),
+                    GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                      padding: const EdgeInsets.all(1),
+                      child: const Icon(
+                        Icons.favorite_border_outlined,
+                        color: Color.fromARGB(255, 90, 88, 88),
+                        size: 30.0,
+                      ),
+                    ),
                   ),
+                  ],
                 ),
               ),
 

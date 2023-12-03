@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:enavit/services/authentication_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:enavit/Data/secure_storage.dart';
 
 class ApproverLoginPage extends StatefulWidget {
   const ApproverLoginPage({super.key});
@@ -68,7 +68,7 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                           labelText: 'Password',
                           hintText: 'Enter password',
                           isDense: true),
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(
                       height: 32,
@@ -95,9 +95,7 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                       child: const Text("Sign in"),
                     ),
                     TextButton(
-                      onPressed: () async {
-                        signOut();
-                      },
+                      onPressed: () {},
                       child: const Text("Forgot Password"),
 
                     ),
@@ -128,22 +126,21 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
       email: email,
       password: password,
     );
+
+    
     if (result == "success") {
-      print("successful");
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      Navigator.pushNamed(context, '/index');
+      SecureStorage secureStorage = SecureStorage();
+      await secureStorage.writer(key: "isLoggedIn", value: "true");
+
+      if (context.mounted) Navigator.pushNamed(context, '/index');
+      
     } else {
-      print("UNsuccessful");
-      print(result);
-      _showToast(context, result);
+      if (context.mounted) _showToast(context, result);
     }
   }
 
   void signOut() async {
-    print("signing out fuck");
     _firebaseAuth.signOut();
-    print("signed out fuck");
   }
 
 

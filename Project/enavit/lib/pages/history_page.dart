@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/event.dart';
-import '../models/add_Event.dart';
+import '../models/add_event.dart';
 import '../components/user_event_item.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +34,6 @@ class _HistoryPageState extends State<HistoryPage> {
                       itemCount: value.getUserEventList().length,
                       itemBuilder: (context, index) {
                         //get event
-                        print(value.getUserEventList().length);
                         Event indiEvent = value.getUserEventList()[index];
                         return UserEventitem(
                           event: indiEvent,

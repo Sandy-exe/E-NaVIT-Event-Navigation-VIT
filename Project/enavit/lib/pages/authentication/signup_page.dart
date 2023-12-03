@@ -158,7 +158,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           _showToast(context, "Passwords do not match");
                           return;
                         }
-                        ;
                         // try {
                         //   final credential = await FirebaseAuth.instance
                         //       .createUserWithEmailAndPassword(
@@ -222,14 +221,11 @@ class _SignUpPageState extends State<SignUpPage> {
         phoneno: phoneno,
         name: name,
         );
-    print(result);
 
     if (result == "success") {
-      print("successful");
-      Navigator.pushNamed(context, '/login');
+      if (context.mounted) Navigator.pushNamed(context, '/login');
     } else {
-      print("UNsuccessful");
-      _showToast(context, result);
+      if (context.mounted) _showToast(context, result);
     }
   }
 

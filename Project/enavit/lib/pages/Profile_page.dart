@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:enavit/Data/secure_storage.dart'; 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enavit/components/flutter_flow_theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,7 +14,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late SharedPreferences prefs;
+  
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
 
@@ -24,14 +25,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    SecureStorage secureStorage = SecureStorage();
+
+    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
 
     if (isLoggedIn) {
-      String? currentUserDataString = prefs.getString('currentUserData');
+      String? currentUserDataString = await secureStorage.reader(key: "currentUserData");
       if (currentUserDataString != null) {
         currentUserData = jsonDecode(currentUserDataString);
-        print(currentUserData["name"]);
       }
     }
   }
@@ -356,7 +357,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                             children: [
                                               TextButton(
                                                 onPressed: () {
-                                                  print('Posts button pressed');
                                                 },
                                                 style: TextButton.styleFrom(
                                                     backgroundColor:
@@ -367,8 +367,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
-                                                  print(
-                                                      'Status button pressed');
                                                 },
                                                 style: TextButton.styleFrom(
                                                     backgroundColor:
@@ -379,7 +377,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
-                                                  print('Bio button pressed');
                                                 },
                                                 style: TextButton.styleFrom(
                                                     backgroundColor:
@@ -472,7 +469,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           .max,
                                                                   children: [
                                                                     Text(
-                                                                      'Eren Yeager',
+                                                                      currentUserData["name"],
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyText1
@@ -900,7 +897,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           .max,
                                                                   children: [
                                                                     Text(
-                                                                      'Eren Yeager',
+                                                                      currentUserData["name"],
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyText1
@@ -1269,7 +1266,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           .max,
                                                                   children: [
                                                                     Text(
-                                                                      'Eren Yeager',
+                                                                      currentUserData["name"],
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyText1
@@ -1638,7 +1635,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           .max,
                                                                   children: [
                                                                     Text(
-                                                                      'Eren Yeager',
+                                                                      currentUserData["name"],
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyText1

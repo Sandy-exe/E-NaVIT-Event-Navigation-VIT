@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:enavit/models/event.dart';
-import '../models/add_Event.dart';
+import '../models/add_event.dart';
 import 'package:provider/provider.dart';
 
 class AboutEvent extends StatefulWidget {
   final Event event;
   final int ok = 1;
-  const AboutEvent({Key? key, required this.event}) : super(key: key);
+  const AboutEvent({super.key, required this.event});
   @override
   State<AboutEvent> createState() => _AboutEventState();
 }
@@ -14,8 +14,6 @@ class AboutEvent extends StatefulWidget {
 class _AboutEventState extends State<AboutEvent> {
   void addEventToUser(Event event,) {
     Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
-    print("blah");
-    print(event.imagePath);
     // get a Event from Event list
     showDialog(
       context: context,
@@ -147,7 +145,6 @@ class _AboutEventState extends State<AboutEvent> {
                   MaterialButton(
                     onPressed: () {
                       addEventToUser(widget.event);
-                      print("ok");        
                     },
                     height: 50,
                     elevation: 0,

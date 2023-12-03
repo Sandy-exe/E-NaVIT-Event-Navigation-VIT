@@ -48,15 +48,11 @@ class AddEvent extends ChangeNotifier {
   void addEventToUser(Event event) {
     userEventlist.add(event);
     notifyListeners();
-    print(userEventlist);
   }
 
   void removeEventFromUser(Event event) {
-    print(userEventlist);
     userEventlist.remove(event);
     notifyListeners();
-    print("removed?");
-    print(userEventlist);
   }
 
   String selectedEvent = "";

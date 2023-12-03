@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/event_tile.dart';
 import '../models/event.dart';
-import '../models/add_Event.dart';
+import '../models/add_event.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

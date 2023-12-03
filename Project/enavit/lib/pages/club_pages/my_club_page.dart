@@ -283,21 +283,18 @@ class _ClubBioState extends State<ClubBio> {
                                     children: [
                                       TextButton(
                                         onPressed: () {
-                                          print('Posts button pressed');
                                         },
                                         style: TextButton.styleFrom(backgroundColor: Colors.black),
                                         child: const Text('Posts', style: TextStyle(color: Colors.white)),
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          print('Status button pressed');
                                         },
                                         style: TextButton.styleFrom(backgroundColor: Colors.black),
                                         child: const Text('Status', style: TextStyle(color: Colors.white)),
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          print('Bio button pressed');
                                         },
                                         style: TextButton.styleFrom(backgroundColor: Colors.black),
                                         child: const Text('Bio', style: TextStyle(color: Colors.white)),
