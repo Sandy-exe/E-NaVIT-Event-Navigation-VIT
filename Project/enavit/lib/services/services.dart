@@ -1,50 +1,44 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:to_do_gdsc/data/categories.dart';
-import 'package:to_do_gdsc/models/category.dart';
-import 'package:to_do_gdsc/models/todolist.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Services {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Future<void> addTask(ToDoItem newItem) async {
+  Future<void> addUser(Users newUser) async {
+    final docref = firestore.collection("app_users").doc(newUser.userId.toString());
+
     Map<String, dynamic> obj = {
-      "name": newItem.title,
-      "category": newItem.category.title,
-      "date": newItem.dateTime,
-      "id": newItem.id,
-      "ispined": newItem.isPinned
+      "userid": newUser.userId,
+      "name": newUser.name,
+      "email": newUser.email,
+      "clubs": newUser.clubs,
+      "events": newUser.events,
+      "organized_events": newUser.organizedEvents,
+      "role": newUser.role,
+      "phone_no": newUser.phoneNo,
+      "reg_no": newUser.regNo,
     };
-    String docId = newItem.id;//randomly generated IDs are not recommended
-    final DocumentReference tasksRef = firestore.collection("tasks").doc(docId);//creating a reference object
-    await tasksRef.set(obj);//push the object
+
+    await docref.set(obj);//push the object
+    print("added");
   }
 
-  Future<List> read() async {
-    List<ToDoItem> tasks = [];
-    final snapshot = await firestore.collection("tasks").get();
-    final List<DocumentSnapshot> documents = snapshot.docs;
-    for (DocumentSnapshot element in documents) {
-      Categories category;
-      if (element["category"] == "Myself") {
-        category = Categories.Myself;
-      }  else if (element["category"] == "Work") {
-        category = Categories.Work;
-      } else {
-        category = Categories.Other;
-      }
+  Future getUserData(String uid) async {
+    final currentUser = await firestore.collection("app_users").doc(uid).get();
+    print(currentUser.data()!.values.toList());
 
-      tasks.add(ToDoItem(
-          title: element["name"],
-          category: categories[category]!,
-          dateTime: element["date"].toDate(),
-          id: element["name"] + element["date"].toDate().toString(),
-          isPinned: element["ispined"] as bool));
-    }
-    return tasks;
+    //save the data in shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> currentUserData = currentUser.data()!;
+    String currentUserDataString = jsonEncode(currentUserData);
+    await prefs.setString('currentUserData', currentUserDataString);
   }
 
-  Future<void> deleteTodoItem(String documentId) async {
-    final DocumentReference documentReference =
-        firestore.collection('tasks').doc(documentId);
-    await documentReference.delete();
-  }
+  // Future<void> deleteTodoItem(String documentId) async {
+  //   final DocumentReference documentReference =
+  //       firestore.collection('tasks').doc(documentId);
+  //   await documentReference.delete();
+  // }
 }

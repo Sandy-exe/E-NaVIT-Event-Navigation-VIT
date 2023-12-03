@@ -87,18 +87,18 @@ class ParticipantRequest {
   });
 }
 
-class User {
+class Users {
   final String email;
   final String name;
   final int role;// for participants and other roles
   final String phoneNo;
   final String regNo;
-  final int userId;
+  final String userId;
   final List<int> events;
   final List<int> organizedEvents;
   final List<int> clubs;
 
-  User({
+  Users({
     required this.email,
     required this.name,
     required this.role,
@@ -109,19 +109,5 @@ class User {
     required this.organizedEvents,
     required this.clubs,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'name': name,
-      'role': role,
-      'phoneNo': phoneNo,
-      'regNo': regNo,
-      'userId': userId,
-      'events': events,
-      'organizedEvents': organizedEvents,
-      'clubs': clubs,
-    };
-  }
 
 }

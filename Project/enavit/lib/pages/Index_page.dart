@@ -30,8 +30,8 @@ class _IndexPageState extends State<IndexPage> {
   final List<Widget> pages = [
     const HomePage(),
     const HistoryPage(),
-    const ProfilePage(),
     const MyEvents(),
+    const ProfilePage(),
   ];
 
   @override

@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:enavit/models/og_models.dart';
+
 import 'package:enavit/services/authentication_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApproverLoginPage extends StatefulWidget {
   const ApproverLoginPage({super.key});
@@ -129,9 +130,9 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
     );
     if (result == "success") {
       print("successful");
-      
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
       Navigator.pushNamed(context, '/index');
-
     } else {
       print("UNsuccessful");
       print(result);

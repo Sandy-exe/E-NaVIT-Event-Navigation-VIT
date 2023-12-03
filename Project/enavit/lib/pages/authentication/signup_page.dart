@@ -1,8 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/authentication_service.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -213,10 +210,18 @@ class _SignUpPageState extends State<SignUpPage> {
   void signup() async {
     final String email = _emailTEC.text;
     final String password = _passwordTEC.text;
+    final String regno = _regNoTEC.text;
+    final String phoneno = _mobileTEC.text;
+    final String name = "${_firstNameTEC.text} ${_lastNameTEC.text}";
+
     
     final String result = await _firebaseAuth.signUp(
         email: email,
-        password: password,);
+        password: password,
+        regno: regno,
+        phoneno: phoneno,
+        name: name,
+        );
     print(result);
 
     if (result == "success") {

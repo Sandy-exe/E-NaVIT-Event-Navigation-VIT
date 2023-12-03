@@ -1,11 +1,6 @@
 // import 'index_page.dart';
 import 'package:flutter/material.dart';
 
-// temp packages
-
-import 'package:enavit/pages/my_events_page.dart';
-import 'package:enavit/pages/index_page.dart';
-import 'package:enavit/pages/club_pages/my_club_page.dart';
 import 'package:enavit/pages/authentication/login_page.dart';
 
 class IntroPage extends StatelessWidget {

@@ -1,4 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:enavit/services/services.dart';
+import 'package:enavit/models/og_models.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -6,11 +9,15 @@ class AuthenticationService {
   Future signIn ({required String email, required String password}) async {
     try {
       var result = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-
+          email: email, password: password);   
       if (result != null) {
+        String uid = result.user?.uid.toString() ?? "null";
+        var service = Services();
+        await service.getUserData(uid);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
         return "success";
-      }
+      } 
 
       return "failed";
     } on FirebaseAuthException catch (e) {
@@ -25,11 +32,26 @@ class AuthenticationService {
     }
   }
 
-  Future signUp({required String email, required password}) async {
+  Future signUp({required String email, required password, required String regno, required String phoneno, required String name}) async {
     try {
       var result = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (result != null) {
+        String uid = result.user?.uid.toString() ?? "null";
+        var service = Services();
+
+        Users newUser = Users(
+          userId: uid,
+          name: name,
+          email: email,
+          clubs: [],
+          events: [],
+          organizedEvents: [],
+          role: 0,
+          phoneNo: phoneno,
+          regNo: regno,
+        );
+        await service.addUser(newUser);
         return "success";
       }
       return "failed";
@@ -46,7 +68,9 @@ class AuthenticationService {
   }
 
   Future<void> signOut() async {
-    print("signing out");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+    await prefs.setString('currentUserData', "");
     await _firebaseAuth.signOut();
     print("signut out");
   }
