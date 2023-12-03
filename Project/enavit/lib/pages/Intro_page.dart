@@ -1,6 +1,4 @@
-// import 'index_page.dart';
 import 'package:flutter/material.dart';
-
 import 'package:enavit/pages/authentication/login_page.dart';
 
 class IntroPage extends StatelessWidget {
