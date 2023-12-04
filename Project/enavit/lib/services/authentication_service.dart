@@ -74,7 +74,7 @@ class AuthenticationService {
   Future<void> signOut(context) async {
     secureStorage.clear();
     await _firebaseAuth.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).popUntil(ModalRoute.withName('/login'));
   }
 
   Future<void> updateMail(String newMail) async {
