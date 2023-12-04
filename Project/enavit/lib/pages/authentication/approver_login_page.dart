@@ -75,6 +75,7 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
+                        
                         signIn();
 
                         // try {
@@ -140,7 +141,7 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
   }
 
   void signOut() async {
-    _firebaseAuth.signOut();
+    _firebaseAuth.signOut(context);
   }
 
 

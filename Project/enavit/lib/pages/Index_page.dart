@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../components/bottom_nav_bar.dart';
-import 'profile_page.dart';
+import 'package:enavit/pages/main_pages/profile_page.dart';
 import 'history_page.dart';
 import 'home_page.dart';
 import 'my_events_page.dart';
@@ -119,8 +119,7 @@ class _IndexPageState extends State<IndexPage> {
                 padding: const EdgeInsets.only(left:25.0,bottom: 25.0),
                 child: GestureDetector(
                   onTap: () {
-                    _firebaseAuth.signOut();
-                    Navigator.pushNamed(context, '/login');
+                    _firebaseAuth.signOut(context);
                   },
                   child:  const ListTile(
                     leading: Icon(

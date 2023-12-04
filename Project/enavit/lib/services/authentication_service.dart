@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/services.dart';
 import 'package:enavit/models/og_models.dart';
+import 'package:flutter/material.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -70,9 +71,15 @@ class AuthenticationService {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(context) async {
     secureStorage.clear();
     await _firebaseAuth.signOut();
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  Future<void> updateMail(String newMail) async {
+    var user = _firebaseAuth.currentUser;
+    await user!.updateEmail(newMail);
   }
 
   // Future<bool> isUserLoggedIn() async {

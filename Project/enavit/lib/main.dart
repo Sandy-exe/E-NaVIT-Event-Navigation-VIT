@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:enavit/pages/authentication/login_page.dart';
 import 'package:enavit/pages/authentication/signup_page.dart';
 import 'package:enavit/pages/index_page.dart';
+import 'package:enavit/pages/main_pages/profile_page.dart';
+import 'package:enavit/pages/main_pages/update_profile_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,10 +38,8 @@ class Enavit extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Enavit',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
         initialRoute: isLoggedIn ? '/index' : '/',
+        //initialRoute: '/',
         routes: {
           // When navigating to the "/" route, build the FirstScreen widget.
           '/': (context) => const IntroPage(),
@@ -47,6 +47,8 @@ class Enavit extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/signup': (context) =>const SignUpPage(),
           '/index': (context) => const IndexPage(),
+          '/profile': (context) => const ProfilePage(),
+          '/update_profile': (context) => const UpdateProfile(),
         },
       ),
     );
