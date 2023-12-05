@@ -65,6 +65,7 @@ CLubs:
 7) organize all the files 
 8) create new files for different components/widgets and import when needed
 9) format the document properly
+10) add null everywhere needed
 
 reference LINKS:
 1) https://www.youtube.com/watch?v=7RnYcmmg2-c&list=RDCMUCWiC79M4FJ-Ylvk7lkk3n5A&index=3

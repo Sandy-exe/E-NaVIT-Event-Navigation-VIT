@@ -16,10 +16,13 @@ class AuthenticationService {
     try {
       var result = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-        String uid = result.user?.uid.toString() ?? "null";
-        var service = Services();
-        await service.getUserData(uid);
-        secureStorage.writer(key: "isLoggedIn", value: "true");
+        if (result.user !=  null ){
+          String uid = result.user!.uid.toString();
+          var service = Services();
+          await service.getUserData(uid);
+          secureStorage.writer(key: "isLoggedIn", value: "true");
+        }
+        
         return "success";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -74,7 +77,7 @@ class AuthenticationService {
   Future<void> signOut(context) async {
     secureStorage.clear();
     await _firebaseAuth.signOut();
-    Navigator.of(context).popUntil(ModalRoute.withName('/login'));
+    Navigator.popAndPushNamed(context,'/login');
   }
 
   Future<void> updateMail(String newMail) async {

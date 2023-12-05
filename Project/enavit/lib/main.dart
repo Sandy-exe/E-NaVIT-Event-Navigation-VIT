@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -14,7 +16,24 @@ import 'package:enavit/pages/main_pages/update_profile_page.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SecureStorage securestorage = SecureStorage();
+
+  //for testing in offline
+  // Map<String, dynamic> currentUserData = {"userid": "123",
+  //     "name": "santhosh",
+  //     "email": "santhosh.kumarasdfas@sadfj",
+  //     "clubs": [],
+  //     "events": [],
+  //     "organized_events": [],
+  //     "role": 0,
+  //     "phone_no": "9500882564",
+  //     "reg_no": "21BCE1829",
+  //   };
+  // String currentUserDataString = jsonEncode(currentUserData);
+  // await securestorage.writer(key: "currentUserData", value: currentUserDataString);
+  // await securestorage.writer(key: "isLoggedIn", value: "true" );
+  //offline test ends here
   bool isLoggedIn = await securestorage.reader(key: "isLoggedIn") == 'true';
+  
 
   await Firebase.initializeApp(
         options: const FirebaseOptions(

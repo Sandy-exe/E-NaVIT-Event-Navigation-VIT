@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:enavit/services/authentication_service.dart';
-import 'package:enavit/Data/secure_storage.dart';
 
 class ApproverLoginPage extends StatefulWidget {
   const ApproverLoginPage({super.key});
@@ -130,9 +129,6 @@ class _ApproverLoginPageState extends State<ApproverLoginPage> {
 
     
     if (result == "success") {
-      SecureStorage secureStorage = SecureStorage();
-      await secureStorage.writer(key: "isLoggedIn", value: "true");
-
       if (context.mounted) Navigator.pushNamed(context, '/index');
       
     } else {
