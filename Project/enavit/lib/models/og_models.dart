@@ -18,7 +18,7 @@ class Approval {
 class Club {
   final String clubId;
   final String clubName;
-  final String description;
+  final String bio;
   final String email;
   final List<int> events;
   final List<int> approvers;
@@ -26,7 +26,7 @@ class Club {
   Club({
     required this.clubId,
     required this.clubName,
-    required this.description,
+    required this.bio,
     required this.email,
     required this.events,
     required this.approvers,
@@ -35,28 +35,24 @@ class Club {
 
 class Event {
   final String clubId;
-  final DateTime date;
+  final DateTime dateTime;
   final String description;
-  final int eventId;
+  final String eventId;
   final String eventName;
-  final String eventTime;
   final String location;
   final List<String> organisers;
-  final DateTime time;
   final int likes;
-  final List<String> comments;
+  final Map<String,String> comments;
   final List<String> partcipants;// Add this line
 
   Event({
     required this.clubId,
-    required this.date,
+    required this.dateTime,
     required this.description,
     required this.eventId,
     required this.eventName,
-    required this.eventTime,
     required this.location,
     required this.organisers,
-    required this.time,
     required this.comments,
     required this.partcipants, 
     required this.likes,
