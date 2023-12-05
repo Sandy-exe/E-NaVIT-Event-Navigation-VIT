@@ -16,7 +16,7 @@ class Approval {
 }
 
 class Club {
-  final int clubId;
+  final String clubId;
   final String clubName;
   final String description;
   final String email;
@@ -34,18 +34,18 @@ class Club {
 }
 
 class Event {
-  final int clubId;
+  final String clubId;
   final DateTime date;
   final String description;
   final int eventId;
   final String eventName;
   final String eventTime;
   final String location;
-  final List<int> organisers;
+  final List<String> organisers;
   final DateTime time;
   final int likes;
-  final List<int> comments;
-  final List<int> partcipants;// Add this line
+  final List<String> comments;
+  final List<String> partcipants;// Add this line
 
   Event({
     required this.clubId,

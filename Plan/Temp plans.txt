@@ -55,7 +55,7 @@ Sponsor details
 Member only or open Bool
 Registered students IDs
 
-CLubs:
+Plans:
 1) Club about page has like button(comman), comment,dislike(Only for participants) buttons
 2) normal event list page tiles has share, like alone and about page 
 3) add different sections in club bio page
@@ -66,6 +66,10 @@ CLubs:
 8) create new files for different components/widgets and import when needed
 9) format the document properly
 10) add null everywhere needed
+
+11) Change login Email
+12) create "create EVENT page" for approver
+
 
 reference LINKS:
 1) https://www.youtube.com/watch?v=7RnYcmmg2-c&list=RDCMUCWiC79M4FJ-Ylvk7lkk3n5A&index=3

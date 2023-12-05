@@ -32,7 +32,7 @@ class AuthenticationService {
       } else if (e.code == "invalid-email") {
         return "Invalid email address";
       }
-      return "Wrong Credentials";
+      return "Error while Performing Request";
     }
   }
 
@@ -77,7 +77,7 @@ class AuthenticationService {
   Future<void> signOut(context) async {
     secureStorage.clear();
     await _firebaseAuth.signOut();
-    Navigator.popAndPushNamed(context,'/login');
+     Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
   }
 
   Future<void> updateMail(String newMail) async {

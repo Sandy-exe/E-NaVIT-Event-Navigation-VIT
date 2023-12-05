@@ -47,6 +47,7 @@ Future main() async {
 class Enavit extends StatelessWidget {
   final bool isLoggedIn;
   const Enavit({super.key, required this.isLoggedIn});
+  
 
   // This widget is the root of your application.
   @override
