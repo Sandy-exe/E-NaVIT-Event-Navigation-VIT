@@ -59,7 +59,6 @@ class _AboutEventState extends State<AboutEvent> {
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
 
     if (isLoggedIn) {
-      num.parse("\n\n\n\n\n"+widget.event.fee+"\n\n\n\n\n");
       String? currentUserDataString =
           await secureStorage.reader(key: "currentUserData");
       if (currentUserDataString != null) {
@@ -81,7 +80,7 @@ class _AboutEventState extends State<AboutEvent> {
     try {
       razorpay.open(options);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -117,7 +116,7 @@ class _AboutEventState extends State<AboutEvent> {
               ],
               background: Image.asset(
                 // widget.product.imageURL,r
-                "lib/images/GOJO.jpg",
+                "lib/images/Gojo.jpg",
                 fit: BoxFit.cover,
               )),
           bottom: PreferredSize(

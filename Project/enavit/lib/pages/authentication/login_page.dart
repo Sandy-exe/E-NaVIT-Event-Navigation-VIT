@@ -1,67 +1,130 @@
-import 'package:flutter/material.dart';
-import 'package:enavit/pages/authentication/approver_login_page.dart';
-import 'package:enavit/pages/authentication/participants_login_page.dart';
-import 'package:enavit/pages/authentication/signup_page.dart';
 
-class LoginPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+import 'package:enavit/services/authentication_service.dart';
+
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final AuthenticationService _firebaseAuth = AuthenticationService();
+
+  final TextEditingController _emailTEC = TextEditingController();
+  final TextEditingController _passwordTEC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {                
-                debugPrint("Approver Login");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ApproverLoginPage(),
-                  ),
-                );
-              },
-              child: const Text("Approver Login"),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                debugPrint("Participant Login");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ParticipantLoginPage(),
-                  ),
-                );
-              },
-              child: const Text("Participant Login"),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                debugPrint("Sign up");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignUpPage(),
-                  ),
-                );
-              },
-              child: const Text("Sign up"),
-            ),
-          ],
+        appBar: AppBar(
+          backgroundColor: Colors.red,
         ),
+        body: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Approver",
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 200,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailTEC,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.mail),
+                          labelText: 'Email address',
+                          hintText: 'Enter email address',
+                          isDense: true),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      controller: _passwordTEC,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.key),
+                          labelText: 'Password',
+                          hintText: 'Enter password',
+                          isDense: true),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        
+                        signIn();
+                      },
+                      child: const Text("Sign in"),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text("Forgot Password"),
+
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+            label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
+
+  void signIn() async {
+    final String email = _emailTEC.text;
+    final String password = _passwordTEC.text;
+
+    final String result = await _firebaseAuth.signIn(
+      email: email,
+      password: password,
+    );
+
+    
+    if (result == "success") {
+      if (context.mounted) Navigator.pushNamed(context, '/participant_index');
+      
+    } else {
+      if (context.mounted) _showToast(context, result);
+    }
+  }
+
+  void signOut() async {
+    _firebaseAuth.signOut(context);
+  }
+
+
 }
+

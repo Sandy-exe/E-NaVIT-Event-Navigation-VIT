@@ -15,7 +15,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  AuthenticationService _firebaseAuth = AuthenticationService();
+  final AuthenticationService _firebaseAuth = AuthenticationService();
 
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       right: 10,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/update_profile');
+                          Navigator.pushNamed(context, '/participant_update_profile');
                         },
                         child: Container(
                           width: 35,
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/update_profile');
+                        Navigator.pushNamed(context, '/participant_update_profile');
                       },
                       child: const Text(
                         'Edit Profile',

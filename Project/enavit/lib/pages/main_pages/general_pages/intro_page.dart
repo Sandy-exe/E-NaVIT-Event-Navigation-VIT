@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:enavit/pages/authentication/login_page.dart';
+import 'package:enavit/pages/authentication/login_signup_page.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -51,7 +51,7 @@ class IntroPage extends StatelessWidget {
                     Navigator.push(
                       context, 
                       MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
+                        builder: (context) => const LoginSignupPage(),
                         ),
                       );
                   },

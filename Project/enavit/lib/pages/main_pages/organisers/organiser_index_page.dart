@@ -1,21 +1,19 @@
 
 import 'package:flutter/material.dart';
-import '../components/bottom_nav_bar.dart';
-import 'package:enavit/pages/main_pages/profile_page.dart';
-import 'main_pages/leader_board_page.dart';
-import 'main_pages/home_page.dart';
-import 'main_pages/my_events_page.dart';
+import 'package:enavit/components/approver_bottom_nav_bar.dart';
+import 'package:enavit/pages/main_pages/organisers/organiser_profile_page.dart';
 import 'package:enavit/services/authentication_service.dart';
+import 'package:enavit/pages/main_pages/general_pages/home_page.dart';
 
 
-class IndexPage extends StatefulWidget {
-  const IndexPage({super.key});
+class OIndexPage extends StatefulWidget {
+  const OIndexPage({super.key});
 
   @override
-  State<IndexPage> createState() => _IndexPageState();
+  State<OIndexPage> createState() => _OIndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _OIndexPageState extends State<OIndexPage> {
 
   final AuthenticationService _firebaseAuth = AuthenticationService();
 
@@ -30,9 +28,7 @@ class _IndexPageState extends State<IndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
-    const MyEvents(),
-    const LeaderBoardPage(),
-    const ProfilePage(),
+    const OProfilePage(),
   ];
 
   @override

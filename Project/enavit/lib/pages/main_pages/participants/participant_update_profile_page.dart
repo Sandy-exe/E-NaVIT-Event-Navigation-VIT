@@ -204,7 +204,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     Services  services = Services();
     services.updateUser(currentUserData['userid'],newinfo);
 
-    if (context.mounted) Navigator.pushNamed(context, '/profile'); 
+    if (context.mounted) Navigator.pushNamed(context, '/participant_profile'); 
     
   }
 

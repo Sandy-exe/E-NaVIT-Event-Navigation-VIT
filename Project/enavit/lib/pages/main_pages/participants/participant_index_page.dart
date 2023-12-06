@@ -1,9 +1,52 @@
 
-      
+import 'package:flutter/material.dart';
+import '../../../components/participant_bottom_nav_bar.dart';
+import 'package:enavit/pages/main_pages/participants/participant_profile_page.dart';
+import 'leader_board_page.dart';
+import '../general_pages/home_page.dart';
+import 'my_events_page.dart';
+import 'package:enavit/services/authentication_service.dart';
+
+
+class IndexPage extends StatefulWidget {
+  const IndexPage({super.key});
+
+  @override
+  State<IndexPage> createState() => _IndexPageState();
+}
+
+class _IndexPageState extends State<IndexPage> {
+
+  final AuthenticationService _firebaseAuth = AuthenticationService();
+
+  int selectedIndex = 0 ;
+
+  void navigateBottomBar(int index){
+    setState(() {
+      selectedIndex = index;
+    });
+  }
+
+  //pages to display
+  final List<Widget> pages = [
+    const HomePage(),
+    const MyEvents(),
+    const LeaderBoardPage(),
+    const ProfilePage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[300],
+      bottomNavigationBar: NavBar(
+        onTabChange: (index) => navigateBottomBar(index),
+      ),
       appBar: AppBar(
         title: const Text('Enavit'),
         centerTitle: true,
-        backgroundColor: Colors.grey[400],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
               onPressed: () {
@@ -73,21 +116,28 @@
               ],
             ), 
               
-              const Padding(
-                padding: EdgeInsets.only(left:25.0,bottom: 25.0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                    ),
-                  title: Text(
-                    'logout',
-                    style: TextStyle(color: Colors.white),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(left:25.0,bottom: 25.0),
+                child: GestureDetector(
+                  onTap: () {
+                    _firebaseAuth.signOut(context);
+                  },
+                  child:  const ListTile(
+                    leading: Icon(
+                      Icons.logout,
+                      color: Colors.white,
                       ),
+                    title: Text(
+                      'logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                        ),
+                ),
               ),
           ]
         ),
       ),
-      body: _pages[_selectedIndex],
-    
+      body: pages[selectedIndex],
+    );
+  }
+}

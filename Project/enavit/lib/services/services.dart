@@ -34,6 +34,8 @@ class Services {
     Map<String, dynamic> currentUserData = currentUser.data()!;
     String currentUserDataString = jsonEncode(currentUserData);
     await secureStorage.writer(key: "currentUserData", value: currentUserDataString);
+    final userRole =  currentUserData['role'];
+    await secureStorage.writer(key: "userRole", value: userRole.toString());
   }
 
   Future<List> getEventData() async {
