@@ -35,7 +35,7 @@ class Club {
 
 class Event {
   final String clubId;
-  final DateTime dateTime;
+  final Map<String,DateTime> dateTime;
   final String description;
   final String eventId;
   final String eventName;
