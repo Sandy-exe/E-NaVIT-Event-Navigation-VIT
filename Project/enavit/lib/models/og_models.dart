@@ -20,8 +20,8 @@ class Club {
   final String clubName;
   final String bio;
   final String email;
-  final List<int> events;
-  final List<int> approvers;
+  final List<String> events;
+  final List<String> approvers;
 
   Club({
     required this.clubId,
