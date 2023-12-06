@@ -40,6 +40,7 @@ class Event {
   final String eventId;
   final String eventName;
   final String location;
+  final String fee;
   final List<String> organisers;
   final int likes;
   final Map<String,String> comments;
@@ -56,6 +57,7 @@ class Event {
     required this.comments,
     required this.participants, 
     required this.likes,
+    required this.fee,
     // Add this line
   });
 }

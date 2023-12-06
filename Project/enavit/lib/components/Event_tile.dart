@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/event.dart';
-import '../pages/about_event_page.dart';
+import 'package:enavit/models/og_models.dart';
+import '../pages/main_pages/about_event_page.dart';
 
 class EventTile extends StatelessWidget {
   final Event event;
@@ -38,7 +38,7 @@ class EventTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0),
                       child: SizedBox(
                         width: 250.0, // desired width
-                        child: Image.asset(event.imagePath),
+                        child: Image.asset('lib/images/GOJO.jpg'),
                       ),
                     ),
                     const SizedBox(height: 10,),

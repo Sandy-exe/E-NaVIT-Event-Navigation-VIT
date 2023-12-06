@@ -1,28 +1,104 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:enavit/models/event.dart';
-import '../models/add_event.dart';
-import 'package:provider/provider.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:enavit/Data/secure_storage.dart';
+import 'package:enavit/services/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+//import '../../models/add_event.dart';
+//import 'package:provider/provider.dart';
 
 class AboutEvent extends StatefulWidget {
   final Event event;
-  final int ok = 1;
   const AboutEvent({super.key, required this.event});
   @override
   State<AboutEvent> createState() => _AboutEventState();
 }
 
 class _AboutEventState extends State<AboutEvent> {
-  void addEventToUser(Event event,) {
-    Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
+  late Razorpay razorpay;
+  late bool isLoggedIn;
+  late Map<String, dynamic> currentUserData;
+
+
+  void razorPayDialogBox(String content) {
+    //Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
     // get a Event from Event list
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Successfully Added'),
-        content: Text('You have successfully added ${event.name} to your list'),
+        title: const Text("Payment Status"),
+        content: Text(content),
       ),
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    
+
+
+    razorpay = Razorpay();
+
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
+    
+
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    razorpay.clear();
+  }
+  void openCheckout() async {
+    SecureStorage secureStorage = SecureStorage();
+    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+
+    if (isLoggedIn) {
+      num.parse("\n\n\n\n\n"+widget.event.fee+"\n\n\n\n\n");
+      String? currentUserDataString =
+          await secureStorage.reader(key: "currentUserData");
+      if (currentUserDataString != null) {
+        currentUserData = jsonDecode(currentUserDataString);
+      }
+    }
+    
+
+
+    var options = {
+      'key': 'rzp_test_nToF04vc477NSJ',
+      'amount': num.parse(widget.event.fee)*100.00, //in the smallest currency sub-unit.
+      'name': 'ENAVIT', 
+      'description': "Payment for ${widget.event.eventName}",
+      'timeout': 60, // in seconds
+      'prefill': {'contact': currentUserData['phone_no'], 'email': currentUserData['email']},
+    };
+
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void handlePaymentSuccess(PaymentSuccessResponse response) {
+    razorPayDialogBox("Payment Successfull");
+    updateUserAndEventDetails(currentUserData['userid'], widget.event.eventId);
+  }
+
+  void handlePaymentError(PaymentFailureResponse response) {
+    razorPayDialogBox("Payment Failed");
+  }
+
+  void handleExternalWallet(ExternalWalletResponse response) {
+    razorPayDialogBox("External Wallet Selected");
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +117,7 @@ class _AboutEventState extends State<AboutEvent> {
               ],
               background: Image.asset(
                 // widget.product.imageURL,r
-                widget.event.imagePath,
+                "lib/images/GOJO.jpg",
                 fit: BoxFit.cover,
               )),
           bottom: PreferredSize(
@@ -86,7 +162,7 @@ class _AboutEventState extends State<AboutEvent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.event.name,
+                            widget.event.eventName,
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 22,
@@ -126,14 +202,14 @@ class _AboutEventState extends State<AboutEvent> {
                     height: 30,
                   ),
                   Text(
-                    widget.event.venue,
+                    widget.event.location,
                     style: TextStyle(color: Colors.grey.shade400, fontSize: 18),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    widget.event.fee,
+                    "Fee: ${widget.event.fee}",
                     style: TextStyle(color: Colors.grey.shade400, fontSize: 18),
                   ),
                   const SizedBox(
@@ -144,7 +220,7 @@ class _AboutEventState extends State<AboutEvent> {
                   ),
                   MaterialButton(
                     onPressed: () {
-                      addEventToUser(widget.event);
+                      openCheckout();
                     },
                     height: 50,
                     elevation: 0,
@@ -154,7 +230,7 @@ class _AboutEventState extends State<AboutEvent> {
                     color: Colors.yellow[800],
                     child: const Center(
                       child: Text(
-                        "Select Event",
+                        "Go to Payment Page",
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
@@ -165,4 +241,22 @@ class _AboutEventState extends State<AboutEvent> {
       ]),
     );
   }
+}
+
+void updateUserAndEventDetails(String userId, String eventId) {
+  Services service = Services();
+
+  Map<String,dynamic> eventDetails = {
+    "participants": FieldValue.arrayUnion([userId]),
+  };
+
+  Map<String,dynamic> userDetails = {
+    "events": FieldValue.arrayUnion([eventId]),
+  };
+
+  service.updateEvent(eventId, eventDetails);
+  service.updateUser(userId, userDetails);
+
+  
+
 }

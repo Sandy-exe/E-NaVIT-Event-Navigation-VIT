@@ -1,12 +1,9 @@
 
-import 'dart:convert';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
-import 'models/add_event.dart';
+
 import 'package:enavit/pages/intro_page.dart';
-import 'package:provider/provider.dart';
 import 'package:enavit/pages/authentication/login_page.dart';
 import 'package:enavit/pages/authentication/signup_page.dart';
 import 'package:enavit/pages/index_page.dart';
@@ -53,24 +50,21 @@ class Enavit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
-    return ChangeNotifierProvider(
-      create: (context) => AddEvent(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Enavit',
-        initialRoute: isLoggedIn ? '/index' : '/',
-        //initialRoute: '/',
-        routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
-          '/': (context) => const IntroPage(),
-          // Add more routes as needed
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) =>const SignUpPage(),
-          '/index': (context) => const IndexPage(),
-          '/profile': (context) => const ProfilePage(),
-          '/update_profile': (context) => const UpdateProfile(),
-        },
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Enavit',
+      initialRoute: isLoggedIn ? '/index' : '/',
+      //initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const IntroPage(),
+        // Add more routes as needed
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) =>const SignUpPage(),
+        '/index': (context) => const IndexPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/update_profile': (context) => const UpdateProfile(),
+      },
     );
   }
 }

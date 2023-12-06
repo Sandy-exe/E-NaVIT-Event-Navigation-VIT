@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import '../components/bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/profile_page.dart';
-import 'history_page.dart';
-import 'home_page.dart';
-import 'my_events_page.dart';
+import 'main_pages/leader_board_page.dart';
+import 'main_pages/home_page.dart';
+import 'main_pages/my_events_page.dart';
 import 'package:enavit/services/authentication_service.dart';
+
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -29,8 +30,8 @@ class _IndexPageState extends State<IndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
-    const HistoryPage(),
     const MyEvents(),
+    const LeaderBoardPage(),
     const ProfilePage(),
   ];
 
