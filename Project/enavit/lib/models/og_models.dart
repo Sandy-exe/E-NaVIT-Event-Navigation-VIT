@@ -43,7 +43,7 @@ class Event {
   final List<String> organisers;
   final int likes;
   final Map<String,String> comments;
-  final List<String> partcipants;// Add this line
+  final List<String> participants;// Add this line
 
   Event({
     required this.clubId,
@@ -54,7 +54,7 @@ class Event {
     required this.location,
     required this.organisers,
     required this.comments,
-    required this.partcipants, 
+    required this.participants, 
     required this.likes,
     // Add this line
   });
