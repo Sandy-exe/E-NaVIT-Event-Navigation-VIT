@@ -31,6 +31,11 @@ class _OIndexPageState extends State<OIndexPage> {
     const OProfilePage(),
   ];
 
+  final List<String> pageTitles = [
+    'Home',
+    'Profile',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +44,7 @@ class _OIndexPageState extends State<OIndexPage> {
         onTabChange: (index) => navigateBottomBar(index),
       ),
       appBar: AppBar(
-        title: const Text('Enavit'),
+        title: Text(pageTitles[selectedIndex]),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

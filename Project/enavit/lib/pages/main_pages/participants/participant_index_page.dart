@@ -35,6 +35,13 @@ class _IndexPageState extends State<IndexPage> {
     const ProfilePage(),
   ];
 
+  final List<String> pageTitles = [
+    'Home',
+    'My Events',
+    'Leader Board',
+    'Profile',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +50,7 @@ class _IndexPageState extends State<IndexPage> {
         onTabChange: (index) => navigateBottomBar(index),
       ),
       appBar: AppBar(
-        title: const Text('Enavit'),
+        title: Text(pageTitles[selectedIndex]),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -71,10 +78,23 @@ class _IndexPageState extends State<IndexPage> {
               children: [
                  //logo
                 DrawerHeader(
-                  child: Image.asset(
-                    'lib/images/Denji.jpg',
-                    height: 300,
+                  child: SizedBox(
+                    height: 500,
+                    child: Column(
+                      children: [
+                        const Center(child: Text("Enavit"
+                      ,style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        ),)),
+                        Image.asset(
+                          'lib/images/Denji.jpg',
+                          width: 150,
+                          ),
+                      ],
                     ),
+                  ),
                   ),
 
                 Padding(

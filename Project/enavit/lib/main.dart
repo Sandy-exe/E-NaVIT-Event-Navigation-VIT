@@ -48,9 +48,17 @@ Future main() async {
           messagingSenderId: "1084741784734",
           projectId: "e-navit"));
 
-  String currentUserDataString = await securestorage.reader(key: "currentUserData") ?? "null"; 
-  Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
-  int userRole = currentUserData["role"];
+  
+
+  String currentUserDataString = await securestorage.reader(key: "currentUserData") ?? "null" ; 
+
+  int userRole = -1;
+  
+  if (currentUserDataString != "null") {
+    Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
+    int userRole = currentUserData["role"];
+  } 
+  
   print(userRole);
   runApp(Enavit(isLoggedIn: isLoggedIn, userRole: userRole),);
 }

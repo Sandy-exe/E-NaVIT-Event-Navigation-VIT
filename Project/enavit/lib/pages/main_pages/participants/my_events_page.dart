@@ -14,9 +14,6 @@ class _MyEventsState extends State<MyEvents> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        title: const Text('My Events'),
-      ),
       body: const Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

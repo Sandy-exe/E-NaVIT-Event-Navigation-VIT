@@ -38,7 +38,7 @@ class EventTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0),
                       child: SizedBox(
                         width: 250.0, // desired width
-                        child: Image.asset('lib/images/Gojo.jpg'),
+                        child: Image.asset('lib/images/GOJO.jpg'),
                       ),
                     ),
                     const SizedBox(height: 10,),

@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = Theme.of(context).brightness == Brightness.dark;
+    //var isDark = Theme.of(context).brightness == Brightness.dark;
     return FutureBuilder(
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -54,23 +54,23 @@ class _ProfilePageState extends State<ProfilePage> {
           } else {
             return Scaffold(
               backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[300],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Center(child: Text('Profile')),
-        actions: [
-          IconButton(
-            icon: Icon(
-                isDark ? FontAwesomeIcons.sun : FontAwesomeIcons.solidMoon),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.grey[300],
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      //   title: const Center(child: Text('Profile')),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(
+      //           isDark ? FontAwesomeIcons.sun : FontAwesomeIcons.solidMoon),
+      //       onPressed: () {},
+      //     ),
+      //   ],
+      // ),
       body: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.all(20),
