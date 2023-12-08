@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:enavit/components/compute.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -17,6 +18,7 @@ import 'package:enavit/pages/main_pages/organisers/organiser_update_profile_page
 import 'package:enavit/pages/main_pages/approvers/approver_index_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
+import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +62,9 @@ Future main() async {
   } 
   
   print(userRole);
-  runApp(Enavit(isLoggedIn: isLoggedIn, userRole: userRole),);
+  runApp(
+     Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
+    );
 }
 
 class Enavit extends StatelessWidget {
@@ -72,30 +76,33 @@ class Enavit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Enavit',
-      initialRoute: isLoggedIn ? (userRole == 0 ? '/approver_index' : (userRole == 1 ? '/organiser_index' : '/participant_index') ) : '/',
-      //initialRoute: '/',
-      routes: {
-        // First Screen
-        '/': (context) => const IntroPage(),
-        // General
-        '/login': (context) => const LoginSignupPage(),
-        '/signup': (context) =>const SignUpPage(),
-        //participants
-        '/participant_index': (context) => const IndexPage(),
-        '/participant_profile': (context) => const ProfilePage(),
-        '/participant_update_profile': (context) => const UpdateProfile(),
-        //organisers
-        '/organiser_index': (context) => const OIndexPage(),
-        '/organiser_profile': (context) => const OProfilePage(),
-        '/organiser_update_profile': (context) => const OProfileUpdatePage(),
-        //approvers
-        '/approver_index': (context) => const AIndexPage(),
-        '/approver_profile': (context) => const AProfilePage(),
-        '/approver_update_profile': (context) => const AProfileUpdatePage(),
-      },
+    return ChangeNotifierProvider(
+      create: (_) => Compute(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Enavit',
+        initialRoute: isLoggedIn ? (userRole == 0 ? '/approver_index' : (userRole == 1 ? '/organiser_index' : '/participant_index') ) : '/',
+        //initialRoute: '/',
+        routes: {
+          // First Screen
+          '/': (context) => const IntroPage(),
+          // General
+          '/login': (context) => const LoginSignupPage(),
+          '/signup': (context) =>const SignUpPage(),
+          //participants
+          '/participant_index': (context) => const IndexPage(),
+          '/participant_profile': (context) => const ProfilePage(),
+          '/participant_update_profile': (context) => const UpdateProfile(),
+          //organisers
+          '/organiser_index': (context) => const OIndexPage(),
+          '/organiser_profile': (context) => const OProfilePage(),
+          '/organiser_update_profile': (context) => const OProfileUpdatePage(),
+          //approvers
+          '/approver_index': (context) => const AIndexPage(),
+          '/approver_profile': (context) => const AProfilePage(),
+          '/approver_update_profile': (context) => const AProfileUpdatePage(),
+        }
+    ),
     );
   }
 }

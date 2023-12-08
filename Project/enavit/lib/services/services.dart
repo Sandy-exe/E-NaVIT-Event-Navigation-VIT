@@ -36,6 +36,44 @@ class Services {
     await secureStorage.writer(key: "currentUserData", value: currentUserDataString);
     final userRole =  currentUserData['role'];
     await secureStorage.writer(key: "userRole", value: userRole.toString());
+
+
+    //Store Event data of the user
+    List<String> events = [];
+    print(currentUserData['events']);
+
+    for (final eventId in currentUserData['events']) {
+      final event = await firestore.collection("Events").doc(eventId).get();
+      print(event.data());
+
+      Map<String, dynamic> eventData = event.data()!;
+
+      Map<String, String> dateTime = {
+        'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate().toString(),
+        'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
+      };
+
+      Map<String,dynamic> eventObj = {
+          "clubId": eventData['clubId'],
+          "dateTime": dateTime,
+          "description": eventData['description'],
+          "eventId": eventData['eventId'],
+          "eventName": eventData['eventName'],
+          "location": eventData['location'],
+          "fee": eventData['fee'],
+          "organisers": List<String>.from(eventData['organisers']),
+          "comments": Map<String, String>.from(eventData['comments']),
+          "participants": List<String>.from(eventData['participants']),
+          "likes": eventData['likes'],
+      };
+
+      String eventDataString = jsonEncode(eventObj);
+      print(eventDataString);
+      events.add(eventDataString);
+    }
+
+    String eventsString = events.join("JOIN");
+    await secureStorage.writer(key: "events", value: eventsString);
   }
 
   Future<List> getEventData() async {
@@ -86,6 +124,19 @@ class Services {
   Future<void> updateEvent (String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
     await docref.update(newinfo);//push the object
+    List<String> events = [];
+
+    Map<String,dynamic> currentUserData = jsonDecode(await secureStorage.reader(key: "currentUserData")?? "null");
+
+    for (final eventId in currentUserData['events']) {
+      final event = await firestore.collection("Events").doc(eventId).get();
+      Map<String, dynamic> eventData = event.data()!;
+      String eventDataString = jsonEncode(eventData);
+      events.add(eventDataString);
+    }
+
+    String eventsString = events.join("JOIN");
+    await secureStorage.writer(key: "events", value: eventsString);
   }
 
 

@@ -10,9 +10,13 @@ class MyEvents extends StatefulWidget {
 }
 
 class _MyEventsState extends State<MyEvents> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[300],
       body: const Center(
         child: Column(
@@ -21,7 +25,9 @@ class _MyEventsState extends State<MyEvents> {
             SizedBox(
               height: 20,
             ),
-            DatePicker(),
+            SizedBox(
+              height: 100,
+              child: DatePicker()),
             SizedBox(
               height: 20,
             ),

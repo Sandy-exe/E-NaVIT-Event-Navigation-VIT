@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:timeline_tile/timeline_tile.dart';
+import 'dart:convert';
 
+import 'package:enavit/Data/secure_storage.dart';
+import 'package:enavit/components/compute.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 class EventTimeline extends StatefulWidget {
   const EventTimeline({super.key});
@@ -8,87 +12,102 @@ class EventTimeline extends StatefulWidget {
   @override
   State<EventTimeline> createState() => _EventTimelineState();
 }
-class _EventTimelineState extends State<EventTimeline> {
-   List<Map<String, dynamic>> events = [
-      {"name": "Event 1", "time": "10:00", "color": "red"},
-      {"name": "Event 2", "time": "11:00", "color": "blue "},
-      {"name": "Event 1", "time": "10:00", "color": "red"},
-      {"name": "Event 2", "time": "11:00", "color": "blue "},
-      {"name": "Event 1", "time": "10:00", "color": "red"},
-      {"name": "Event 2", "time": "11:00", "color": "blue "},
-      // Add more events here
-    ];
 
-    var dropdown = ["Month", "Week", "Upcoming", "Past", "Year"];
-    String dropdownValue = 'Month';
+class _EventTimelineState extends State<EventTimeline> {
+
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Event Timeline',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getEventsUserByDate();
+  }
+
+  SecureStorage secureStorage = SecureStorage();
+  List<Map<String, dynamic>> events = [];
+  Future<void> getEventsUserByDate() async {
+    String? eventsString = await secureStorage.reader(key: "events");
+    List<String> userEvent =
+        eventsString != null ? eventsString.split("JOIN") : [];
+    for (final event in userEvent) {
+      Map<String, dynamic> eventData = jsonDecode(event);
+      Map<String, dynamic> tempData = {"name": eventData["eventName"] , "time":eventData["dateTime"]["startTime"].substring(11,16),"color":"red"};
+      events.add(tempData);
+    }
+    events.sort((a, b) => a['time'].compareTo(b['time']));
+    print(events);
+  }
+    var dropdown = ["Month", "Week", "Upcoming", "Past", "Year"];
+  String dropdownValue = 'Month';
+    @override
+    Widget build(BuildContext context) {
+      return Consumer<Compute>(
+          builder: (context, value, child) => Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Event Timeline',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  dropdownColor: Colors.black,
+                                  value: dropdownValue,
+                                  iconEnabledColor: Colors.white,
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  iconSize: 30,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  items: dropdown.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items,
+                                      child: Center(child: Text(items)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      dropdownValue = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        dropdownColor: Colors.black,
-                        value: dropdownValue,
-                        iconEnabledColor: Colors.white,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        iconSize: 30,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        items: dropdown.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Center(child: Text(items)),
-                          );
-                        }).toList(),
-                                       
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: events.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return _buildEvent(events[index]);
                         },
                       ),
                     ),
-                  ),
-                ],
-              )),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: events.length,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                return _buildEvent(events[index]);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+                  ],
+                ),
+              ));
+    }
   }
 
   Widget _buildEvent(Map<String, dynamic> event) {
@@ -185,4 +204,3 @@ class _EventTimelineState extends State<EventTimeline> {
       ),
     );
   }
-}
