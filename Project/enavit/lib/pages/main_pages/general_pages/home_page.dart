@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                 //search bar
                 Container(
                   padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.symmetric(horizontal: 25.0),
+                  margin: const EdgeInsets.only(bottom: 10, top: 5, left: 20, right: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(25.0),
@@ -89,12 +89,6 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "See All",
-                        style: TextStyle(
-                          color: Colors.blue,
                         ),
                       ),
                     ],

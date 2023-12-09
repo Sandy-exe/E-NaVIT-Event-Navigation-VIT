@@ -61,7 +61,6 @@ Future main() async {
     int userRole = currentUserData["role"];
   } 
   
-  print(userRole);
   runApp(
      Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
     );

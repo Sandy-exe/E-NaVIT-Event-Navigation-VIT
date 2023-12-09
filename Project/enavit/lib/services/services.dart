@@ -40,11 +40,9 @@ class Services {
 
     //Store Event data of the user
     List<String> events = [];
-    print(currentUserData['events']);
 
     for (final eventId in currentUserData['events']) {
       final event = await firestore.collection("Events").doc(eventId).get();
-      print(event.data());
 
       Map<String, dynamic> eventData = event.data()!;
 
@@ -52,6 +50,8 @@ class Services {
         'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate().toString(),
         'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
       };
+
+      print(dateTime);
 
       Map<String,dynamic> eventObj = {
           "clubId": eventData['clubId'],
@@ -68,12 +68,12 @@ class Services {
       };
 
       String eventDataString = jsonEncode(eventObj);
-      print(eventDataString);
       events.add(eventDataString);
     }
 
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
+    
   }
 
   Future<List> getEventData() async {

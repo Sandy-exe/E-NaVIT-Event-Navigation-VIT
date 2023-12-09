@@ -116,7 +116,7 @@ class _AboutEventState extends State<AboutEvent> {
               ],
               background: Image.asset(
                 // widget.product.imageURL,r
-                "lib/images/Gojo.jpg",
+                "lib/images/GOJO.jpg",
                 fit: BoxFit.cover,
               )),
           bottom: PreferredSize(

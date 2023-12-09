@@ -76,6 +76,7 @@ flutter:
   assets:
     - lib/images/
     - lib/images/GOJO.jpg
+    - lib/images/Gojo.jpg
     - lib/images/Denji.jpg
     - lib/images/Pochita.jpg
     - lib/images/Freedom_eren.jpg

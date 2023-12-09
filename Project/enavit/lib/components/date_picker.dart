@@ -14,24 +14,33 @@ class _DatePickerState extends State<DatePicker> {
   @override
   void initState() {
     super.initState();
-    print("ok");
   }
 
-  Future<void> initPrefs() async {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<Compute>(context, listen: false).datePicker(3);
-    });
-  }
+  // Future<void> initPrefs() async {
+  //   WidgetsBinding.instance.addPostFrameCallback((_){
+  //     Provider.of<Compute>(context, listen: false).datePickerWeek(3);
+  //   });
+  // }
 
-  void ontimelinechange(int index) {
-      Provider.of<Compute>(context, listen: false).datePicker(index);
+  Future<void> ontimelinechange(int index) async {
+    if (Provider.of<Compute>(context, listen: false).updateFilter == "Week") {
+      Provider.of<Compute>(context, listen: false).datePickerWeek(index);
+    } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Month") {
+      Provider.of<Compute>(context, listen: false).datePickerMonth(index);}
+    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Year") {
+    //   Provider.of<Compute>(context, listen: false).datePickerYear(index);
+    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Upcoming") {
+    //   Provider.of<Compute>(context, listen: false).datePickerUpcoming(index);
+    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Past") {
+    //   Provider.of<Compute>(context, listen: false).datePickerPast(index);
+    // }
   }
 
   
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: initPrefs(),
+        future: ontimelinechange(3),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
@@ -58,7 +67,7 @@ class _DatePickerState extends State<DatePicker> {
                     child: Column(
                       children: [
                         Text(
-                          value.weekList[index],
+                          value.datePickerUpper[index],
                           style: TextStyle(
                             color:
                                 value.selected == index ? Colors.white : Colors.black,
@@ -79,7 +88,7 @@ class _DatePickerState extends State<DatePicker> {
                           ),
                           child: Center(
                             child: Text(
-                              value.dayList[index],
+                              value.datePickerLower[index],
                               style: TextStyle(
                                 color: value.selected == index
                                     ? Colors.black
@@ -97,7 +106,7 @@ class _DatePickerState extends State<DatePicker> {
             separatorBuilder: (_, index) => const SizedBox(
                   width: 5,
                 ),
-            itemCount: value.weekList.length),
+            itemCount: value.datePickerLower.length),
       ),
     );
           }
