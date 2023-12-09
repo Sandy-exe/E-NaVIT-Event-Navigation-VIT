@@ -52,6 +52,7 @@ class _IndexPageState extends State<IndexPage> {
       appBar: AppBar(
         title: Text(pageTitles[selectedIndex]),
         centerTitle: true,
+        scrolledUnderElevation: 0.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Builder(
@@ -100,7 +101,7 @@ class _IndexPageState extends State<IndexPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:25.0),
                   child: Divider(
-                    color: Colors.grey[400],
+                    color: Colors.grey[300],
                     thickness: 1,
                   ),
                   ),

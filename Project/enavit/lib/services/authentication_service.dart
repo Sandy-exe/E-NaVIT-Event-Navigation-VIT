@@ -75,11 +75,7 @@ class AuthenticationService {
   }
 
   Future<void> signOut(context) async {
-    String eventsString = (await secureStorage.reader(key: "events")) ?? "null";
-    print(eventsString);
     secureStorage.clear();
-    eventsString = (await secureStorage.reader(key: "events")) ?? "null";
-    print(eventsString);
     await _firebaseAuth.signOut();
     Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);
   }

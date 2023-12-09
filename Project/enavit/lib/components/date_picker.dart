@@ -26,14 +26,13 @@ class _DatePickerState extends State<DatePicker> {
     if (Provider.of<Compute>(context, listen: false).updateFilter == "Week") {
       Provider.of<Compute>(context, listen: false).datePickerWeek(index);
     } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Month") {
-      Provider.of<Compute>(context, listen: false).datePickerMonth(index);}
-    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Year") {
-    //   Provider.of<Compute>(context, listen: false).datePickerYear(index);
-    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Upcoming") {
-    //   Provider.of<Compute>(context, listen: false).datePickerUpcoming(index);
-    // } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Past") {
-    //   Provider.of<Compute>(context, listen: false).datePickerPast(index);
-    // }
+      Provider.of<Compute>(context, listen: false).datePickerMonth(index);
+    } else if (Provider.of<Compute>(context, listen: false).updateFilter == "Year") {
+      Provider.of<Compute>(context, listen: false).datePickerYear(index);
+    } else if (Provider.of<Compute>(context, listen: false).updateFilter == "History") {
+      Provider.of<Compute>(context, listen: false).datePickerHistory(index);
+    }
+
   }
 
   

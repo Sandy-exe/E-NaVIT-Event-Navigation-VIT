@@ -41,10 +41,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    // Consumer<AddEvent>(
-    // builder: (context, value, child) => 
-              FutureBuilder(
+    return FutureBuilder(
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -57,26 +54,21 @@ class _HomePageState extends State<HomePage> {
               children: [
                 //search bar
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(1),
                   margin: const EdgeInsets.only(bottom: 10, top: 5, left: 20, right: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(25.0),
                   ),
-                  child: const Row(
-                    children: [
-                      Text(
-                        "Search",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      ),
-                    ],
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
-
                 //HOT Picks
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),

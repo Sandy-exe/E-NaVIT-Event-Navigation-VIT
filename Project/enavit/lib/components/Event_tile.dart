@@ -42,17 +42,65 @@ class EventTile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10,),
-                    GestureDetector(
-                    onTap: onTap,
-                    child: Container(
-                      padding: const EdgeInsets.all(1),
-                      child: const Icon(
-                        Icons.favorite_border_outlined,
-                        color: Color.fromARGB(255, 90, 88, 88),
-                        size: 30.0,
+
+
+                    SizedBox(
+                      width: 250,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                              onTap: onTap,
+                              child: Container(
+                                padding: const EdgeInsets.all(1),
+                                child: const Icon(
+                                  Icons.favorite_border_outlined,
+                                  color: Color.fromARGB(255, 90, 88, 88),
+                                  size: 30.0,
+                                ),
+                              ),
+                                                      ),
+                                                      GestureDetector(
+                              onTap: onTap,
+                              child: Container(
+                                padding: const EdgeInsets.all(1),
+                                child: const Icon(
+                                  Icons.comment_outlined,
+                                  color: Color.fromARGB(255, 90, 88, 88),
+                                  size: 30.0,
+                                ),
+                              ),
+                                                      ),
+                                                      GestureDetector(
+                              onTap: onTap,
+                              child: Container(
+                                padding: const EdgeInsets.all(1),
+                                child: const Icon(
+                                  Icons.send_outlined,
+                                  color: Color.fromARGB(255, 90, 88, 88),
+                                  size: 30.0,
+                                ),
+                              ),
+                                                      ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: onTap,
+                            child: Container(
+                              padding: const EdgeInsets.all(1),
+                              child: const Icon(
+                                Icons.bookmark_border_outlined,
+                                color: Color.fromARGB(255, 90, 88, 88),
+                                size: 30.0,
+                              ),
+                            ),
+                          ),
+
+                        ],
                       ),
                     ),
-                  ),
                   ],
                 ),
               ),
@@ -109,99 +157,24 @@ class EventTile extends StatelessWidget {
             //   ),
             // ),
 
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Container(
-                height: 300,
-                width:40,
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(245, 245, 245, 1),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(12.0),
-                    bottomRight: Radius.circular(12.0),
-                  )
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-              
-                  children: [
-                    
-                    GestureDetector(
-                          onTap: onTap,
-                          child: Container(
-                            padding: const EdgeInsets.all(1),
-                            child: const Icon(
-                              Icons.bookmark_border_outlined,
-                              color: Color.fromARGB(255, 90, 88, 88),
-                              size: 30.0,
-                            ),
-                          ),
-                        ),
-              
-                    const SizedBox(height: 10,),
-                    
-                    GestureDetector(
-                            onTap: onTap,
-                            child: Container(
-                              padding: const EdgeInsets.all(1),
-                              child: const Icon(
-                                Icons.favorite_border_outlined,
-                                color: Color.fromARGB(255, 90, 88, 88),
-                                size: 30.0,
-                              ),
-                            ),
-                          ),
-                
-                    const SizedBox(height: 10,),
-              
-                    
-                     GestureDetector(
-                          onTap: onTap,
-                          child: Container(
-                            padding: const EdgeInsets.all(1),
-                            child: const Icon(
-                              Icons.comment_outlined,
-                              color: Color.fromARGB(255, 90, 88, 88),
-                              size: 30.0,
-                            ),
-                          ),
-                        ),
-              
-                    const SizedBox(
-                      height: 10,
+            SizedBox(
+              // color: Colors.red,
+              height: 400,
+              width:80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 70,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: const Image(
+                          image: AssetImage('lib/images/Pochita.jpg')),
                     ),
-              
-                    
-                    
-                    GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        child: const Icon(
-                          Icons.info_outline_rounded,
-                          color: Color.fromARGB(255, 90, 88, 88),
-                          size: 30.0,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        padding: const EdgeInsets.all(1),
-                        child: const Icon(
-                          Icons.send_outlined,
-                          color: Color.fromARGB(255, 90, 88, 88),
-                          size: 30.0,
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
+                  ),
+                  
+                  
+                ],
               ),
             ),
           ],

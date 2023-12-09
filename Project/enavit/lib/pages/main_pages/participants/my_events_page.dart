@@ -12,21 +12,20 @@ class MyEvents extends StatefulWidget {
 }
 
 class _MyEventsState extends State<MyEvents> {
-  var dropdown = ["Week","Month","Year","Upcoming","Past"];
+  var dropdown = ["Week","Month","Year","History"];
   String dropdownValue = 'Week';
 
   Future<void> updateFilter(String dropdownValue) async {
+    DateTime now = DateTime.now();
     if (dropdownValue == 'Week'){
       Provider.of<Compute>(context, listen: false).datePickerWeek(3);
     } else if (dropdownValue == 'Month'){
-      Provider.of<Compute>(context, listen: false).datePickerMonth(6);}
-    // } else if (dropdownValue == 'Year'){
-    //   Provider.of<Compute>(context, listen: false).datePickerYear(1);
-    // } else if (dropdownValue == 'Upcoming'){
-    //   Provider.of<Compute>(context, listen: false).datePickerUpcoming();
-    // } else if (dropdownValue == 'Past'){
-    //   Provider.of<Compute>(context, listen: false).datePickerPast();
-    // }
+      Provider.of<Compute>(context, listen: false).datePickerMonth(now.month.toInt()-1);
+    } else if (dropdownValue == 'Year'){
+      Provider.of<Compute>(context, listen: false).datePickerYear(4);
+    } else if (dropdownValue == 'History'){
+      Provider.of<Compute>(context, listen: false).datePickerHistory(1);
+    }
   }
 
 

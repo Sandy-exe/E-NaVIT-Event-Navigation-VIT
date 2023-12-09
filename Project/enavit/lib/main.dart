@@ -55,11 +55,10 @@ Future main() async {
   String currentUserDataString = await securestorage.reader(key: "currentUserData") ?? "null" ; 
 
   int userRole = -1;
-  
   if (currentUserDataString != "null") {
     Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
-    int userRole = currentUserData["role"];
-  } 
+    userRole = currentUserData["role"];
+  }
   
   runApp(
      Enavit(isLoggedIn: isLoggedIn, userRole: userRole),

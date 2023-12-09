@@ -160,12 +160,30 @@ class _AboutEventState extends State<AboutEvent> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.event.eventName,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width *  0.88 ,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  widget.event.eventName,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                            
+                                SizedBox(
+                                  width: 70,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: const Image(
+                                        image:
+                                            AssetImage('lib/images/Pochita.jpg')),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(

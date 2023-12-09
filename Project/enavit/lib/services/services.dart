@@ -51,7 +51,6 @@ class Services {
         'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
       };
 
-      print(dateTime);
 
       Map<String,dynamic> eventObj = {
           "clubId": eventData['clubId'],

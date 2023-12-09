@@ -60,7 +60,7 @@ Widget _buildEvent(Map<String, dynamic> event) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(event['startTime']),
+              Text(event['toDisplay']),
               const SizedBox(
                 width: 10,
               ),
