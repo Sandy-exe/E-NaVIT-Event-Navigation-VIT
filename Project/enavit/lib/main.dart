@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:enavit/components/compute.dart';
+import 'package:enavit/components/search_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -74,8 +75,15 @@ class Enavit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   
-    return ChangeNotifierProvider(
-      create: (_) => Compute(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Compute>(
+          create: (context) => Compute(),
+        ),
+        ChangeNotifierProvider<SearchModel>(
+          create: (context) => SearchModel(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Enavit',
