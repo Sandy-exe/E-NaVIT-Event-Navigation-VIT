@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
 import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
 import 'search_model.dart';
+import '../models/og_models.dart';
 class FloatingSearchBarWidget extends StatefulWidget {
   const FloatingSearchBarWidget({super.key});
 
@@ -37,21 +39,11 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List<FloatingSearchBarAction> actions = <FloatingSearchBarAction>[
-      FloatingSearchBarAction(
-        child: CircularButton(
-          icon: const Icon(Icons.place),
-          onPressed: () {},
-        ),
-      ),
-      FloatingSearchBarAction.searchToClear(
-        showIfClosed: false,
-      ),
-    ];
-
+  
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Consumer<SearchModel>(
       builder: (BuildContext context, value, _) => FloatingSearchBar(
+        height: 50,
           controller: controller,
         backgroundColor: Colors.grey[200],
           automaticallyImplyDrawerHamburger: false,
@@ -67,16 +59,17 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
             )
           ],
           hint: 'Search...',
-          scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+          scrollPadding: const EdgeInsets.only(top: 16),
+          margins: const EdgeInsets.only(bottom: 0),
           transitionDuration: const Duration(milliseconds: 800),
           transitionCurve: Curves.easeInOut,
           physics: const BouncingScrollPhysics(),
           axisAlignment: isPortrait ? 0.0 : -1.0,
           openAxisAlignment: 0.0,
           width: isPortrait ? 600 : 500,
-          debounceDelay: const Duration(milliseconds: 500),
+          debounceDelay: const Duration(milliseconds: 100),
           onQueryChanged: value.onQueryChanged,
-          progress: value.isLoading,
+          progress: false,//value.isLoading,
           // Specify a custom transition to be used for
           // animating between opened and closed stated.
           onKeyEvent: (KeyEvent keyEvent) {
@@ -92,7 +85,8 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
               child: CircularButton(
                 icon: const Icon(Icons.filter_list),
                 onPressed: () {
-      
+                  Services services = Services();
+                  services.getEventData(context);
                 },
               ),
             ),
@@ -107,26 +101,26 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               clipBehavior: Clip.antiAlias,
-              child: ImplicitlyAnimatedList<String>(
+              child: ImplicitlyAnimatedList<Event>(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 items: value.suggestions,
-                insertDuration: const Duration(milliseconds: 700),
+                insertDuration: const Duration(milliseconds: 500),
                 itemBuilder: (BuildContext context, Animation<double> animation,
-                    String item, _) {
+                    Event item, _) {
                   return SizeFadeTransition(
                     animation: animation,
                     child: buildItem(context, item),
-                  );
+                    );
                 },
                 updateItemBuilder: (BuildContext context,
-                    Animation<double> animation, String item) {
+                    Animation<double> animation, Event item) {
                   return FadeTransition(
                     opacity: animation,
                     child: buildItem(context, item),
                   );
                 },
-                areItemsTheSame: (String a, String b) => a == b,
+                areItemsTheSame: (Event a, Event b) => a == b,
               ),
             ),
           );
@@ -144,7 +138,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
     );
   }
 
-  Widget buildItem(BuildContext context,String place) {
+  Widget buildItem(BuildContext context,Event event) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
@@ -157,8 +151,8 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
           onTap: () {
             FloatingSearchBar.of(context)?.close();
             Future<void>.delayed(
-              const Duration(milliseconds: 500),
-              () => model.clear(),
+              const Duration(milliseconds: 800),
+              () => model.clear(event),
             );
           },
           child: Padding(
@@ -171,7 +165,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
                     duration: const Duration(milliseconds: 500),
                     child: model.suggestions == history
                         ? const Icon(Icons.history, key: Key('history'))
-                        : const Icon(Icons.place, key: Key('place')),
+                        : const Icon(Icons.list, key: Key('item')),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -181,7 +175,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        place,
+                        event.eventName,
                         style: textTheme.titleMedium,
                       ),
                       const SizedBox(height: 2),
@@ -197,8 +191,8 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
             ),
           ),
         ),
-        if (model.suggestions.isNotEmpty && place != model.suggestions.last)
-          const Divider(height: 0),
+        // if (model.suggestions.isNotEmpty && item != model.suggestions.last)
+        //   const Divider(height: 0),
       ],
     );
   }

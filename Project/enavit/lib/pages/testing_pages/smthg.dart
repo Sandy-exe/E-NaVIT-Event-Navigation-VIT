@@ -4,15 +4,17 @@ import 'package:material_floating_search_bar_2/material_floating_search_bar_2.da
 class SearchFunction extends StatelessWidget {
   final FloatingSearchBarController controller = FloatingSearchBarController();
 
+  SearchFunction({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FloatingSearchBar(
         controller: controller,
-        body: Center(child: Text('Search Page')),
+        body: const Center(child: Text('Search Page')),
         transition: CircularFloatingSearchBarTransition(),
         physics: const BouncingScrollPhysics(),
-        title: Text('Search'),
+        title: const Text('Search'),
         hint: "Let's Play.....",
         actions: [
           FloatingSearchBarAction.searchToClear()

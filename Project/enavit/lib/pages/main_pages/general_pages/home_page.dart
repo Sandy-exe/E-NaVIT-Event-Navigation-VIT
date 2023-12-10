@@ -1,8 +1,10 @@
+import 'package:enavit/components/search_model.dart';
 import 'package:flutter/material.dart';
 import '../../../components/event_tile.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/services.dart';
 import 'package:enavit/components/event_club_search.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,13 +20,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    initPrefs();
   }
 
   Future<void> initPrefs() async {
     Services service = Services();
-    eventList = await service.getEventData();
-    eventListLength = eventList.length;
+    eventList = await service.getEventData(context);
   }
 
   void addEventToUser(Event event) {
@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           }
-
 
           //HOT Picks
           //   const Padding(
@@ -102,56 +101,59 @@ class _HomePageState extends State<HomePage> {
           //}
           //}
         });
-
-
-       
   }
 
-  Widget buildHomepage () {
-    return Column(
-      children: [
-        //Dummy search bar in Stack
-        SizedBox(
-          height: 60,
-        ),
-        //HOT Picks
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'Available Events',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
+  Widget buildHomepage() {
+    return Consumer<SearchModel>(
+      builder: (BuildContext context, value, _){
+        // 
+        // 
+        return 
+        Column(
+        children: [
+          //Dummy search bar in Stack
+          const SizedBox(
+            height: 60,
+          ),
+          //HOT Picks
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Available Events',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
-        const SizedBox(
-          height: 10.0,
-        ),
-
-        //Event List
-        Expanded(
-          child: ListView.builder(
-            itemCount: eventListLength,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              // get a Event from Event list
-              Event event = eventList[index];
-              return EventTile(
-                event: event,
-                onTap: () => addEventToUser(event),
-              );
-            },
+          const SizedBox(
+            height: 10.0,
           ),
-        ),
-      ],
-    ); 
+
+          //Event List
+          Expanded(
+            child: ListView.builder(
+              itemCount: value.eventListHome.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                // get a Event from Event list
+                Event event = value.eventListHome[index];
+                return EventTile(
+                  event: event,
+                  onTap: () => addEventToUser(event),
+                );
+              },
+            ),
+          ),
+        ],
+        );
+  });
   }
 }

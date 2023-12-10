@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/Data/secure_storage.dart';
+import 'package:enavit/components/search_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:enavit/services/authentication_service.dart';
 
 class Services {
@@ -40,6 +43,7 @@ class Services {
 
     //Store Event data of the user
     List<String> events = [];
+    List<Event> eventListObj = [];
 
     for (final eventId in currentUserData['events']) {
       final event = await firestore.collection("Events").doc(eventId).get();
@@ -50,8 +54,6 @@ class Services {
         'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate().toString(),
         'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
       };
-
-
       Map<String,dynamic> eventObj = {
           "clubId": eventData['clubId'],
           "dateTime": dateTime,
@@ -66,6 +68,22 @@ class Services {
           "likes": eventData['likes'],
       };
 
+      eventListObj.add(
+        Event(
+          clubId: eventData['clubId'],
+          dateTime: eventData['dateTime'],
+          description: eventData['description'],
+          eventId: eventData['eventId'],
+          eventName: eventData['eventName'],
+          location: eventData['location'],
+          fee: eventData['fee'],
+          organisers: List<String>.from(eventData['organisers']),
+          comments: Map<String, String>.from(eventData['comments']),
+          participants: List<String>.from(eventData['participants']),
+          likes: eventData['likes'],
+        ),
+      );
+
       String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
     }
@@ -75,7 +93,7 @@ class Services {
     
   }
 
-  Future<List> getEventData() async {
+  Future<List> getEventData(BuildContext context) async {
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
 
@@ -103,6 +121,12 @@ class Services {
         ),
       );
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<SearchModel>(context, listen: false).initEventList(events);
+    });
+
+    
 
     return events;
 
