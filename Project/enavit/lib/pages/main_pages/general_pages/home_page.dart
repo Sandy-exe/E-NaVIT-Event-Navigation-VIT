@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../components/event_tile.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/services.dart';
+import 'package:enavit/components/event_club_search.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List eventList = []; 
+  late List eventList = [];
   late int eventListLength;
 
   @override
@@ -32,12 +33,11 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Successfully Added'),
-        content: Text('You have successfully added ${event.eventName} to your list'),
+        content:
+            Text('You have successfully added ${event.eventName} to your list'),
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,65 +50,108 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             ));
           } else {
-            return Column(
+            return Stack(
+              fit: StackFit.expand,
               children: [
-                //search bar
-                Container(
-                  padding: const EdgeInsets.all(1),
-                  margin: const EdgeInsets.only(bottom: 10, top: 5, left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      prefixIcon: Icon(Icons.search, color: Colors.grey),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                //HOT Picks
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Available Events',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 10.0,
-                ),
-
-                //Event List
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: eventListLength,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      // get a Event from Event list
-                      Event event = eventList[index];
-                      return EventTile(
-                        event: event,
-                        onTap: () => addEventToUser(event),
-                      );
-                    },
-                  ),
-                ),
+                buildHomepage(),
+                const FloatingSearchBarWidget(),
               ],
-            ); 
-    }
-              });
+            );
+          }
+
+
+          //HOT Picks
+          //   const Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 25.0),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       crossAxisAlignment: CrossAxisAlignment.end,
+          //       children: [
+          //         Text(
+          //           'Available Events',
+          //           style: TextStyle(
+          //             fontSize: 24.0,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+
+          //   const SizedBox(
+          //     height: 10.0,
+          //   ),
+
+          //   //Event List
+          //   Expanded(
+          //     child: ListView.builder(
+          //       itemCount: eventListLength,
+          //       scrollDirection: Axis.vertical,
+          //       itemBuilder: (context, index) {
+          //         // get a Event from Event list
+          //         Event event = eventList[index];
+          //         return EventTile(
+          //           event: event,
+          //           onTap: () => addEventToUser(event),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          //],
+          //);
+          //}
+          //}
+        });
+
+
+       
+  }
+
+  Widget buildHomepage () {
+    return Column(
+      children: [
+        //Dummy search bar in Stack
+        SizedBox(
+          height: 60,
+        ),
+        //HOT Picks
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 25.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Available Events',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 10.0,
+        ),
+
+        //Event List
+        Expanded(
+          child: ListView.builder(
+            itemCount: eventListLength,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              // get a Event from Event list
+              Event event = eventList[index];
+              return EventTile(
+                event: event,
+                onTap: () => addEventToUser(event),
+              );
+            },
+          ),
+        ),
+      ],
+    ); 
   }
 }
