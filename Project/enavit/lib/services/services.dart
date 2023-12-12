@@ -183,6 +183,49 @@ class Services {
     await secureStorage.writer(key: "events", value: eventsString);
   }
 
+  Future<List<Event>> getClubEvents(String clubId) async {
+    final querySnapshotEvent = await firestore.collection("Events").get();
+    final querySnapshotClub = await firestore.collection("Clubs").doc(clubId).get();
+    Map<String, dynamic> selectedClub  = querySnapshotClub.data()!;
+
+    List<Event> events = [];
+
+    for (final docSnapshot in querySnapshotEvent.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+
+      print(selectedClub["events"]);
+      print(data["Event_1"]);
+      if (!selectedClub["events"].contains(data["eventId"])) {
+        continue;
+      }
+
+      Map<String, DateTime> dateTime = {
+        'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
+        'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
+      };
+      
+      events.add(
+        Event(
+          clubId: data['clubId'],
+          dateTime: dateTime,
+          description: data['description'],
+          eventId: data['eventId'],
+          eventName: data['eventName'],
+          location: data['location'],
+          fee: data['fee'],
+          organisers: List<String>.from(data['organisers']),
+          comments: Map<String, String>.from(data['comments']),
+          participants: List<String>.from(data['participants']),
+          likes: data['likes'],
+        ),
+      );
+    }
+    return events;
+  } 
+
+
+
+
 
 
 
