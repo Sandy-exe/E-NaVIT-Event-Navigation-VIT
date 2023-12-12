@@ -35,7 +35,7 @@ class Club {
 
 class Event {
   final String clubId;
-  final Map<String,DateTime> dateTime;
+  final Map<String,dynamic> dateTime;
   final String description;
   final String eventId;
   final String eventName;
@@ -44,7 +44,9 @@ class Event {
   final List<String> organisers;
   final int likes;
   final Map<String,String> comments;
-  final List<String> participants;// Add this line
+  final List<String> participants;
+  
+  //Add this line
 
   Event({
     required this.clubId,

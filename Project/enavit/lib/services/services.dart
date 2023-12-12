@@ -27,7 +27,6 @@ class Services {
       "reg_no": newUser.regNo,
     };
 
-
     await docref.set(obj);//push the object
   }
 
@@ -68,6 +67,8 @@ class Services {
           "likes": eventData['likes'],
       };
 
+      print(eventData['dateTime'].runtimeType);
+
       eventListObj.add(
         Event(
           clubId: eventData['clubId'],
@@ -93,7 +94,7 @@ class Services {
     
   }
 
-  Future<List> getEventData(BuildContext context) async {
+  Future<List> getEventClubData(BuildContext context) async {
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
 
@@ -122,11 +123,31 @@ class Services {
       );
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<SearchModel>(context, listen: false).initEventList(events);
-    });
 
-    
+    //Clubs list
+    final clubquerySnapshot = await firestore.collection("Clubs").get();
+    List<Club> clubs = [];
+
+    for (final docSnapshot in clubquerySnapshot.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+
+      clubs.add(
+        Club(
+          clubId: data['clubId'],
+          clubName: data['clubName'],
+          bio: data['bio'],
+          email: data['email'],
+          events: List<String>.from(data['events']),
+          approvers: List<String>.from(data['approvers']),
+        ),
+      );
+    }
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<SearchModel>(context, listen: false).initEventClubList(events,clubs);
+
+    });
 
     return events;
 

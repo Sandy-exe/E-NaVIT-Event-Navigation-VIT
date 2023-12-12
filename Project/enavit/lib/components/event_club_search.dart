@@ -86,7 +86,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
                 icon: const Icon(Icons.filter_list),
                 onPressed: () {
                   Services services = Services();
-                  services.getEventData(context);
+                  services.getEventClubData(context);
                 },
               ),
             ),
@@ -101,26 +101,26 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               clipBehavior: Clip.antiAlias,
-              child: ImplicitlyAnimatedList<Event>(
+              child: ImplicitlyAnimatedList<Object>(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 items: value.suggestions,
                 insertDuration: const Duration(milliseconds: 500),
                 itemBuilder: (BuildContext context, Animation<double> animation,
-                    Event item, _) {
+                    Object item, _) {
                   return SizeFadeTransition(
                     animation: animation,
                     child: buildItem(context, item),
                     );
                 },
                 updateItemBuilder: (BuildContext context,
-                    Animation<double> animation, Event item) {
+                    Animation<double> animation, Object item) {
                   return FadeTransition(
                     opacity: animation,
                     child: buildItem(context, item),
                   );
                 },
-                areItemsTheSame: (Event a, Event b) => a == b,
+                areItemsTheSame: (Object a, Object b) => a == b,
               ),
             ),
           );
@@ -138,7 +138,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
     );
   }
 
-  Widget buildItem(BuildContext context,Event event) {
+  Widget buildItem(BuildContext context,Object object) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
@@ -152,7 +152,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
             FloatingSearchBar.of(context)?.close();
             Future<void>.delayed(
               const Duration(milliseconds: 800),
-              () => model.clear(event),
+              () => model.clear(object),
             );
           },
           child: Padding(
@@ -175,7 +175,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        event.eventName,
+                        object is Event ? (object).eventName : (object as Club).clubName,
                         style: textTheme.titleMedium,
                       ),
                       const SizedBox(height: 2),

@@ -9,16 +9,26 @@ class SearchModel extends ChangeNotifier {
   late List<Event> eventListObj = [];
   //to display in home page
   late List<Event> eventListHome = [];
-  List<Event> _suggestions = history;
-  List<Event> get suggestions => _suggestions;
+  late List<Club> clubListObj = [];
+  late List<Object> eventClubList = [];
+  late List<Event> historyEvent = [];
+  late List<Club> historyClub = [];
+  List<Object> _suggestions = history;
+  List<Object> get suggestions => _suggestions;
+
 
   String _query = '';
   String get query => _query;
 
-  Future<void> initEventList(List<Event> eventList) async {
+  Future<void> initEventClubList(List<Event> eventList,List<Club> clubList) async {
     Future<void> initPrefs() async {
       eventListObj = eventList;
       eventListHome = eventList;
+      clubListObj = clubList;
+
+      eventClubList = [...eventListObj, ...clubListObj];
+
+      print(eventClubList);
     }
     await initPrefs();
     notifyListeners();
@@ -38,24 +48,36 @@ class SearchModel extends ChangeNotifier {
     if (query.isEmpty) {
       _suggestions = history;
     } else {
-      _suggestions = eventListObj.where((element) => element.eventName.toLowerCase().startsWith(query.toLowerCase())).toList();
+      _suggestions = [...eventListObj.where((element) => element.eventName.toLowerCase().startsWith(query.toLowerCase())).take(2), 
+      ...clubListObj.where((element) => element.clubName.toLowerCase().startsWith(query.toLowerCase())).take(2)];
     }
     _isLoading = false;
     notifyListeners();
   }
 
-  void clear(Event newValue) {
-    history.insert(0, newValue);
-    if (history.length > 3) {
-      history.removeLast();
-    }
-    eventListHome = [newValue];
-    _suggestions = history;
+  void clear(Object newValue) {
+    print(newValue);
 
+    if (newValue is Club) historyClub.insert(0, newValue);
+    if (newValue is Event) historyEvent.insert(0, newValue);
+
+    if (historyClub.length > 2) {
+      historyClub.removeLast();
+    }
+
+
+    if (historyEvent.length > 2) {
+      historyEvent.removeLast();
+    }
+    
+    history = [...historyEvent,...historyClub];
+    
+    if (newValue is Event) eventListHome = [newValue];
+    _suggestions = history;
     notifyListeners();
   }
 }
 
-List<Event> history = [];
+List<Object> history = [];
 
 

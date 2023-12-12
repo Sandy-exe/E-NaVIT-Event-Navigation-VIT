@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> initPrefs() async {
     Services service = Services();
-    eventList = await service.getEventData(context);
+    eventList = await service.getEventClubData(context);
   }
 
   void addEventToUser(Event event) {
