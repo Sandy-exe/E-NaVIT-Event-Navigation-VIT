@@ -55,8 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundColor: Colors.grey[300],
               body: SingleChildScrollView(
                   child: Container(
-                      padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 22),
                       child: Column(
+                        
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -148,39 +149,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Organizer Mode',
-                            icon: FontAwesomeIcons.powerOff,
+                            icon: Icons.group,
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
-                          ),
-                          Transform.scale(
-                            scale: 0.8,
-                            child: LiteRollingSwitch(
-                              value: true,
-                              textOn: 'ON',
-                              textOff: 'OFF',
-                              textOnColor: Colors.white,
-                              textOffColor: Colors.white,
-                              colorOn: const Color.fromRGBO(0, 200, 83, 1),
-                              colorOff: const Color.fromRGBO(213, 0, 0, 1),
-                              iconOn: Icons.done,
-                              iconOff: Icons.remove_circle_outline,
-                              textSize: 20.0,
-                              onChanged: (bool state) {
-                                print('Current State of SWITCH IS: $state');
-                              },
-                              onTap: () {
-                                print('Click');
-                              },
-                              onDoubleTap: 
-                                () {
-                                  print('Double Tap');
-                                },
-                              onSwipe: 
-                                () {
-                                  print('Swipe');
-                                },
-                            ),
                           ),
                           ProfileMenuWidget(
                             text: 'Settings',
@@ -222,8 +194,8 @@ class ProfileMenuWidget extends StatelessWidget {
       leading: GestureDetector(
         onTap: () => onTap(),
         child: Container(
-          height: 40,
-          width: 40,
+          width: 30,
+          height: 30,
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(10),
@@ -237,21 +209,58 @@ class ProfileMenuWidget extends StatelessWidget {
       title: Text(
         text,
         style: const TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child:  const Icon(
-          FontAwesomeIcons.angleRight,
-          size: 15,
-          color: Colors.black,
-        ),
-      ));
+      trailing: text == "Organizer Mode"
+          ? Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Transform.scale(
+                scale: 0.65,
+                child: LiteRollingSwitch(
+                  width: 120.0,
+                  value: true,
+                  textOn: 'ON',
+                  textOff: 'OFF',
+                  textOnColor: Colors.white,
+                  textOffColor: Colors.white,
+                  colorOn: const Color.fromRGBO(0, 200, 83, 1),
+                  colorOff: const Color.fromRGBO(213, 0, 0, 1),
+                  iconOn: Icons.done,
+                  iconOff: Icons.remove_circle_outline,
+                  textSize: 20.0,
+                  onChanged: (bool state) {
+                    print('Current State of SWITCH IS: $state');
+                  },
+                  onTap: () {
+                    print('Click');
+                  },
+                  onDoubleTap: () {
+                    print('Double Tap');
+                  },
+                  onSwipe: () {
+                    print('Swipe');
+                  },
+                ),
+              ))
+          : Padding(
+              padding: const EdgeInsets.only(left: 50.0),
+              child: Container(
+                height: 40,
+                width: 125,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  FontAwesomeIcons.angleRight,
+                  size: 15,
+                  color: Colors.black,
+                ),
+              ),
+            ));
 }
