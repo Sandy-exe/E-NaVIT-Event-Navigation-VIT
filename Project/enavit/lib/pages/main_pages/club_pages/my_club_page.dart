@@ -27,7 +27,6 @@ class _ClubBioState extends State<ClubBio> {
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
     eventList = await service.getClubEvents(clubId);
-    print(eventList);
   }
   
   @override
@@ -53,7 +52,6 @@ class _ClubBioState extends State<ClubBio> {
         ),
         child: Center(
           child: ListView(
-            padding: EdgeInsets.zero,
             scrollDirection: Axis.vertical,
             children: [
               Padding(
@@ -89,7 +87,7 @@ class _ClubBioState extends State<ClubBio> {
                                   ),
                                   child: ClipOval(
                                     child: Image.asset(
-                                      'lib/images/Mikasa_eren.jpg',
+                                      'lib/images/Pochita.jpg',
                                     ),
                                   ),
                                 ),
@@ -259,43 +257,66 @@ class _ClubBioState extends State<ClubBio> {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Text(
-                              widget.club.clubName,
-                              style: FlutterFlowTheme.of(context).bodyText1,
+
+
+                            Column(
+                              children: [
+                                Text(
+                                  widget.club.clubName,
+                                  style: FlutterFlowTheme.of(context).bodyText1,
+                                ),
+                                Padding(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0, 0, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                '@${widget.club.clubName}',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: const Color(
+                                                              0xFF787878),
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                              ],
+                              
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                                  const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 15),
                               child: Icon(
                                 Icons.verified_rounded,
                                 color: FlutterFlowTheme.of(context).primaryColor,
                                 size: 16,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              '@${widget.club.clubName}',
-                              style:
-                                  FlutterFlowTheme.of(context).bodyText1.override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0xFF787878),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                            ),
+                            const Spacer(),
+
+                            TextButton(
+                                      onPressed: () {},
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: Colors.black),
+                                      child: const Text('Follow',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                    ),
                           ],
                         ),
                       ),
                       
+                      
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 100, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0,10, 200, 10),
                         child: Row(
                           children: [
                             Expanded(
@@ -314,14 +335,9 @@ class _ClubBioState extends State<ClubBio> {
                                       onPressed: () {
                                       },
                                       style: TextButton.styleFrom(backgroundColor: Colors.black),
-                                      child: const Text('Status', style: TextStyle(color: Colors.white)),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                      },
-                                      style: TextButton.styleFrom(backgroundColor: Colors.black),
                                       child: const Text('Bio', style: TextStyle(color: Colors.white)),
                                     ),
+                                    
                                   ],
                                 ),
                               ),

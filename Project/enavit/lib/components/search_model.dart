@@ -28,8 +28,6 @@ class SearchModel extends ChangeNotifier {
       eventClubList = [...eventListObj, ...clubListObj];
       eventClubListHome = [...eventListObj, ...clubListObj];
 
-      print(eventClubList);
-      print(eventClubListHome);
     }
     await initPrefs();
     notifyListeners();
@@ -57,7 +55,6 @@ class SearchModel extends ChangeNotifier {
   }
 
   void clear(Object newValue) {
-    print(newValue);
 
     if (newValue is Club) historyClub.insert(0, newValue);
     if (newValue is Event) historyEvent.insert(0, newValue);

@@ -67,7 +67,6 @@ class Services {
           "likes": eventData['likes'],
       };
 
-      print(eventData['dateTime'].runtimeType);
 
       eventListObj.add(
         Event(
@@ -193,8 +192,6 @@ class Services {
     for (final docSnapshot in querySnapshotEvent.docs) {
       Map<String, dynamic> data = docSnapshot.data();
 
-      print(selectedClub["events"]);
-      print(data["Event_1"]);
       if (!selectedClub["events"].contains(data["eventId"])) {
         continue;
       }

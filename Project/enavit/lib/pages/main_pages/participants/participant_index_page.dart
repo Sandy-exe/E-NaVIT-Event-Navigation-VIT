@@ -134,6 +134,20 @@ class _IndexPageState extends State<IndexPage> {
                       ),
                       ),
                     ),
+
+                    const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.info,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        'Request Approver',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
               ],
             ), 
               
