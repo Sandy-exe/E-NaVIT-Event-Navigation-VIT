@@ -8,7 +8,7 @@ class SearchModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   late List<Event> eventListObj = [];
   //to display in home page
-  late List<Event> eventListHome = [];
+  late List<Object> eventClubListHome = [];
   late List<Club> clubListObj = [];
   late List<Object> eventClubList = [];
   late List<Event> historyEvent = [];
@@ -23,12 +23,13 @@ class SearchModel extends ChangeNotifier {
   Future<void> initEventClubList(List<Event> eventList,List<Club> clubList) async {
     Future<void> initPrefs() async {
       eventListObj = eventList;
-      eventListHome = eventList;
       clubListObj = clubList;
 
       eventClubList = [...eventListObj, ...clubListObj];
+      eventClubListHome = [...eventListObj, ...clubListObj];
 
       print(eventClubList);
+      print(eventClubListHome);
     }
     await initPrefs();
     notifyListeners();
@@ -72,7 +73,8 @@ class SearchModel extends ChangeNotifier {
     
     history = [...historyEvent,...historyClub];
     
-    if (newValue is Event) eventListHome = [newValue];
+    eventClubListHome = [newValue];
+    
     _suggestions = history;
     notifyListeners();
   }

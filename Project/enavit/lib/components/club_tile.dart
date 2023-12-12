@@ -1,99 +1,73 @@
+import 'package:enavit/components/flutter_flow_theme.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:enavit/pages/main_pages/club_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
 
 class ClubTile extends StatelessWidget {
-  const ClubTile({super.key});
+  final Club club;
+  const ClubTile({super.key, required this.club});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-            // constraints: const BoxConstraints(minHeight: 50),
-            padding: padding,
-            margin: margin,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.all(Radius.circular(radius ?? 8)),
-              boxShadow: color != null
-                  ? [
-                      shadow ??
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-
-                            spreadRadius: 4,
-                            blurRadius: 7,
-                            offset: const Offset(
-                                2, 4), // changes position of shadow
-                          ),
-                    ]
-                  : [],
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    avatar ?? Container(),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            titleText != null
-                                ? Text(
-                                    titleText!,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500,
-                                        color: listItemTextColor),
-                                  )
-                                : title ?? Container(),
-                            subTitleText != null
-                                ? Text(
-                                    subTitleText!,
-                                    style: const TextStyle(
-                                      fontSize: 14.5,
-                                      color: Colors.black54,
-                                    ),
-                                  )
-                                : subTitle ?? Container(),
-                            description ?? Container()
-                          ],
-                        ),
-                      ),
-                    ),
-                    icon ?? Container(),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (firstButtonTitle?.isNotEmpty ?? false)
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: InkWell(
-                          onTap: onFirstButtonTap,
-                          child: Text(firstButtonTitle ?? '',
-                              style: firstButtonTextStyle),
-                        ),
-                      ),
-                    if (secondButtonTitle?.isNotEmpty ?? false)
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: InkWell(
-                          onTap: onSecondButtonTap,
-                          child: Text(
-                            secondButtonTitle ?? '',
-                            style: secondButtonTextStyle,
-                          ),
-                        ),
-                      )
-                  ],
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ClubBio(
+              club: club,
             ),
           ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(12.0),
         ),
-      );
-};
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+              child: Container(
+                width: 150,
+                height: 150,
+                color: Colors.transparent,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: const Image(image: AssetImage('lib/images/Pochita.jpg')),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(7, 0, 7, 0),
+                      child: Text(
+                        club.clubName,
+                        textAlign: TextAlign.start,
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enavit/components/flutter_flow_theme.dart';
+import 'package:enavit/models/og_models.dart';
 
 class ClubBio extends StatefulWidget {
-  const ClubBio({super.key});
+  final Club club;
+  const ClubBio({super.key, required this.club});
    
-
   @override
   
   State<ClubBio> createState() => _ClubBioState();
@@ -236,7 +237,7 @@ class _ClubBioState extends State<ClubBio> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                'Eren Yeager',
+                                widget.club.clubName,
                                 style: FlutterFlowTheme.of(context).bodyText1,
                               ),
                               Padding(

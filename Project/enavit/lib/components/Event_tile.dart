@@ -4,11 +4,26 @@ import '../pages/main_pages/general_pages/about_event_page.dart';
 
 class EventTile extends StatelessWidget {
   final Event event;
-  final void Function()? onTap;
-  const EventTile({super.key, required this.event, required this.onTap});
+  const EventTile({super.key, required this.event,});
+
+  
 
   @override
   Widget build(BuildContext context) {
+
+
+    void addEventToUser(Event event) {
+      // get a Event from Event list
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Successfully Added'),
+          content: Text(
+              'You have successfully added ${event.eventName} to your list'),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -52,7 +67,7 @@ class EventTile extends StatelessWidget {
                           Row(
                             children: [
                               GestureDetector(
-                              onTap: onTap,
+                              onTap: () => addEventToUser(event),
                               child: Container(
                                 padding: const EdgeInsets.all(1),
                                 child: const Icon(
@@ -63,7 +78,7 @@ class EventTile extends StatelessWidget {
                               ),
                                                       ),
                                                       GestureDetector(
-                              onTap: onTap,
+                              onTap: () => addEventToUser(event),
                               child: Container(
                                 padding: const EdgeInsets.all(1),
                                 child: const Icon(
@@ -74,7 +89,7 @@ class EventTile extends StatelessWidget {
                               ),
                                                       ),
                                                       GestureDetector(
-                              onTap: onTap,
+                              onTap: () => addEventToUser(event),
                               child: Container(
                                 padding: const EdgeInsets.all(1),
                                 child: const Icon(
@@ -87,7 +102,7 @@ class EventTile extends StatelessWidget {
                             ],
                           ),
                           GestureDetector(
-                            onTap: onTap,
+                            onTap: () => addEventToUser(event),
                             child: Container(
                               padding: const EdgeInsets.all(1),
                               child: const Icon(
