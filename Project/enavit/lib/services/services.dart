@@ -82,6 +82,7 @@ class Services {
           comments: Map<String, String>.from(eventData['comments']),
           participants: List<String>.from(eventData['participants']),
           likes: eventData['likes'],
+          eventImageURL: eventData['eventImageURL']
         ),
       );
 
@@ -120,6 +121,7 @@ class Services {
           comments: Map<String, String>.from(data['comments']),
           participants: List<String>.from(data['participants']),
           likes: data['likes'],
+          eventImageURL: data['eventImageURL']
         ),
       );
     }
@@ -249,6 +251,7 @@ class Services {
           comments: Map<String, String>.from(data['comments']),
           participants: List<String>.from(data['participants']),
           likes: data['likes'],
+          eventImageURL: data['eventImageURL']
         ),
       );
     }
