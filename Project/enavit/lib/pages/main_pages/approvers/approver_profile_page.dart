@@ -4,7 +4,6 @@ import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 class AProfilePage extends StatefulWidget {
   const AProfilePage({super.key});

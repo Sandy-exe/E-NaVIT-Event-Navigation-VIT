@@ -1,5 +1,5 @@
 import 'package:enavit/components/club_tile.dart';
-import 'package:enavit/components/search_model.dart';
+import 'package:enavit/components/home_search_model.dart';
 import 'package:flutter/material.dart';
 import '../../../components/event_tile.dart';
 import 'package:enavit/models/og_models.dart';
@@ -15,8 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List eventList = [];
-  late int eventListLength;
 
   @override
   void initState() {
@@ -25,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> initPrefs() async {
     Services service = Services();
-    eventList = await service.getEventClubData(context);
+    await service.getEventClubData(context);
   }
 
   @override

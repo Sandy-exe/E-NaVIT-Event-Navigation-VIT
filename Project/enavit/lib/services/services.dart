@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/Data/secure_storage.dart';
-import 'package:enavit/components/search_model.dart';
+import 'package:enavit/components/home_search_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:enavit/services/authentication_service.dart';
@@ -93,7 +94,8 @@ class Services {
     
   }
 
-  Future<List> getEventClubData(BuildContext context) async {
+  //details of all clubs and events
+  Future<void> getEventClubData(BuildContext context) async {
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
 
@@ -145,16 +147,47 @@ class Services {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<SearchModel>(context, listen: false).initEventClubList(events,clubs);
-
     });
 
-    return events;
 
     // for (final docSnapshot in querySnapshot.docs) {
     //   Map<String, dynamic> docData = docSnapshot.data();
     //   String docDataString = jsonEncode(docData);
     //   await secureStorage.writer(key: "eventData", value: docDataString);
     // }
+  }
+
+
+  //get all participants
+  Future<void> getParticipantData(BuildContext context) async {
+    final querySnapshotusers = await firestore.collection("app_users").get();
+
+    List<Users> userList = [];
+
+    for (final docSnapshot in querySnapshotusers.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+
+      if (data['role'] == 0) {
+        continue;
+      }
+
+      userList.add(Users(
+        userId: data['userid'],
+        name: data['name'],
+        email: data['email'],
+        clubs: List<String>.from(data['clubs']),
+        events: List<String>.from(data['events']),
+        organizedEvents: List<String>.from(data['organized_events']),
+        role: data['role'],
+        phoneNo: data['phone_no'],
+        regNo: data['reg_no'],
+      ));
+    }
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<ApproverSearchModel>(context, listen: false).initUserList(userList);
+    });
   }
 
   Future<void> updateUser (String uid, Map<String, dynamic> newinfo) async {
@@ -181,7 +214,9 @@ class Services {
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
   }
+  
 
+  //details of specific club
   Future<List<Event>> getClubEvents(String clubId) async {
     final querySnapshotEvent = await firestore.collection("Events").get();
     final querySnapshotClub = await firestore.collection("Clubs").doc(clubId).get();

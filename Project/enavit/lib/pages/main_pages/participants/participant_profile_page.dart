@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/authentication_service.dart';
+import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
+  late String role;
 
   @override
   void initState() {
@@ -28,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+    role = await secureStorage.reader(key: 'roleState') ?? 'null';
 
     if (isLoggedIn) {
       String? currentUserDataString =
@@ -36,11 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-    if (currentUserData['role'] == '1') {
-      if (mounted)
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/organiser_index", (r) => false);
-    }
+
   }
 
   @override
@@ -59,9 +58,9 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundColor: Colors.grey[300],
               body: SingleChildScrollView(
                   child: Container(
-                      padding:
-                          const EdgeInsets.only(top: 10, bottom: 10, left: 22),
+                    padding: const EdgeInsets.only(top: 10, bottom: 10, left: 22),
                       child: Column(
+                        
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -76,8 +75,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: const Image(
-                                      image: AssetImage(
-                                          'lib/images/VIT_LOGO.png')),
+                                      image:
+                                          AssetImage('lib/images/VIT_LOGO.png')),
                                 ),
                               ),
                               Positioned(
@@ -151,12 +150,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 15),
                           const Divider(),
                           const SizedBox(height: 15),
+
+                          if (currentUserData['role'] == 1)
+                            ProfileMenuWidget(
+                              text: 'Organizer Mode',
+                              icon: FontAwesomeIcons.userTie,
+                              onTap: () {
+                              },
+                              role: role,
+                            ),
                           ProfileMenuWidget(
                             text: 'Settings',
                             icon: FontAwesomeIcons.gear,
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
+                            role: role,
                           ),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
@@ -165,6 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
+                            role: role,
                           ),
                         ],
                       ))),
@@ -178,11 +188,18 @@ class ProfileMenuWidget extends StatelessWidget {
   final String text;
   final IconData icon;
   final Function onTap;
+  final String role;
+
+  Future<void> updateRoleStateSecure(String booly) async {
+    SecureStorage secureStorage = SecureStorage();
+    await secureStorage.writer(key: 'roleState', value: booly);
+  }
 
   const ProfileMenuWidget({
     required this.text,
     required this.icon,
     required this.onTap,
+    required this.role,
     super.key,
   });
 
@@ -210,20 +227,64 @@ class ProfileMenuWidget extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: Padding(
-        padding: const EdgeInsets.only(left: 50.0),
-        child: Container(
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Icon(
-            FontAwesomeIcons.angleRight,
-            size: 15,
-            color: Colors.black,
-          ),
-        ),
-      ));
+      trailing: text == "Organizer Mode"
+          ? Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Transform.scale(
+                scale: 0.65,
+                child: LiteRollingSwitch(
+                  width: 120.0,
+                  value: role == "true" ? true : false,
+                  textOn: 'ON',
+                  textOff: 'OFF',
+                  textOnColor: Colors.white,
+                  textOffColor: Colors.white,
+                  colorOn: const Color.fromRGBO(0, 200, 83, 1),
+                  colorOff: const Color.fromRGBO(213, 0, 0, 1),
+                  iconOn: Icons.done,
+                  iconOff: Icons.remove_circle_outline,
+                  textSize: 20.0,
+                  onChanged: (bool state) {
+                    if (state) {
+                      updateRoleStateSecure(state.toString());
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/organiser_index', (r) => false);
+                    } else {
+                      updateRoleStateSecure(state.toString());
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/participant_index', (r) => false);
+                    }
+                  },
+                  onTap: () {
+                    debugPrint('Click');
+                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                  },
+                  onDoubleTap: () {
+                    debugPrint('Double Tap');
+                  },
+                  onSwipe: () {
+                    debugPrint('Swipe');
+                  },
+                ),
+              ))
+          : Padding(
+              padding: const EdgeInsets.only(left: 50.0),
+              child: Container(
+                height: 40,
+                width: 125,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  FontAwesomeIcons.angleRight,
+                  size: 15,
+                  color: Colors.black,
+                ),
+              ),
+            )
+            );
 }

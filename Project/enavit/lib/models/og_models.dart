@@ -94,9 +94,9 @@ class Users {
   final String phoneNo;
   final String regNo;
   final String userId;
-  final List<int> events;
-  final List<int> organizedEvents;
-  final List<int> clubs;
+  final List<String> events;
+  final List<String> organizedEvents;
+  final List<String> clubs;
 
   Users({
     required this.email,

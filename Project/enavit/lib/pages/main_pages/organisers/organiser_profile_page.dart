@@ -15,6 +15,8 @@ class OProfilePage extends StatefulWidget {
 
 class _OProfilePageState extends State<OProfilePage> {
   final AuthenticationService _firebaseAuth = AuthenticationService();
+  SecureStorage secureStorage = SecureStorage();
+  late String role;
 
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
@@ -29,6 +31,7 @@ class _OProfilePageState extends State<OProfilePage> {
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+    role = await secureStorage.reader(key: 'roleState') ?? 'null';
 
     if (isLoggedIn) {
       String? currentUserDataString =
@@ -37,13 +40,9 @@ class _OProfilePageState extends State<OProfilePage> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-    if (currentUserData['role'] == '0') {
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/participant_index", (r) => false);
-      }
-    }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +158,7 @@ class _OProfilePageState extends State<OProfilePage> {
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
+                            role: role,
                           ),
                           ProfileMenuWidget(
                             text: 'Settings',
@@ -166,6 +166,7 @@ class _OProfilePageState extends State<OProfilePage> {
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
+                            role: role,
                           ),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
@@ -174,6 +175,7 @@ class _OProfilePageState extends State<OProfilePage> {
                             onTap: () {
                               _firebaseAuth.signOut(context);
                             },
+                            role: role,
                           ),
                         ],
                       ))),
@@ -187,11 +189,18 @@ class ProfileMenuWidget extends StatelessWidget {
   final String text;
   final IconData icon;
   final Function onTap;
+  final String role;
+
+  Future<void> updateRoleStateSecure(String booly) async {
+    SecureStorage secureStorage = SecureStorage();
+    await secureStorage.writer(key: 'roleState', value: booly);
+  }
 
   const ProfileMenuWidget({
     required this.text,
     required this.icon,
     required this.onTap,
+    required this.role,
     super.key,
   });
 
@@ -229,7 +238,7 @@ class ProfileMenuWidget extends StatelessWidget {
                 scale: 0.65,
                 child: LiteRollingSwitch(
                   width: 120.0,
-                  value: true,
+                  value: role=="true" ? true : false,
                   textOn: 'ON',
                   textOff: 'OFF',
                   textOnColor: Colors.white,
@@ -240,10 +249,19 @@ class ProfileMenuWidget extends StatelessWidget {
                   iconOff: Icons.remove_circle_outline,
                   textSize: 20.0,
                   onChanged: (bool state) {
-                    debugPrint('Current State of SWITCH IS: $state');
+                    if (state) {
+                      updateRoleStateSecure(state.toString());
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/organiser_index', (r) => false);
+                    } else {
+                      updateRoleStateSecure(state.toString());
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/participant_index', (r) => false);
+                    }
                   },
                   onTap: () {
                     debugPrint('Click');
+                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
                   },
                   onDoubleTap: () {
                     debugPrint('Double Tap');
@@ -268,5 +286,6 @@ class ProfileMenuWidget extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-            ));
+            )
+            );
 }

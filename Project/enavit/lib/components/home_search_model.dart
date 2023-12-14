@@ -16,7 +16,6 @@ class SearchModel extends ChangeNotifier {
   List<Object> _suggestions = history;
   List<Object> get suggestions => _suggestions;
 
-
   String _query = '';
   String get query => _query;
 
