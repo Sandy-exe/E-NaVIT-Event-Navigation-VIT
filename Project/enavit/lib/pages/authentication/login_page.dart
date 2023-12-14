@@ -123,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
     if (currentUserDataString != "null") { Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
       userRole = currentUserData["role"];
     }
-    print(userRole);
 
     
     if (result == "success") {

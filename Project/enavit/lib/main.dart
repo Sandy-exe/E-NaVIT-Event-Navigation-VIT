@@ -62,7 +62,6 @@ Future main() async {
     Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
     userRole = currentUserData["role"];
   }
-  print(userRole);
   
   runApp(
      Enavit(isLoggedIn: isLoggedIn, userRole: userRole),

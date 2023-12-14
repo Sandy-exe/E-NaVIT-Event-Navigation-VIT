@@ -45,7 +45,7 @@ class _SetRoleState extends State<SetRole> {
                       Navigator.pop(context);
                     },
                   ),
-                  title: Text("Send Request")
+                  title: const Text("Send Request")
                 ),
                 body: Stack(
                               fit: StackFit.expand,

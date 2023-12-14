@@ -20,7 +20,6 @@ class ApproverSearchModel extends ChangeNotifier {
     Future<void> initPrefs() async {
       userListObj = userList;
       userListApprover = userList;
-      print(userListObj.length);
     }
 
     await initPrefs();
@@ -40,7 +39,6 @@ class ApproverSearchModel extends ChangeNotifier {
       _suggestions = history;
     } else {
       _suggestions = userListObj.where((element) => element.name.toLowerCase().startsWith(query.toLowerCase())).take(2).toList() + userListObj.where((element) => element.regNo.toLowerCase().startsWith(query.toLowerCase())).take(2).toList();
-      print(_suggestions);
 
     }
     _isLoading = false;

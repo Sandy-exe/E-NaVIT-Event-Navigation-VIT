@@ -8,14 +8,12 @@ class ParticipantTile extends StatelessWidget {
   const ParticipantTile({super.key, required this.user});
 
   void updateUserRole (String uid,context) {
-    print(uid);
         Services service = Services();
 
         Map<String, dynamic> newinfo = {
           if (user.role == 1) 'role': 2 else 'role': 1,
         };
 
-        print(newinfo);
 
         service.updateUser(uid, newinfo);
         
