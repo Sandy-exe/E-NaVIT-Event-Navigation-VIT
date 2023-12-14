@@ -31,7 +31,7 @@ class _OProfilePageState extends State<OProfilePage> {
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
-    role = await secureStorage.reader(key: 'roleState') ?? 'null';
+    role = await secureStorage.reader(key: 'roleState') ?? 'true';
 
     if (isLoggedIn) {
       String? currentUserDataString =
