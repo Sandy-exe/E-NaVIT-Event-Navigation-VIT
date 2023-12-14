@@ -53,7 +53,7 @@ class EventTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0),
                       child: SizedBox(
                         width: 250.0, // desired width
-                        child: Image.asset('lib/images/GOJO.jpg'),
+                        child: Image.asset('lib/images/Vit_poster.jpg'),
                       ),
                     ),
                     const SizedBox(height: 10,),
@@ -184,7 +184,7 @@ class EventTile extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: const Image(
-                          image: AssetImage('lib/images/Pochita.jpg')),
+                          image: AssetImage('lib/images/VIT_LOGO.png')),
                     ),
                   ),
                   

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/search_model.dart';
+import 'package:enavit/pages/main_pages/approvers/set_role_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -60,6 +61,7 @@ Future main() async {
     Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
     userRole = currentUserData["role"];
   }
+  print(userRole);
   
   runApp(
      Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
@@ -107,6 +109,7 @@ class Enavit extends StatelessWidget {
           '/approver_index': (context) => const AIndexPage(),
           '/approver_profile': (context) => const AProfilePage(),
           '/approver_update_profile': (context) => const AProfileUpdatePage(),
+          '/set_role':(context) => const SetRole(),
         }
     ),
     );

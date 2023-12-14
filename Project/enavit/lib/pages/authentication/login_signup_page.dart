@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:enavit/pages/authentication/signup_page.dart';
 import 'package:enavit/pages/authentication/login_page.dart';
 
-
 class LoginSignupPage extends StatelessWidget {
   const LoginSignupPage({super.key});
 
@@ -18,7 +17,7 @@ class LoginSignupPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () async {                
+              onPressed: () async {
                 debugPrint("Login");
                 Navigator.push(
                   context,
@@ -32,7 +31,6 @@ class LoginSignupPage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            
             ElevatedButton(
               onPressed: () {
                 debugPrint("Sign up");

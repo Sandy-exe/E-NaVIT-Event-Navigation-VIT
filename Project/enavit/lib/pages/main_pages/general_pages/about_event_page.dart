@@ -21,7 +21,6 @@ class _AboutEventState extends State<AboutEvent> {
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
 
-
   void razorPayDialogBox(String content) {
     //Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
     // get a Event from Event list
@@ -37,23 +36,20 @@ class _AboutEventState extends State<AboutEvent> {
   @override
   void initState() {
     super.initState();
-    
-
 
     razorpay = Razorpay();
 
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
-    
-
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     razorpay.clear();
   }
+
   void openCheckout() async {
     SecureStorage secureStorage = SecureStorage();
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
@@ -65,16 +61,18 @@ class _AboutEventState extends State<AboutEvent> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-    
-
 
     var options = {
       'key': 'rzp_test_nToF04vc477NSJ',
-      'amount': num.parse(widget.event.fee)*100.00, //in the smallest currency sub-unit.
-      'name': 'ENAVIT', 
+      'amount': num.parse(widget.event.fee) *
+          100.00, //in the smallest currency sub-unit.
+      'name': 'ENAVIT',
       'description': "Payment for ${widget.event.eventName}",
       'timeout': 60, // in seconds
-      'prefill': {'contact': currentUserData['phone_no'], 'email': currentUserData['email']},
+      'prefill': {
+        'contact': currentUserData['phone_no'],
+        'email': currentUserData['email']
+      },
     };
 
     try {
@@ -97,7 +95,6 @@ class _AboutEventState extends State<AboutEvent> {
     razorPayDialogBox("External Wallet Selected");
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +113,7 @@ class _AboutEventState extends State<AboutEvent> {
               ],
               background: Image.asset(
                 // widget.product.imageURL,r
-                "lib/images/GOJO.jpg",
+                "lib/images/Vit_poster.jpg",
                 fit: BoxFit.cover,
               )),
           bottom: PreferredSize(
@@ -161,7 +158,7 @@ class _AboutEventState extends State<AboutEvent> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width *  0.88 ,
+                            width: MediaQuery.of(context).size.width * 0.88,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -173,14 +170,13 @@ class _AboutEventState extends State<AboutEvent> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                            
                                 SizedBox(
                                   width: 70,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: const Image(
-                                        image:
-                                            AssetImage('lib/images/Pochita.jpg')),
+                                        image: AssetImage(
+                                            'lib/images/VIT_LOGO.png')),
                                   ),
                                 ),
                               ],
@@ -200,7 +196,8 @@ class _AboutEventState extends State<AboutEvent> {
                         ],
                       ),
                       const Text(
-                        "",style: TextStyle(color: Colors.black, fontSize: 16),
+                        "",
+                        style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     ],
                   ),
@@ -263,17 +260,14 @@ class _AboutEventState extends State<AboutEvent> {
 void updateUserAndEventDetails(String userId, String eventId) {
   Services service = Services();
 
-  Map<String,dynamic> eventDetails = {
+  Map<String, dynamic> eventDetails = {
     "participants": FieldValue.arrayUnion([userId]),
   };
 
-  Map<String,dynamic> userDetails = {
+  Map<String, dynamic> userDetails = {
     "events": FieldValue.arrayUnion([eventId]),
   };
 
   service.updateEvent(eventId, eventDetails);
   service.updateUser(userId, userDetails);
-
-  
-
 }

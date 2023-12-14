@@ -37,7 +37,7 @@ class ClubTile extends StatelessWidget {
                 color: Colors.transparent,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: const Image(image: AssetImage('lib/images/Pochita.jpg')),
+                  child: const Image(image: AssetImage('lib/images/VIT_LOGO.png')),
                 ),
               ),
             ),

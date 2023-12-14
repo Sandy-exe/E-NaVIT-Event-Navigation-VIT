@@ -87,6 +87,9 @@ flutter:
     - lib/images/Eren_Rumbling.jpg
     - lib/images/Survey_Corps.jpg
     - lib/images/Denji_pochita.png
+    - lib/images/VIT_LOGO.png
+    - lib/images/Vit_poster.jpg
+    - lib/images/Campus_vitchennai.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

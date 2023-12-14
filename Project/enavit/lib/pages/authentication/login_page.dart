@@ -1,4 +1,7 @@
 
+import 'dart:convert';
+
+import 'package:enavit/Data/secure_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enavit/services/authentication_service.dart';
@@ -112,9 +115,28 @@ class _LoginPageState extends State<LoginPage> {
       password: password,
     );
 
+    SecureStorage storage = SecureStorage();
+
+    String currentUserDataString = await storage.reader(key: "currentUserData") ?? "null"; 
+
+    int userRole = -1;
+    if (currentUserDataString != "null") { Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
+      userRole = currentUserData["role"];
+    }
+    print(userRole);
+
     
     if (result == "success") {
-      if (context.mounted) Navigator.pushNamed(context, '/participant_index');
+
+      if (userRole == 0){
+        if (context.mounted) Navigator.pushNamed(context, '/approver_index');
+      } else if (userRole == 1){
+        if (context.mounted) Navigator.pushNamed(context, '/organiser_index');
+      } else if (userRole == 2) {
+        if (context.mounted) Navigator.pushNamed(context, '/participant_index');
+      } else { 
+        if (context.mounted) Navigator.pushNamed(context, '/');
+      }
       
     } else {
       if (context.mounted) _showToast(context, result);

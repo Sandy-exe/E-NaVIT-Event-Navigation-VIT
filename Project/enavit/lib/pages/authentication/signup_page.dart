@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:enavit/services/authentication_service.dart';
 
@@ -10,7 +9,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
   final AuthenticationService _firebaseAuth = AuthenticationService();
 
   final TextEditingController _passwordTEC = TextEditingController();
@@ -164,24 +162,24 @@ class _SignUpPageState extends State<SignUpPage> {
                         //     email: _emailTEC.text,
                         //     password: _passwordTEC.text,
                         //   );
-                        //   print("succesful");
+                        //   debugPrint("succesful");
                         // } on FirebaseAuthException catch (e) {
-                        //   print("UNsuccesful");
+                        //   debugPrint("UNsuccesful");
                         //   if (e.code == "invalid-email") {
                         //     _showToast(context, "Invalid email address");
                         //   }
                         //   if (e.code == 'weak-password') {
-                        //     print('The password provided is too weak.');
+                        //     debugPrint('The password provided is too weak.');
                         //     _showToast(
                         //         context, "The password provided is too weak");
                         //   } else if (e.code == 'email-already-in-use') {
-                        //     print('The account already exists for that email.');
+                        //     debugPrint('The account already exists for that email.');
                         //     _showToast(context,
                         //         "The account already exists for that email");
                         //   }
                         // } catch (e) {
-                        //   print("UNsuccesful");
-                        //   print(e);
+                        //   debugPrint("UNsuccesful");
+                        //   debugPrint(e);
                         // }
                         signup();
                       },
@@ -213,14 +211,13 @@ class _SignUpPageState extends State<SignUpPage> {
     final String phoneno = _mobileTEC.text;
     final String name = "${_firstNameTEC.text} ${_lastNameTEC.text}";
 
-    
     final String result = await _firebaseAuth.signUp(
-        email: email,
-        password: password,
-        regno: regno,
-        phoneno: phoneno,
-        name: name,
-        );
+      email: email,
+      password: password,
+      regno: regno,
+      phoneno: phoneno,
+      name: name,
+    );
 
     if (result == "success") {
       if (context.mounted) Navigator.pushNamed(context, '/login');
@@ -228,6 +225,4 @@ class _SignUpPageState extends State<SignUpPage> {
       if (context.mounted) _showToast(context, result);
     }
   }
-
-
 }

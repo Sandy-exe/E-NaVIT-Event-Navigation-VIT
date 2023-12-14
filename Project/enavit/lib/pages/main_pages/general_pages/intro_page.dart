@@ -17,7 +17,7 @@ class IntroPage extends StatelessWidget {
                 //logo
                 Center(
                   child: Image.asset(
-                    'lib/images/Denji_pochita.png',
+                    'lib/images/VIT_LOGO.png',
                     height: 300,
                     ),
                 ),

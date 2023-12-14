@@ -43,7 +43,9 @@ class Compute with ChangeNotifier {
 
     eventExist = 0; //to check whether events exist or not for specific date
 
-    if (eventsString == "") eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    if (eventsString == "") {
+      eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    }
 
     if (eventsString == "null") return;
 
@@ -66,7 +68,7 @@ class Compute with ChangeNotifier {
 
     for (final event in userEvent) {
       Map<String, dynamic> eventData = jsonDecode(event);
-      // print(event);
+      // debugPrint(event);
       if (eventData["dateTime"]["startTime"].substring(0, 10) !=
           preDayList[selected].toString().substring(0, 10)) continue;
       eventExist = 1; //to check whether events exist or not for specific date
@@ -140,7 +142,9 @@ class Compute with ChangeNotifier {
 
     eventExist = 0; //to check whether events exist or not for specific date
 
-    if (eventsString == "") eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    if (eventsString == "") {
+      eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    }
 
     if (eventsString == "null") return;
 
@@ -167,7 +171,7 @@ class Compute with ChangeNotifier {
 
     for (final event in userEvent) {
       Map<String, dynamic> eventData = jsonDecode(event);
-      // print(event);
+      // debugPrint(event);
       int incremented = selected + 1;
       if (eventData["dateTime"]["startTime"].substring(5, 7) !=
           (incremented.toString().length < 2
@@ -234,7 +238,9 @@ class Compute with ChangeNotifier {
     events = [];
     eventExist = 0; //to check whether events exist or not for specific date
 
-    if (eventsString == "") eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    if (eventsString == "") {
+      eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    }
 
     if (eventsString == "null") return;
 
@@ -242,7 +248,7 @@ class Compute with ChangeNotifier {
 
     for (final event in userEvent) {
       Map<String, dynamic> eventData = jsonDecode(event);
-      // print(event);
+      // debugPrint(event);
       if (eventData["dateTime"]["startTime"].substring(0, 4) !=
           yearList[selected]) continue;
       eventExist = 1; //to check whether events exist or not for specific date
@@ -316,12 +322,13 @@ class Compute with ChangeNotifier {
     events = [];
     eventExist = 0; //to check whether events exist or not for specific date
 
-    if (eventsString == "") eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    if (eventsString == "") {
+      eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+    }
 
     if (eventsString == "null") return;
 
     List<String> userEvent = eventsString.split("JOIN");
-
 
     for (final event in userEvent) {
       Map<String, dynamic> eventData = jsonDecode(event);
@@ -335,24 +342,28 @@ class Compute with ChangeNotifier {
         "toDisplay": ""
       };
 
-
       if (selected == 0) {
-        if (DateTime.parse(eventData["dateTime"]["startTime"]).isBefore(DateTime.now())) {
-          eventExist =1; //to check whether events exist or not for specific date
+        if (DateTime.parse(eventData["dateTime"]["startTime"])
+            .isBefore(DateTime.now())) {
+          eventExist =
+              1; //to check whether events exist or not for specific date
           events.add(tempData);
         }
       } else if (selected == 1) {
-        if (DateTime.parse(eventData["dateTime"]["startTime"].toString()).isAtSameMomentAs(DateTime.now())) {
-          eventExist =1; //to check whether events exist or not for specific date
+        if (DateTime.parse(eventData["dateTime"]["startTime"].toString())
+            .isAtSameMomentAs(DateTime.now())) {
+          eventExist =
+              1; //to check whether events exist or not for specific date
           events.add(tempData);
         }
       } else if (selected == 2) {
-        if (DateTime.parse(eventData["dateTime"]["startTime"]).isAfter(DateTime.now())) {
-          eventExist =1; //to check whether events exist or not for specific date
+        if (DateTime.parse(eventData["dateTime"]["startTime"])
+            .isAfter(DateTime.now())) {
+          eventExist =
+              1; //to check whether events exist or not for specific date
           events.add(tempData);
         }
       }
-
     }
     events.sort((a, b) => a['mon'].compareTo(b['mon']));
 

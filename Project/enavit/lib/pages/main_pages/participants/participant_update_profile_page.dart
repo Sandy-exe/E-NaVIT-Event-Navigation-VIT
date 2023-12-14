@@ -13,8 +13,6 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
-
-  
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _mobileTEC = TextEditingController();
@@ -54,7 +52,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ));
           } else {
             return Scaffold(
-              backgroundColor: Colors.grey[300],
+                backgroundColor: Colors.grey[300],
                 appBar: AppBar(
                   backgroundColor: Colors.grey[300],
                   leading: IconButton(
@@ -84,7 +82,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     borderRadius: BorderRadius.circular(100),
                                     child: const Image(
                                         image: AssetImage(
-                                            'lib/images/Pochita.jpg')),
+                                            'lib/images/VIT_LOGO.png')),
                                   ),
                                 ),
                                 Positioned(
@@ -180,12 +178,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
           }
         });
   }
-  
 
   void updateprof() async {
-    final String email = _emailTEC.text.isEmpty? currentUserData['email']: _emailTEC.text;
-    final String phoneno = _mobileTEC.text.isEmpty? currentUserData['phone_no']: _mobileTEC.text;
-    final String name = _name.text.isEmpty? currentUserData['name']: _name.text;
+    final String email =
+        _emailTEC.text.isEmpty ? currentUserData['email'] : _emailTEC.text;
+    final String phoneno =
+        _mobileTEC.text.isEmpty ? currentUserData['phone_no'] : _mobileTEC.text;
+    final String name =
+        _name.text.isEmpty ? currentUserData['name'] : _name.text;
 
     Map<String, dynamic> newinfo = {
       "email": email,
@@ -201,11 +201,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
     await secureStorage.writer(
         key: "currentUserData", value: newUserDataString);
 
-    Services  services = Services();
-    services.updateUser(currentUserData['userid'],newinfo);
+    Services services = Services();
+    services.updateUser(currentUserData['userid'], newinfo);
 
-    if (context.mounted) Navigator.pop(context); 
-    
+    if (context.mounted) Navigator.pop(context);
   }
-
 }
