@@ -45,6 +45,7 @@ class Event {
   final int likes;
   final Map<String,String> comments;
   final List<String> participants;
+  final String eventImageURL;
   
   //Add this line
 
@@ -60,6 +61,7 @@ class Event {
     required this.participants, 
     required this.likes,
     required this.fee,
+    required this.eventImageURL
     // Add this line
   });
 }

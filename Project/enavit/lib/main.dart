@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
+import 'package:enavit/pages/authentication/event_creation_page.dart';
 import 'package:enavit/pages/main_pages/approvers/set_role_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ Future main() async {
           apiKey: "AIzaSyB3xdXpZ_CWyvqnHe6PjaEVz-dYsCpRydU",
           appId: "1:1084741784734:android:e31ef7588490b9b9e2978f",
           messagingSenderId: "1084741784734",
+          storageBucket: "e-navit.appspot.com",
           projectId: "e-navit"));
 
   
@@ -89,9 +91,11 @@ class Enavit extends StatelessWidget {
           create: (context) => ApproverSearchModel(),
         )
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Enavit',
+        home: EventCreationPage(),
+        /*
         initialRoute: isLoggedIn ? (userRole == 0 ? '/approver_index' : (userRole == 1 ? '/organiser_index' : '/participant_index') ) : '/',
         //initialRoute: '/',
         routes: {
@@ -114,6 +118,7 @@ class Enavit extends StatelessWidget {
           '/approver_update_profile': (context) => const AProfileUpdatePage(),
           '/set_role':(context) => const SetRole(),
         }
+        */
     ),
     );
   }
