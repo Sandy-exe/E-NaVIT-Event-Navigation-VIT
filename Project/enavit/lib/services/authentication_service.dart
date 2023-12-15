@@ -1,8 +1,10 @@
+import 'package:enavit/components/compute.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/services.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -55,7 +57,7 @@ class AuthenticationService {
           clubs: [],
           events: [],
           organizedEvents: [],
-          role: 0,
+          role: 2,
           phoneNo: phoneno,
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning
@@ -76,6 +78,8 @@ class AuthenticationService {
   }
 
   Future<void> signOut(context) async {
+    var computeProvider = Provider.of<Compute>(context, listen: false);
+    await computeProvider.logout();
     secureStorage.clear();
     await _firebaseAuth.signOut();
     Navigator.pushNamedAndRemoveUntil(context, "/login", (r) => false);

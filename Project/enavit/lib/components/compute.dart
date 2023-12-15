@@ -45,9 +45,12 @@ class Compute with ChangeNotifier {
 
     if (eventsString == "") {
       eventsString = (await secureStorage.reader(key: "events")) ?? "null";
+      print(eventsString);
     }
 
-    if (eventsString == "null") return;
+    print(eventsString);
+
+    if (eventsString == "null" || eventsString.isEmpty) return;
 
     List<String> userEvent = eventsString.split("JOIN");
 
@@ -111,6 +114,7 @@ class Compute with ChangeNotifier {
     });
 
     timeLineEvents = events;
+    print(events);
   }
 
   void datePickerWeek(int selectedIndex) {
@@ -130,7 +134,6 @@ class Compute with ChangeNotifier {
       datePickerUpper = weekList;
       selected = selectedIndex;
       updateFilter = "Week";
-
       await saveEventsWeek();
 
       notifyListeners();
@@ -146,7 +149,7 @@ class Compute with ChangeNotifier {
       eventsString = (await secureStorage.reader(key: "events")) ?? "null";
     }
 
-    if (eventsString == "null") return;
+    if (eventsString == "null" || eventsString.isEmpty) return;
 
     List<String> userEvent = eventsString.split("JOIN");
 
@@ -213,6 +216,7 @@ class Compute with ChangeNotifier {
         DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
 
     timeLineEvents = events;
+    print(timeLineEvents);
   }
 
   void datePickerMonth(int selectedIndex) {
@@ -242,7 +246,7 @@ class Compute with ChangeNotifier {
       eventsString = (await secureStorage.reader(key: "events")) ?? "null";
     }
 
-    if (eventsString == "null") return;
+    if (eventsString == "null" || eventsString.isEmpty) return;
 
     List<String> userEvent = eventsString.split("JOIN");
 
@@ -326,7 +330,7 @@ class Compute with ChangeNotifier {
       eventsString = (await secureStorage.reader(key: "events")) ?? "null";
     }
 
-    if (eventsString == "null") return;
+    if (eventsString == "null" || eventsString.isEmpty) return;
 
     List<String> userEvent = eventsString.split("JOIN");
 
@@ -401,5 +405,24 @@ class Compute with ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+
+  Future<void> logout() async {
+    dayList = [];
+    monthList = [];
+    weekList = [];
+    selected = 3;
+    preDayList = [];
+    yearList = [];
+    events = [];
+    eventsString = "";
+    eventExist = 0;
+    updateFilter = "Week";
+    datePickerUpper = [];
+    datePickerLower = [];
+    timeLineEvents = [];
+
+    notifyListeners(); // Notify listeners to update the UI
   }
 }
