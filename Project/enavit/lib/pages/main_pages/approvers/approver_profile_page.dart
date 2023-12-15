@@ -36,12 +36,7 @@ class _AProfilePageState extends State<AProfilePage> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-    if (currentUserData['role'] == '0') {
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/participant_index", (r) => false);
-      }
-    }
+    
   }
 
   @override

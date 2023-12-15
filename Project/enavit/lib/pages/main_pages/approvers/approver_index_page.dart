@@ -1,4 +1,5 @@
 
+import 'package:enavit/pages/main_pages/approvers/approver_event_creation_page.dart';
 import 'package:flutter/material.dart';
 import '../../../components/approver_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
@@ -28,11 +29,13 @@ class _AIndexPageState extends State<AIndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
+    const EventCreationPage(),
     const AProfilePage(),
   ];
 
   final List<String> pageTitles = [
     'Home',
+    'Create Event',
     'Profile',
   ];
 

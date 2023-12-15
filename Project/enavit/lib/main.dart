@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
-import 'package:enavit/pages/authentication/event_creation_page.dart';
-import 'package:enavit/pages/main_pages/approvers/set_role_page.dart';
+import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -23,6 +22,8 @@ import 'package:enavit/pages/main_pages/approvers/approver_index_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
 import 'package:provider/provider.dart';
+
+import 'pages/main_pages/approvers/approver_event_creation_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +65,8 @@ Future main() async {
     Map<String, dynamic> currentUserData = jsonDecode(currentUserDataString); //null not checked properly
     userRole = currentUserData["role"];
   }
+
+  print(userRole);
   
   runApp(
      Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
@@ -73,7 +76,10 @@ Future main() async {
 class Enavit extends StatelessWidget {
   final bool isLoggedIn;
   final int userRole;
+
   const Enavit({super.key, required this.isLoggedIn, required this.userRole});
+
+  
 
   // This widget is the root of your application.
   @override
@@ -91,11 +97,9 @@ class Enavit extends StatelessWidget {
           create: (context) => ApproverSearchModel(),
         )
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Enavit',
-        home: EventCreationPage(),
-        /*
         initialRoute: isLoggedIn ? (userRole == 0 ? '/approver_index' : (userRole == 1 ? '/organiser_index' : '/participant_index') ) : '/',
         //initialRoute: '/',
         routes: {
@@ -117,8 +121,8 @@ class Enavit extends StatelessWidget {
           '/approver_profile': (context) => const AProfilePage(),
           '/approver_update_profile': (context) => const AProfileUpdatePage(),
           '/set_role':(context) => const SetRole(),
+          '/event_creation':(context) => const EventCreationPage(),
         }
-        */
     ),
     );
   }

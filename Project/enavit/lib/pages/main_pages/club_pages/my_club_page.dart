@@ -25,10 +25,12 @@ class _ClubBioState extends State<ClubBio> {
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
     eventList = await service.getClubEvents(clubId);
+    print(eventList.length);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.club.clubId);
     return FutureBuilder(
         future: initPrefs(widget.club.clubId),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
