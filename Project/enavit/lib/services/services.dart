@@ -185,6 +185,7 @@ class Services {
         role: data['role'],
         phoneNo: data['phone_no'],
         regNo: data['reg_no'],
+        profileImageURL: data['profileImageURL'] ?? "null",
       ));
     }
 

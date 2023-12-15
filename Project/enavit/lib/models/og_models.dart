@@ -99,6 +99,7 @@ class Users {
   final List<String> events;
   final List<String> organizedEvents;
   final List<String> clubs;
+  final String profileImageURL;
 
   Users({
     required this.email,
@@ -110,6 +111,7 @@ class Users {
     required this.events,
     required this.organizedEvents,
     required this.clubs,
+    required this.profileImageURL,
   });
 
 }

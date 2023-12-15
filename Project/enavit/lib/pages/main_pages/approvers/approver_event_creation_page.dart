@@ -33,6 +33,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
   File? _image;
   final picker = ImagePicker();
   String? downloadUrl;
+  final imageNotifier = ValueNotifier<File?>(null);
 
   Future ImagePickerMethod () async {
 
@@ -41,7 +42,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        uploadImage().whenComplete(showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
+        imageNotifier.value = _image;
       } else {
         showSnackBar("No Image Selected", const Duration(milliseconds: 1000));
       }
@@ -63,7 +64,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
 
     Reference ref = FirebaseStorage.instance.ref().child("$clubId/images").child("$uniqueFileName.userID$userId");
     UploadTask uploadTask = ref.putFile(_image!);
-    uploadTask.whenComplete(() async {
+    await uploadTask.whenComplete(() async {
     downloadUrl = await ref.getDownloadURL();
     _eventImageURL.text = downloadUrl!;
     print("checking ${_eventImageURL.text}");
@@ -235,42 +236,11 @@ class _EventCreationPageState extends State<EventCreationPage> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-
                         ImagePickerMethod();
-                        // ImagePicker imagePicker = ImagePicker();
-                        // XFile? file = await imagePicker.pickImage(
-                        //     source: ImageSource.gallery);
-                        // print("testing ${file?.path}");
-                        // if (file == null) return;
-                        // String uniqueFileName =
-                        //     DateTime.now().millisecondsSinceEpoch.toString();
-                        // Reference referenceRoot = FirebaseStorage.instance.ref();
-                        // Reference referenceDirImages =
-                        //     referenceRoot.child("images");
-                        // Reference referenceImageToUpload =
-                        //     referenceDirImages.child(uniqueFileName);
-                        // var imageURL = "";
-                        // try {
-                        //   await referenceImageToUpload.putFile(File(file.path));
-                        //   // setState(() async {
-                        //   //     imageURL = await referenceImageToUpload.getDownloadURL();
-                        //   // });
-                        //   _eventImageURL.text = await referenceImageToUpload.getDownloadURL();
-                        //   print("checking ${_eventImageURL.text}");
-                        // } catch (error) {
-                        //   print("false $error");
-                        // }
-                        // print("checking outside ${_eventImageURL.text}");
-                        // // var thanan = ThananServices();
-                        // // Future<String> future =
-                        // //     thanan.addImage(uniqueFileName, file);
-                        // // future.then((URL) {
-                        // //   imageURL = URL;
-                        // //   print("image check ${imageURL}");
-                        // // });
-                        // // imageURL = "vfvfv";
                       },
-                      child: const Text("Choose Image")),
+                      child: _image !=null ? const Text("Choose Image"): const Text("Change Image")),
+                  //view image
+                  _buildImage(context, _image),
                   const SizedBox(
                     height: 32,
                   ),
@@ -309,14 +279,26 @@ class _EventCreationPageState extends State<EventCreationPage> {
     );
   }
 
-  Future<void> addEvent(Event event) async {
-    print(event);
-    
+  Widget _buildImage(BuildContext context, [File? image]) {
+    if (image != null) {
+      return Image.file(image);
+    } else {
+      return const Text('Take a picture');
+    }
+  }
 
+  Future addEvent(Event event) async {
+    print(event);
+
+    await uploadImage().whenComplete(() => showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
+    
     Services services = Services();
     await services.addEvent(event);
+    print("'ok");
     
-    if (mounted) {showDialog(
+    
+    if (mounted) {
+      showDialog(
       context: context,
       builder: (BuildContext context) {
         return const AlertDialog(
@@ -330,23 +312,17 @@ class _EventCreationPageState extends State<EventCreationPage> {
     if (mounted) {
       Future.delayed(const Duration(seconds: 2), () {Navigator.pushNamedAndRemoveUntil(context, "/approver_index", (r) => false);});
     }
+
+    print("ok");
     }
 
-    
-  // var thanan = ThananServices();
-  //await thanan.addEvent(event);
-  // await thanan.addEvent(Event(
-  //     clubId: "clubId",
-  //     dateTime: {"endTime": DateTime.now(), "startTime": DateTime.now()},
-  //     description: "description",
-  //     eventId: "Test_Event",
-  //     eventName: "Etho pannunga",
-  //     location: "You know where",
-  //     organisers: ["org1", "org2"],
-  //     comments: {"user1": "naice"},
-  //     participants: ["part1", "part2"],
-  //     likes: 100,
-  //     fee: "99.99"));
+    ValueListenableBuilder<File?>(
+  valueListenable: imageNotifier,
+  builder: (context, value, child) {
+    return _buildImage(context, value);
+  },
+);
+
 }
 
 

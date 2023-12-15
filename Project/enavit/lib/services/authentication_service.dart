@@ -58,6 +58,7 @@ class AuthenticationService {
           role: 0,
           phoneNo: phoneno,
           regNo: regno,
+          profileImageURL: "null", //add profile image in the beginning
         );
         await service.addUser(newUser);
         return "success";

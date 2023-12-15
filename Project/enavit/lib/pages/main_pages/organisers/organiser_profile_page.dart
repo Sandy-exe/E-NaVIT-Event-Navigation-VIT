@@ -87,7 +87,7 @@ class _OProfilePageState extends State<OProfilePage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.pushNamed(
-                                        context, '/participant_update_profile');
+                                        context, '/organiser_update_profile');
                                   },
                                   child: Container(
                                     width: 35,
