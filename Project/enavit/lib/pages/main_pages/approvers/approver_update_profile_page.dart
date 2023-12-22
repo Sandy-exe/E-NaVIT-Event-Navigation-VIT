@@ -24,7 +24,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
 
-
   File? _image;
   final picker = ImagePicker();
   String? downloadUrl;
@@ -45,7 +44,8 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
 
   Future uploadImage() async {
     SecureStorage secureStorage = SecureStorage();
-    String userData = await secureStorage.reader(key: "currentUserData") ?? "null";
+    String userData =
+        await secureStorage.reader(key: "currentUserData") ?? "null";
 
     if (userData == "null") return;
     Map<String, dynamic> currentUserData = jsonDecode(userData);
@@ -72,7 +72,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
     ));
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -97,7 +96,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -135,9 +133,14 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
                                   width: 150,
                                   height: 150,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: currentUserData['profileImageURL'] == "null" && _image == null ? Image.asset('lib/images/VIT_LOGO.png') : _buildImage(context, _image)
-                                  ),
+                                      borderRadius: BorderRadius.circular(100),
+                                      child:
+                                          currentUserData['profileImageURL'] ==
+                                                      "null" &&
+                                                  _image == null
+                                              ? Image.asset(
+                                                  'lib/images/VIT_LOGO.png')
+                                              : _buildImage(context, _image)),
                                 ),
                                 Positioned(
                                   bottom: 5,
@@ -234,27 +237,23 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
                             ))
                           ],
                         ))));
-          }          
+          }
         });
   }
 
-      
-
   Widget _buildImage(BuildContext context, [File? image]) {
     if (image != null) {
-      return Image.file( image, fit: BoxFit.cover);
+      return Image.file(image, fit: BoxFit.cover);
     } else {
-      return Image.network(
-        currentUserData['profileImageURL'],
-        fit: BoxFit.cover,
-      );
+      return currentUserData['profileImageURL'] == null
+          ? Image.asset('lib/images/VIT_LOGO.png')
+          : Image.network(currentUserData['profileImageURL'],
+              fit: BoxFit.cover);
     }
   }
 
   void updateprof() async {
-
     await uploadImage();
-
 
     final String email =
         _emailTEC.text.isEmpty ? currentUserData['email'] : _emailTEC.text;
@@ -291,7 +290,9 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
     Services services = Services();
     services.updateUser(currentUserData['userid'], newinfo);
 
-    if (context.mounted) Navigator.pushNamedAndRemoveUntil(context, '/approver_index', (route) => false);
+    if (context.mounted)
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/approver_index', (route) => false);
 
     ValueListenableBuilder<File?>(
       valueListenable: imageNotifier,
@@ -299,9 +300,5 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
         return _buildImage(context, value);
       },
     );
-
-
   }
-
-  
 }

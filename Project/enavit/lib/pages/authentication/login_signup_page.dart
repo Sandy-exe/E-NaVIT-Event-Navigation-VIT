@@ -17,6 +17,12 @@ class LoginSignupPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
               onPressed: () async {
                 debugPrint("Login");
                 Navigator.push(
@@ -26,12 +32,24 @@ class LoginSignupPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text("Login"),
+              child: const Text("Login",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
             const SizedBox(
               height: 16,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
               onPressed: () {
                 debugPrint("Sign up");
                 Navigator.push(
@@ -41,7 +59,13 @@ class LoginSignupPage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text("Sign up"),
+              child: const Text("Sign up",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

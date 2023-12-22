@@ -111,11 +111,11 @@ class _AboutEventState extends State<AboutEvent> {
               stretchModes: const [
                 StretchMode.zoomBackground,
               ],
-              background: Image.asset(
-                // widget.product.imageURL,r
-                "lib/images/Vit_poster.jpg",
-                fit: BoxFit.cover,
-              )),
+              background: widget.event.eventImageURL == "null"
+                ? Image.asset('lib/images/Vit_poster.jpg', fit: BoxFit.cover,
+                  )
+                : Image.network(widget.event.eventImageURL, fit: BoxFit.cover,),
+          ),
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(45),
               child: Transform.translate(

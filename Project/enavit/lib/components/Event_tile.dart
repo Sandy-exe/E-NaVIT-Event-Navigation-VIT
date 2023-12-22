@@ -53,7 +53,7 @@ class EventTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0),
                       child: SizedBox(
                         width: 250.0, // desired width
-                        child: event.eventImageURL == "null" ? Image.asset('lib/images/Vit_poster.jpg') : Image.network(event.eventImageURL),
+                        child: event.eventImageURL == "null" ? Image.asset('lib/images/Vit_poster.jpg') : Image.network(event.eventImageURL, fit: BoxFit.cover,),
                       ),
                     ),
                     const SizedBox(height: 10,),
