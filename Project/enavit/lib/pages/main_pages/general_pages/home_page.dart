@@ -15,15 +15,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
   }
 
   Future<void> initPrefs() async {
+    print("sut");
     Services service = Services();
     await service.getEventClubData(context);
+    print("gg");
   }
 
   @override
@@ -49,12 +50,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildHomepage() {
-    return Consumer<SearchModel>(
-      builder: (BuildContext context, value, _){
-        // 
-        // 
-        return 
-        Column(
+    return Consumer<SearchModel>(builder: (BuildContext context, value, _) {
+      //
+      //
+      return Column(
         children: [
           //Dummy search bar in Stack
           const SizedBox(
@@ -95,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                   return ClubTile(
                     club: object,
                   );
-                }else {
+                } else {
                   return EventTile(
                     event: object as Event,
                   );
@@ -104,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-        );
-  });
+      );
+    });
   }
 }

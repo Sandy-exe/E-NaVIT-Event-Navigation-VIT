@@ -29,13 +29,13 @@ class _AIndexPageState extends State<AIndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
-    const EventCreationPage(),
+    const CompleteEventDetailPage(),
     const AProfilePage(),
   ];
 
   final List<String> pageTitles = [
     'Home',
-    'Create Event',
+    'Approvals',
     'Profile',
   ];
 

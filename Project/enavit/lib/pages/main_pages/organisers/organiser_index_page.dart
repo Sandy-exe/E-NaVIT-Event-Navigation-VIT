@@ -1,4 +1,5 @@
 
+import 'package:enavit/pages/main_pages/organisers/organiser_approval_creation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/components/organiser_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/organisers/organiser_profile_page.dart';
@@ -28,11 +29,13 @@ class _OIndexPageState extends State<OIndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
+    const EventCreationPage(),
     const OProfilePage(),
   ];
 
   final List<String> pageTitles = [
     'Home',
+    'Create Approval',
     'Profile',
   ];
 

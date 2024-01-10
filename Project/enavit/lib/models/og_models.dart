@@ -1,18 +1,38 @@
-
+import 'dart:ffi';
 
 class Approval {
-  final int userId;
-  final int clubId;
-  final int approvalId;
-  final int status;// pending, approved, rejected
-  final String message;
-  Approval({
-    required this.userId,
-    required this.clubId,
-    required this.approvalId,
-    required this.status,
-    required this.message,
-  });
+  final String clubId;
+  final Map<String, dynamic> dateTime;
+  final String description;
+  final String approvalId;
+  final String eventName;
+  final String location;
+  final String fee;
+  final List<String> organisers;
+  final int likes;
+  final Map<String, String> comments;
+  final List<String> participants;
+  final String eventImageURL;
+  final int approved;
+
+  //Add this line
+
+  Approval(
+      {required this.clubId,
+      required this.dateTime,
+      required this.description,
+      required this.approvalId,
+      required this.eventName,
+      required this.location,
+      required this.organisers,
+      required this.comments,
+      required this.participants,
+      required this.likes,
+      required this.fee,
+      required this.eventImageURL,
+      required this.approved,
+      // Add this line
+      });
 }
 
 class Club {
@@ -35,7 +55,7 @@ class Club {
 
 class Event {
   final String clubId;
-  final Map<String,dynamic> dateTime;
+  final Map<String, dynamic> dateTime;
   final String description;
   final String eventId;
   final String eventName;
@@ -43,27 +63,29 @@ class Event {
   final String fee;
   final List<String> organisers;
   final int likes;
-  final Map<String,String> comments;
+  final Map<String, String> comments;
   final List<String> participants;
   final String eventImageURL;
-  
+  final String extraInfo;
+
   //Add this line
 
-  Event({
-    required this.clubId,
-    required this.dateTime,
-    required this.description,
-    required this.eventId,
-    required this.eventName,
-    required this.location,
-    required this.organisers,
-    required this.comments,
-    required this.participants, 
-    required this.likes,
-    required this.fee,
-    required this.eventImageURL
-    // Add this line
-  });
+  Event(
+      {required this.clubId,
+      required this.dateTime,
+      required this.description,
+      required this.eventId,
+      required this.eventName,
+      required this.location,
+      required this.organisers,
+      required this.comments,
+      required this.participants,
+      required this.likes,
+      required this.fee,
+      required this.eventImageURL,
+      required this.extraInfo
+      // Add this line
+      });
 }
 
 class Comments {
@@ -92,12 +114,13 @@ class ParticipantRequest {
 class Users {
   final String email;
   final String name;
-  final int role;// for participants and other roles
+  final int role; // for participants and other roles
   final String phoneNo;
   final String regNo;
   final String userId;
   final List<String> events;
   final List<String> organizedEvents;
+  final List<String> approvalEvents;
   final List<String> clubs;
   final String profileImageURL;
 
@@ -110,8 +133,8 @@ class Users {
     required this.userId,
     required this.events,
     required this.organizedEvents,
+    required this.approvalEvents,
     required this.clubs,
     required this.profileImageURL,
   });
-
 }

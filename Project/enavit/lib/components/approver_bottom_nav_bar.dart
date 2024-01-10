@@ -24,8 +24,8 @@ class NavBar extends StatelessWidget {
               text: 'Home',
             ),
             GButton(
-              icon: Icons.create,
-              text: 'Event Creation',
+              icon: Icons.approval_rounded,
+              text: 'Approvals',
             ),
             GButton(
               icon: Icons.person,
