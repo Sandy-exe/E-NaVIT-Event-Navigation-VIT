@@ -14,7 +14,8 @@ class Services {
   SecureStorage secureStorage = SecureStorage();
 
   Future<void> addUser(Users newUser) async {
-    final docref = firestore.collection("app_users").doc(newUser.userId.toString());
+    final docref =
+        firestore.collection("app_users").doc(newUser.userId.toString());
 
     Map<String, dynamic> obj = {
       "userid": newUser.userId,
@@ -23,12 +24,13 @@ class Services {
       "clubs": newUser.clubs,
       "events": newUser.events,
       "organized_events": newUser.organizedEvents,
+      "approval_events": newUser.approvalEvents,
       "role": newUser.role,
       "phone_no": newUser.phoneNo,
       "reg_no": newUser.regNo,
     };
 
-    await docref.set(obj);//push the object
+    await docref.set(obj); //push the object
   }
 
   Future getUserData(String uid) async {
@@ -37,10 +39,10 @@ class Services {
 
     Map<String, dynamic> currentUserData = currentUser.data()!;
     String currentUserDataString = jsonEncode(currentUserData);
-    await secureStorage.writer(key: "currentUserData", value: currentUserDataString);
-    final userRole =  currentUserData['role'];
+    await secureStorage.writer(
+        key: "currentUserData", value: currentUserDataString);
+    final userRole = currentUserData['role'];
     await secureStorage.writer(key: "userRole", value: userRole.toString());
-
 
     //Store Event data of the user
     List<String> events = [];
@@ -52,23 +54,25 @@ class Services {
       Map<String, dynamic> eventData = event.data()!;
 
       Map<String, String> dateTime = {
-        'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate().toString(),
-        'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
+        'startTime': (eventData['dateTime']['startTime'] as Timestamp)
+            .toDate()
+            .toString(),
+        'endTime':
+            (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
       };
-      Map<String,dynamic> eventObj = {
-          "clubId": eventData['clubId'],
-          "dateTime": dateTime,
-          "description": eventData['description'],
-          "eventId": eventData['eventId'],
-          "eventName": eventData['eventName'],
-          "location": eventData['location'],
-          "fee": eventData['fee'],
-          "organisers": List<String>.from(eventData['organisers']),
-          "comments": Map<String, String>.from(eventData['comments']),
-          "participants": List<String>.from(eventData['participants']),
-          "likes": eventData['likes'],
+      Map<String, dynamic> eventObj = {
+        "clubId": eventData['clubId'],
+        "dateTime": dateTime,
+        "description": eventData['description'],
+        "eventId": eventData['eventId'],
+        "eventName": eventData['eventName'],
+        "location": eventData['location'],
+        "fee": eventData['fee'],
+        "organisers": List<String>.from(eventData['organisers']),
+        "comments": Map<String, String>.from(eventData['comments']),
+        "participants": List<String>.from(eventData['participants']),
+        "likes": eventData['likes'],
       };
-
 
       eventListObj.add(
         Event(
@@ -83,7 +87,8 @@ class Services {
           comments: Map<String, String>.from(eventData['comments']),
           participants: List<String>.from(eventData['participants']),
           likes: eventData['likes'],
-          eventImageURL: eventData['eventImageURL'] ?? "null"
+          eventImageURL: eventData['eventImageURL'] ?? "null",
+          extraInfo: eventData['extraInfo'],
         ),
       );
 
@@ -94,22 +99,21 @@ class Services {
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
     print(eventsString);
-    
   }
 
   //details of all clubs and events
   Future<void> getEventClubData(BuildContext context) async {
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
-
+    print("inside eventClubData");
     for (final docSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
-
+      print(data);
       Map<String, DateTime> dateTime = {
         'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
         'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
       };
-      
+
       events.add(
         Event(
           clubId: data['clubId'],
@@ -123,11 +127,13 @@ class Services {
           comments: Map<String, String>.from(data['comments']),
           participants: List<String>.from(data['participants']),
           likes: data['likes'],
-          eventImageURL: data['eventImageURL'] ?? "null"
+          eventImageURL: data['eventImageURL'] ?? "null",
+          extraInfo: data['extraInfo'],
         ),
       );
+      print(events);
     }
-
+    print(events);
 
     //Clubs list
     final clubquerySnapshot = await firestore.collection("Clubs").get();
@@ -147,12 +153,13 @@ class Services {
         ),
       );
     }
-
+    print("inga paaru");
+    print(events);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<SearchModel>(context, listen: false).initEventClubList(events,clubs);
+      Provider.of<SearchModel>(context, listen: false)
+          .initEventClubList(events, clubs);
     });
-
 
     // for (final docSnapshot in querySnapshot.docs) {
     //   Map<String, dynamic> docData = docSnapshot.data();
@@ -160,7 +167,6 @@ class Services {
     //   await secureStorage.writer(key: "eventData", value: docDataString);
     // }
   }
-
 
   //get all participants
   Future<void> getParticipantData(BuildContext context) async {
@@ -182,6 +188,7 @@ class Services {
         clubs: List<String>.from(data['clubs']),
         events: List<String>.from(data['events']),
         organizedEvents: List<String>.from(data['organized_events']),
+        approvalEvents: List<String>.from(data['approval_events']),
         role: data['role'],
         phoneNo: data['phone_no'],
         regNo: data['reg_no'],
@@ -189,25 +196,26 @@ class Services {
       ));
     }
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<ApproverSearchModel>(context, listen: false).initUserList(userList);
+      Provider.of<ApproverSearchModel>(context, listen: false)
+          .initUserList(userList);
     });
   }
 
-  Future<void> updateUser (String uid, Map<String, dynamic> newinfo) async {
+  Future<void> updateUser(String uid, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("app_users").doc(uid);
     // AuthenticationService auth = AuthenticationService();
     // auth.updateMail(newinfo["email"]);
-    await docref.update(newinfo);//push the object
+    await docref.update(newinfo); //push the object
   }
 
-  Future<void> updateEvent (String eventId, Map<String, dynamic> newinfo) async {
+  Future<void> updateEvent(String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
-    await docref.update(newinfo);//push the object
+    await docref.update(newinfo); //push the object
     List<String> events = [];
 
-    Map<String,dynamic> currentUserData = jsonDecode(await secureStorage.reader(key: "currentUserData")?? "null");
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
 
     for (final eventId in currentUserData['events']) {
       final event = await firestore.collection("Events").doc(eventId).get();
@@ -219,13 +227,15 @@ class Services {
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
   }
-  
 
   //details of specific club
   Future<List<Event>> getClubEvents(String clubId) async {
     final querySnapshotEvent = await firestore.collection("Events").get();
-    final querySnapshotClub = await firestore.collection("Clubs").doc(clubId).get();
-    Map<String, dynamic> selectedClub  = querySnapshotClub.data()!;
+    final querySnapshotClub =
+        await firestore.collection("Clubs").doc(clubId).get();
+    print("aaaaaaaaaaaaaaaaa");
+    print(querySnapshotClub);
+    Map<String, dynamic> selectedClub = querySnapshotClub.data()!;
 
     List<Event> events = [];
 
@@ -243,28 +253,27 @@ class Services {
 
       print("pk");
 
-      try{
+      try {
         events.add(
-        Event(
-          clubId: data['clubId'],
-          dateTime: dateTime,
-          description: data['description'],
-          eventId: data['eventId'],
-          eventName: data['eventName'],
-          location: data['location'],
-          fee: data['fee'],
-          organisers: List<String>.from(data['organisers']),
-          comments: Map<String, String>.from(data['comments']),
-          participants: List<String>.from(data['participants']),
-          likes: data['likes'],
-          eventImageURL: data['eventImageURL'] ??  "null"
-        ),
-      );
+          Event(
+            clubId: data['clubId'],
+            dateTime: dateTime,
+            description: data['description'],
+            eventId: data['eventId'],
+            eventName: data['eventName'],
+            location: data['location'],
+            fee: data['fee'],
+            organisers: List<String>.from(data['organisers']),
+            comments: Map<String, String>.from(data['comments']),
+            participants: List<String>.from(data['participants']),
+            likes: data['likes'],
+            eventImageURL: data['eventImageURL'] ?? "null",
+            extraInfo: data['extraInfo'],
+          ),
+        );
       } catch (e) {
         print(e);
       }
-      
-      
 
       print("ok");
 
@@ -272,10 +281,9 @@ class Services {
     }
 
     return events;
-  } 
+  }
 
-
-  Future<void> addEvent (Event event) async {
+  Future<void> addEvent(Event event) async {
     print(event);
     final docref = firestore.collection("Events").doc(event.eventId.toString());
     Map<String, dynamic> obj = {
@@ -290,9 +298,14 @@ class Services {
       "comments": event.comments,
       "participants": event.participants,
       "likes": event.likes,
-      "eventImageURL": event.eventImageURL
+      "eventImageURL": event.eventImageURL,
+      "extraInfo": event.extraInfo
     };
     await docref.set(obj);
+
+    // update approved status
+    final approvalRef = firestore.collection("Approvals").doc(event.eventId);
+    await approvalRef.update({"approved": 1});
 
     //update club events
     final clubref = firestore.collection("Clubs").doc(event.clubId);
@@ -303,12 +316,78 @@ class Services {
     await clubref.update({"events": events});
   }
 
+  Future<void> addApproval(Approval approval) async {
+    print(approval);
+    final docref =
+        firestore.collection("Approvals").doc(approval.approvalId.toString());
+    Map<String, dynamic> obj = {
+      "clubId": approval.clubId,
+      "dateTime": approval.dateTime,
+      "description": approval.description,
+      "approvalId": approval.approvalId,
+      "eventName": approval.eventName,
+      "location": approval.location,
+      "fee": approval.fee,
+      "organisers": approval.organisers,
+      "comments": approval.comments,
+      "participants": approval.participants,
+      "likes": approval.likes,
+      "eventImageURL": approval.eventImageURL,
+      "approved": approval.approved
+    };
 
+    for (var organiser in approval.organisers) {
+      final orgRef = firestore.collection("app_users").doc(organiser);
+      final org = await orgRef.get();
+      Map<String, dynamic> orgData = org.data()!;
+      List<String> approvalEvents =
+          List<String>.from(orgData["approval_events"]);
+      approvalEvents.add(approval.approvalId);
+      await orgRef.update({"approval_events": approvalEvents});
+    }
 
+    await docref.set(obj);
 
+    //update club events
+    // final clubref = firestore.collection("Clubs").doc(event.clubId);
+    // final club = await clubref.get();
+    // Map<String, dynamic> clubData = club.data()!;
+    // List<String> events = List<String>.from(clubData["events"]);
+    // events.add(event.eventId);
+    // await clubref.update({"events": events});
+  }
 
-
-
+  Future<List<Approval>> getApprovalList(String organiserId) async {
+    List<Approval> approvalList = [];
+    final orgRef = firestore.collection("app_users").doc(organiserId);
+    final org = await orgRef.get();
+    Map<String, dynamic> currentOrgData = org.data()!;
+    for (var approvalId in currentOrgData['approval_events']) {
+      final approval =
+          await firestore.collection("Approvals").doc(approvalId).get();
+      Map<String, dynamic> approvalData = approval.data()!;
+      if (approvalData['approved'] == 0) {
+        approvalList.add(
+          Approval(
+            clubId: approvalData['clubId'],
+            dateTime: approvalData['dateTime'],
+            description: approvalData['description'],
+            approvalId: approvalData['approvalId'],
+            eventName: approvalData['eventName'],
+            location: approvalData['location'],
+            fee: approvalData['fee'],
+            organisers: List<String>.from(approvalData['organisers']),
+            comments: Map<String, String>.from(approvalData['comments']),
+            participants: List<String>.from(approvalData['participants']),
+            likes: approvalData['likes'],
+            eventImageURL: approvalData['eventImageURL'] ?? "null",
+            approved: approvalData['approved'],
+          ),
+        );
+      }
+    }
+    return approvalList;
+  }
 
   //Creating Dummy Data
   // Future<void> createDummyData() async {
@@ -423,142 +502,4 @@ class Services {
   //       firestore.collection('tasks').doc(documentId);
   //   await documentReference.delete();
   // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

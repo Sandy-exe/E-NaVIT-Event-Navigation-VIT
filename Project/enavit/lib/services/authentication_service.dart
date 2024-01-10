@@ -57,6 +57,7 @@ class AuthenticationService {
           clubs: [],
           events: [],
           organizedEvents: [],
+          approvalEvents: [],
           role: 2,
           phoneNo: phoneno,
           regNo: regno,

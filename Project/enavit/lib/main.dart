@@ -23,7 +23,7 @@ import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
 import 'package:provider/provider.dart';
 
-import 'pages/main_pages/approvers/approver_event_creation_page.dart';
+import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

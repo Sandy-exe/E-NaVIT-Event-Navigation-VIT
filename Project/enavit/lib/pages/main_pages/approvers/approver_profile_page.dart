@@ -71,7 +71,7 @@ class _AProfilePageState extends State<AProfilePage> {
                                 height: 150,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
-                                  child: currentUserData['profileImageURL'] == "null"
+                                  child: currentUserData['profileImageURL'] == null
                                         ? Image.asset('lib/images/VIT_LOGO.png')
                                         : Image.network(currentUserData['profileImageURL'],fit: BoxFit.cover )
                                 ),
