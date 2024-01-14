@@ -5,6 +5,7 @@ import '../../../components/approver_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/pages/main_pages/general_pages/home_page.dart';
+import 'package:enavit/pages/main_pages/approvers/approver_stats_page.dart';
 
 
 class AIndexPage extends StatefulWidget {
@@ -30,12 +31,14 @@ class _AIndexPageState extends State<AIndexPage> {
   final List<Widget> pages = [
     const HomePage(),
     const CompleteEventDetailPage(),
+    const StatsPage(),
     const AProfilePage(),
   ];
 
   final List<String> pageTitles = [
     'Home',
     'Approvals',
+    'Stats',
     'Profile',
   ];
 

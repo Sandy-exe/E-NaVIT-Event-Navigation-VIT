@@ -112,7 +112,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      prefixIcon: Icon(Icons.event),
+                      prefixIcon: const Icon(Icons.event),
                       labelText: 'Event name',
                       hintText: 'Enter event name',
                       isDense: true),
@@ -127,7 +127,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      prefixIcon: Icon(Icons.description),
+                      prefixIcon: const Icon(Icons.description),
                       labelText: 'Event description',
                       hintText: 'Enter event description',
                       isDense: true),
@@ -142,7 +142,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      prefixIcon: Icon(Icons.house),
+                      prefixIcon: const Icon(Icons.house),
                       labelText: 'Club',
                       hintText: 'Enter club ID',
                       isDense: true),
@@ -157,7 +157,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      prefixIcon: Icon(Icons.location_pin),
+                      prefixIcon: const Icon(Icons.location_pin),
                       labelText: 'Event location',
                       hintText: 'Enter event location',
                       isDense: true),
@@ -263,7 +263,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                       labelText: 'Organiser',
                       hintText: 'Enter organiser ID',
                       isDense: true),

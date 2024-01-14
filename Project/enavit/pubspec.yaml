@@ -53,6 +53,9 @@ dependencies:
 
   lite_rolling_switch:
 
+  flutter_svg: ^2.0.5
+  fl_chart: ^0.62.0
+
   timeline_tile:
 
   flutter_local_notifications:
