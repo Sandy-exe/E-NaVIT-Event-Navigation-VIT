@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/components/approver_search_model.dart';
+import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/home_search_model.dart';
@@ -387,6 +388,47 @@ class Services {
       }
     }
     return approvalList;
+  }
+
+  Future<void> getOrganizedEvents(BuildContext context) async {
+    Map<String, dynamic> currentUserData = jsonDecode(await secureStorage.reader(key: "currentUserData") ?? "null");
+    print(currentUserData['organized_events']);
+
+    final querySnapshot = await firestore.collection("Events").get();
+    List<Event> Aevents = [];
+    for (final docSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+      Map<String, DateTime> dateTime = {
+        'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
+        'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
+      };
+      print(data['eventName']);
+
+      if (!currentUserData['organized_events'].contains(data['eventId'])) {continue;}
+
+      Aevents.add(
+        Event(
+          clubId: data['clubId'],
+          dateTime: dateTime,
+          description: data['description'],
+          eventId: data['eventId'],
+          eventName: data['eventName'],
+          location: data['location'],
+          fee: data['fee'],
+          organisers: List<String>.from(data['organisers']),
+          comments: Map<String, String>.from(data['comments']),
+          participants: List<String>.from(data['participants']),
+          likes: data['likes'],
+          eventImageURL: data['eventImageURL'] ?? "null",
+          extraInfo: data['extraInfo'],
+        ),
+      );
+    }
+    print(Aevents);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<ApproverEventSearchModel>(context, listen: false).initeventList(Aevents);
+    });
   }
 
   //Creating Dummy Data

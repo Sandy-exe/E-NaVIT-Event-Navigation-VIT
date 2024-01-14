@@ -1,17 +1,17 @@
 
-import 'package:enavit/dashboard/models/MyFiles.dart';
+import 'package:enavit/dashboard/models/D_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants.dart';
 
-class FileInfoCard extends StatelessWidget {
-  const FileInfoCard({
-    Key? key,
+class StatInfoCard extends StatelessWidget {
+  const StatInfoCard({
+    super.key,
     required this.info,
-  }) : super(key: key);
+  });
 
-  final CloudStorageInfo info;
+  final CardInfo info;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,6 @@ class FileInfoCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,27 +44,34 @@ class FileInfoCard extends StatelessWidget {
               const Icon(Icons.more_vert, color: Colors.white54)
             ],
           ),
+          const SizedBox(height: defaultPadding / 2),
           Text(
             info.title!,
             maxLines: 1,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
             overflow: TextOverflow.ellipsis,
           ),
+          const SizedBox(height: defaultPadding / 2),
           ProgressLine(
             color: info.color,
             percentage: info.percentage,
           ),
+          const SizedBox(height: defaultPadding / 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${info.numOfFiles} Files",
+                "${info.stat} Files",
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!
                     .copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
               ),
               Text(
-                info.totalStorage!,
+                info.totalstat!,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!
@@ -81,10 +87,10 @@ class FileInfoCard extends StatelessWidget {
 
 class ProgressLine extends StatelessWidget {
   const ProgressLine({
-    Key? key,
+    super.key,
     this.color = primaryColor,
     required this.percentage,
-  }) : super(key: key);
+  });
 
   final Color? color;
   final int? percentage;

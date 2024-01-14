@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
@@ -95,7 +96,10 @@ class Enavit extends StatelessWidget {
         ),
         ChangeNotifierProvider<ApproverSearchModel>(
           create: (context) => ApproverSearchModel(),
-        )
+        ),
+        ChangeNotifierProvider<ApproverEventSearchModel>(
+          create: (context) => ApproverEventSearchModel(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

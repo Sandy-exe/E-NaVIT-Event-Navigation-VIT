@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import 'chart.dart';
-import 'storage_info_card.dart';
+import 'participant_stat_card.dart';
 
-class StorageDetails extends StatelessWidget {
-  const StorageDetails({
+class ParticipantStat extends StatelessWidget {
+  const ParticipantStat({
     super.key,
   });
+  
 
   @override
   Widget build(BuildContext context) {
@@ -21,33 +22,34 @@ class StorageDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Storage Details",
+            "Participant Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
           SizedBox(height: defaultPadding),
           Chart(),
-          StorageInfoCard(
+          ParticipantStatCard(
             svgSrc: "assets/icons/Documents.svg",
             title: "Documents Files",
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          ParticipantStatCard(
             svgSrc: "assets/icons/media.svg",
             title: "Media Files",
             amountOfFiles: "15.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          ParticipantStatCard(
             svgSrc: "assets/icons/folder.svg",
             title: "Other Files",
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
-          StorageInfoCard(
+          ParticipantStatCard(
             svgSrc: "assets/icons/unknown.svg",
             title: "Unknown",
             amountOfFiles: "1.3GB",

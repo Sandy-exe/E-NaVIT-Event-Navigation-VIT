@@ -36,7 +36,12 @@ class Chart extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: defaultPadding / 2),
-                const Text("of 128GB")
+                const Text("of 128GB",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    )),
               ],
             ),
           ),

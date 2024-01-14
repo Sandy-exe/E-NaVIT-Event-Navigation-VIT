@@ -1,19 +1,21 @@
-import 'package:enavit/components/approver_search_model.dart';
-import 'package:enavit/components/participant_tile.dart';
+
+import 'package:enavit/components/approver_event_search.dart';
+import 'package:enavit/components/approver_event_search_model.dart';
+import 'package:enavit/components/approver_event_tile.dart';
 import 'package:enavit/models/og_models.dart';
-import 'package:flutter/material.dart';
 import 'package:enavit/services/services.dart';
-import 'package:enavit/components/participants_search.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SetRole extends StatefulWidget {
-  const SetRole({super.key});
+
+class ApproverEvents extends StatefulWidget {
+  const ApproverEvents({super.key});
 
   @override
-  State<SetRole> createState() => _SetRoleState();
+  State<ApproverEvents> createState() => _ApproverEventsState();
 }
 
-class _SetRoleState extends State<SetRole> {
+class _ApproverEventsState extends State<ApproverEvents> {
   @override
   void initState() {
     super.initState();
@@ -21,7 +23,7 @@ class _SetRoleState extends State<SetRole> {
 
   Future<void> initPrefs() async {
     Services service = Services();
-    await service.getParticipantData(context);
+    await service.getOrganizedEvents(context);
   }
 
   @override
@@ -37,20 +39,11 @@ class _SetRoleState extends State<SetRole> {
           } else {
             return Scaffold(
               backgroundColor: Colors.grey[300],
-              appBar: AppBar(
-                  backgroundColor: Colors.grey[300],
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  title: const Text("Send Request")),
               body: Stack(
                 fit: StackFit.expand,
                 children: [
                   buildParticipantsSearch(),
-                  const FloatingSearchBarWidgetApprover(),
+                  const FloatingSearchBarWidgetApproverEvent(),
                 ],
               ),
             );
@@ -59,7 +52,7 @@ class _SetRoleState extends State<SetRole> {
   }
 
   Widget buildParticipantsSearch() {
-    return Consumer<ApproverSearchModel>(
+    return Consumer<ApproverEventSearchModel>(
         builder: (BuildContext context, value, _) {
       //
       //
@@ -77,7 +70,7 @@ class _SetRoleState extends State<SetRole> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Available Participants',
+                  'Organized Events',
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
@@ -94,12 +87,12 @@ class _SetRoleState extends State<SetRole> {
           //Event user
           Expanded(
             child: ListView.builder(
-              itemCount: value.userListApprover.length,
+              itemCount: value.eventListfinal.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index) {
                 // get a user
-                Users user = value.userListApprover[index];
-                return ParticipantTile(user: user);
+                Event event = value.eventListfinal[index];
+                return AEventTile(approverEvent: event);
               },
             ),
           ),
@@ -108,3 +101,5 @@ class _SetRoleState extends State<SetRole> {
     });
   }
 }
+
+
