@@ -2,11 +2,12 @@ import 'components/Grid_view.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
+import '../models/og_models.dart';
 
 import 'components/participant_stat.dart';
-
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final Event event;
+  const DashboardScreen({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +20,13 @@ class DashboardScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           primary: false,
-          padding: EdgeInsets.all(defaultPadding),
+          padding: const EdgeInsets.all(defaultPadding),
           child: Column(
             children: [
-              SizedBox(height: defaultPadding),
+              const SizedBox(height: defaultPadding),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -33,15 +34,9 @@ class DashboardScreen extends StatelessWidget {
                     flex: 5,
                     child: Column(
                       children: [
-                        StatInfoCardListView(),
-                        // FileInfoCardGridView(
-                        //     crossAxisCount: _size.width < 650 ? 2 : 4,
-                        //     childAspectRatio:
-                        //        _size.width < 650 && _size.width > 350 ? 1.3 : 1,
-                        //   ),
-                        SizedBox(height: defaultPadding),
-                        //const RecentFiles(),
-                        ParticipantStat(),
+                        StatInfoCardListView(event: event),
+                        const SizedBox(height: defaultPadding),
+                        const ParticipantStat(),
                       ],
                     ),
                   ),

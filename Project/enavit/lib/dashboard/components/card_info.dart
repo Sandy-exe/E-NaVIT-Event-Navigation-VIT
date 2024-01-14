@@ -1,7 +1,5 @@
-
 import 'package:enavit/dashboard/models/D_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants.dart';
 
@@ -29,16 +27,15 @@ class StatInfoCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(defaultPadding * 0.75),
-                height: 40,
-                width: 40,
+                height: 45,
+                width: 45,
                 decoration: BoxDecoration(
                   color: info.color!.withOpacity(0.1),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                child: SvgPicture.asset(
-                  info.svgSrc!,
-                  colorFilter: ColorFilter.mode(
-                      info.color ?? Colors.black, BlendMode.srcIn),
+                child: Image.asset(
+                  info.pngSrc!,
+                  color: info.color ?? Colors.black,
                 ),
               ),
               const Icon(Icons.more_vert, color: Colors.white54)
@@ -64,7 +61,7 @@ class StatInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${info.stat} Files",
+                "${info.stat}",
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!

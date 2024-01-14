@@ -99,6 +99,14 @@ flutter:
     - lib/images/Vit_poster.jpg
     - lib/images/Campus_vitchennai.jpg
 
+    - lib/images/SVG/attendance.png
+    - lib/images/SVG/issues.png
+    - lib/images/SVG/money-bag.png
+    - lib/images/SVG/CSEcore.png
+    - lib/images/SVG/robotics.png
+    - lib/images/SVG/ai.png
+    - lib/images/SVG/other.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

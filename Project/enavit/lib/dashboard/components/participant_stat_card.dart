@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants.dart';
 
@@ -7,12 +6,12 @@ class ParticipantStatCard extends StatelessWidget {
   const ParticipantStatCard({
     super.key,
     required this.title,
-    required this.svgSrc,
+    required this.pngSrc,
     required this.amountOfFiles,
     required this.numOfFiles,
   });
 
-  final String title, svgSrc, amountOfFiles;
+  final String title, pngSrc, amountOfFiles;
   final int numOfFiles;
 
   @override
@@ -31,7 +30,7 @@ class ParticipantStatCard extends StatelessWidget {
           SizedBox(
             height: 20,
             width: 20,
-            child: SvgPicture.asset(svgSrc),
+            child: Image.asset(pngSrc),
           ),
           Expanded(
             child: Padding(
@@ -49,7 +48,7 @@ class ParticipantStatCard extends StatelessWidget {
                         .copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
                   ),
                   Text(
-                    "$numOfFiles Files",
+                    "$numOfFiles",
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
