@@ -89,7 +89,14 @@ class Services {
           participants: List<String>.from(eventData['participants']),
           likes: eventData['likes'],
           eventImageURL: eventData['eventImageURL'] ?? "null",
-          extraInfo: eventData['extraInfo'],
+          discussionPoints: eventData['discussionPoints'] ?? "old doc",
+          eventType: eventData['eventType'] ?? "old doc",
+          eventCategory: eventData['eventCategory'] ?? "old doc",
+          fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+          schoolCentre: eventData['schoolCentre'] ?? "old doc",
+          coordinator1: eventData['coordinator1'] ?? "old doc",
+          coordinator2: eventData['coordinator2'] ?? "old doc",
+          coordinator3: eventData['coordinator3'] ?? "old doc",
         ),
       );
 
@@ -129,7 +136,14 @@ class Services {
           participants: List<String>.from(data['participants']),
           likes: data['likes'],
           eventImageURL: data['eventImageURL'] ?? "null",
-          extraInfo: data['extraInfo'],
+          discussionPoints: data['discussionPoints'] ?? "old doc" ?? "old doc",
+          eventType: data['eventType'] ?? "old doc" ?? "old doc",
+          eventCategory: data['eventCategory'] ?? "old doc" ?? "old doc",
+          fdpProposedBy: data['fdpProposedBy'] ?? "old doc" ?? "old doc",
+          schoolCentre: data['schoolCentre'] ?? "old doc" ?? "old doc",
+          coordinator1: data['coordinator1'] ?? "old doc" ?? "old doc",
+          coordinator2: data['coordinator2'] ?? "old doc" ?? "old doc",
+          coordinator3: data['coordinator3'] ?? "old doc" ?? "old doc",
         ),
       );
       print(events);
@@ -269,7 +283,14 @@ class Services {
             participants: List<String>.from(data['participants']),
             likes: data['likes'],
             eventImageURL: data['eventImageURL'] ?? "null",
-            extraInfo: data['extraInfo'],
+            discussionPoints: data['discussionPoints'] ?? "old doc",
+            eventType: data['eventType'] ?? "old doc",
+            eventCategory: data['eventCategory'] ?? "old doc",
+            fdpProposedBy: data['fdpProposedBy'] ?? "old doc",
+            schoolCentre: data['schoolCentre'] ?? "old doc",
+            coordinator1: data['coordinator1'] ?? "old doc",
+            coordinator2: data['coordinator2'] ?? "old doc",
+            coordinator3: data['coordinator3'] ?? "old doc",
           ),
         );
       } catch (e) {
@@ -300,7 +321,14 @@ class Services {
       "participants": event.participants,
       "likes": event.likes,
       "eventImageURL": event.eventImageURL,
-      "extraInfo": event.extraInfo
+      "discussionPoints": event.discussionPoints,
+      "eventType": event.eventType,
+      "eventCategory": event.eventCategory,
+      "fdpProposedBy": event.fdpProposedBy,
+      "schoolCentre": event.schoolCentre,
+      "coordinator1": event.coordinator1,
+      "coordinator2": event.coordinator2,
+      "coordinator3": event.coordinator3,
     };
     await docref.set(obj);
 
@@ -391,7 +419,8 @@ class Services {
   }
 
   Future<void> getOrganizedEvents(BuildContext context) async {
-    Map<String, dynamic> currentUserData = jsonDecode(await secureStorage.reader(key: "currentUserData") ?? "null");
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
     print(currentUserData['organized_events']);
 
     final querySnapshot = await firestore.collection("Events").get();
@@ -404,7 +433,9 @@ class Services {
       };
       print(data['eventName']);
 
-      if (!currentUserData['organized_events'].contains(data['eventId'])) {continue;}
+      if (!currentUserData['organized_events'].contains(data['eventId'])) {
+        continue;
+      }
 
       Aevents.add(
         Event(
@@ -420,14 +451,22 @@ class Services {
           participants: List<String>.from(data['participants']),
           likes: data['likes'],
           eventImageURL: data['eventImageURL'] ?? "null",
-          extraInfo: data['extraInfo'],
+          discussionPoints: data['discussionPoints'] ?? "old doc",
+          eventType: data['eventType'] ?? "old doc",
+          eventCategory: data['eventCategory'] ?? "old doc",
+          fdpProposedBy: data['fdpProposedBy'] ?? "old doc",
+          schoolCentre: data['schoolCentre'] ?? "old doc",
+          coordinator1: data['coordinator1'] ?? "old doc",
+          coordinator2: data['coordinator2'] ?? "old doc",
+          coordinator3: data['coordinator3'] ?? "old doc",
         ),
       );
     }
     print(Aevents);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<ApproverEventSearchModel>(context, listen: false).initeventList(Aevents);
+      Provider.of<ApproverEventSearchModel>(context, listen: false)
+          .initeventList(Aevents);
     });
   }
 

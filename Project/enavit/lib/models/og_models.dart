@@ -17,22 +17,22 @@ class Approval {
 
   //Add this line
 
-  Approval(
-      {required this.clubId,
-      required this.dateTime,
-      required this.description,
-      required this.approvalId,
-      required this.eventName,
-      required this.location,
-      required this.organisers,
-      required this.comments,
-      required this.participants,
-      required this.likes,
-      required this.fee,
-      required this.eventImageURL,
-      required this.approved,
-      // Add this line
-      });
+  Approval({
+    required this.clubId,
+    required this.dateTime,
+    required this.description,
+    required this.approvalId,
+    required this.eventName,
+    required this.location,
+    required this.organisers,
+    required this.comments,
+    required this.participants,
+    required this.likes,
+    required this.fee,
+    required this.eventImageURL,
+    required this.approved,
+    // Add this line
+  });
 }
 
 class Club {
@@ -66,26 +66,40 @@ class Event {
   final Map<String, String> comments;
   final List<String> participants;
   final String eventImageURL;
-  final String extraInfo;
+  final String discussionPoints;
+  final String eventType;
+  final String eventCategory;
+  final String fdpProposedBy;
+  final String schoolCentre;
+  final String coordinator1;
+  final String coordinator2;
+  final String coordinator3;
 
   //Add this line
 
-  Event(
-      {required this.clubId,
-      required this.dateTime,
-      required this.description,
-      required this.eventId,
-      required this.eventName,
-      required this.location,
-      required this.organisers,
-      required this.comments,
-      required this.participants,
-      required this.likes,
-      required this.fee,
-      required this.eventImageURL,
-      required this.extraInfo
-      // Add this line
-      });
+  Event({
+    required this.clubId,
+    required this.dateTime,
+    required this.description,
+    required this.eventId,
+    required this.eventName,
+    required this.location,
+    required this.organisers,
+    required this.comments,
+    required this.participants,
+    required this.likes,
+    required this.fee,
+    required this.eventImageURL,
+    required this.discussionPoints,
+    required this.eventType,
+    required this.eventCategory,
+    required this.fdpProposedBy,
+    required this.schoolCentre,
+    required this.coordinator1,
+    required this.coordinator2,
+    required this.coordinator3,
+    // Add this line
+  });
 }
 
 class Comments {
