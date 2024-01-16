@@ -6,6 +6,7 @@ import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/home_search_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:enavit/services/authentication_service.dart';
@@ -32,6 +33,17 @@ class Services {
     };
 
     await docref.set(obj); //push the object
+  }
+
+  Future updateFcmToken(String uid) async {
+    final userRef = firestore.collection("app_users").doc(uid);
+    final user = await userRef.get();
+    Map<String, dynamic> userData = user.data()!;
+    //String fcmToken = List<String>.from(userData["fcmToken"]);
+    //events.add(event.eventId);
+    final _firebaseMessaging = FirebaseMessaging.instance;
+    final fCMToken = await _firebaseMessaging.getToken();
+    await userRef.update({"fcmToken": fCMToken});
   }
 
   Future getUserData(String uid) async {
@@ -208,6 +220,7 @@ class Services {
         phoneNo: data['phone_no'],
         regNo: data['reg_no'],
         profileImageURL: data['profileImageURL'] ?? "null",
+        fcmToken: data['fcmToken'] ?? "",
       ));
     }
 

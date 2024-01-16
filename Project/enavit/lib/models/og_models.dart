@@ -137,6 +137,7 @@ class Users {
   final List<String> approvalEvents;
   final List<String> clubs;
   final String profileImageURL;
+  final String fcmToken;
 
   Users({
     required this.email,
@@ -150,5 +151,6 @@ class Users {
     required this.approvalEvents,
     required this.clubs,
     required this.profileImageURL,
+    required this.fcmToken,
   });
 }

@@ -47,7 +47,7 @@ Future main() async {
   // await securestorage.writer(key: "isLoggedIn", value: "true" );
   //offline test ends here
 
-  bool isLoggedIn = await securestorage.reader(key: "isLogg edIn") == 'true';
+  bool isLoggedIn = await securestorage.reader(key: "isLoggedIn") == 'true';
 
   await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -70,7 +70,7 @@ Future main() async {
   }
 
   print(userRole);
-
+  
   runApp(
     Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
   );
