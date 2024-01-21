@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Approver",
+                  "Log In",
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,

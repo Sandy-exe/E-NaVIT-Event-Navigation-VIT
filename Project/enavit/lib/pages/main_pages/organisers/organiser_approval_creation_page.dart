@@ -93,7 +93,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Create Event",
+              "Create Approval",
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
@@ -401,7 +401,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
       if (mounted) {
         Future.delayed(const Duration(seconds: 2), () {
           Navigator.pushNamedAndRemoveUntil(
-              context, "/approver_index", (r) => false);
+              context, "/organiser_index", (r) => false);
         });
       }
 

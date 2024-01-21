@@ -18,14 +18,15 @@ class AuthenticationService {
     try {
       var result = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-        if (result.user !=  null ){
-          String uid = result.user!.uid.toString();
-          var service = Services();
-          await service.getUserData(uid);
-          secureStorage.writer(key: "isLoggedIn", value: "true");
-        }
-        
-        return "success";
+      if (result.user != null) {
+        String uid = result.user!.uid.toString();
+        var service = Services();
+        await service.updateFcmToken(uid);
+        await service.getUserData(uid);
+        secureStorage.writer(key: "isLoggedIn", value: "true");
+      }
+
+      return "success";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return 'No user found for that email.';
@@ -47,10 +48,10 @@ class AuthenticationService {
     try {
       var result = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-        String uid = result.user?.uid.toString() ?? "null";
-        var service = Services();
+      String uid = result.user?.uid.toString() ?? "null";
+      var service = Services();
 
-        Users newUser = Users(
+      Users newUser = Users(
           userId: uid,
           name: name,
           email: email,
@@ -62,10 +63,9 @@ class AuthenticationService {
           phoneNo: phoneno,
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning
-        );
-        await service.addUser(newUser);
-        return "success";
-
+          fcmToken: "");
+      await service.addUser(newUser);
+      return "success";
     } on FirebaseAuthException catch (e) {
       if (e.code == "invalid-email") {
         return "Invalid email address";
