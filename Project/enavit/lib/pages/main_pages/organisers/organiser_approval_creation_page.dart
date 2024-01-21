@@ -49,29 +49,22 @@ class _EventCreationPageState extends State<EventCreationPage> {
     SecureStorage secureStorage = SecureStorage();
     String userData =
         await secureStorage.reader(key: "currentUserData") ?? "null";
-    print(userData);
 
     if (userData == "null") return;
     Map<String, dynamic> currentUserData = jsonDecode(userData);
     String clubId = currentUserData["clubs"][0];
     String userId = currentUserData["userid"];
-    print("entered uploadImage $clubId and $userId");
     String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     Reference ref = FirebaseStorage.instance
         .ref()
         .child("$clubId/images")
         .child("$uniqueFileName.userID$userId");
-    print("got ref of destination");
     UploadTask uploadTask = ref.putFile(_image!);
     await uploadTask.whenComplete(() async {
-      print("upload task entered");
       downloadUrl = await ref.getDownloadURL();
-      print("got url $downloadUrl");
       _eventImageURL.text = downloadUrl!;
-      print("checking ${_eventImageURL.text}");
     });
-    print("outsode upload task func and end of uploadIamge func");
     // var imageURL = "";
   }
 
@@ -385,7 +378,6 @@ class _EventCreationPageState extends State<EventCreationPage> {
         approved: 0,
       ),
     );
-    print("'ok");
 
     if (mounted) {
       showDialog(
@@ -405,7 +397,6 @@ class _EventCreationPageState extends State<EventCreationPage> {
         });
       }
 
-      print("ok");
     }
 
     ValueListenableBuilder<File?>(
@@ -476,10 +467,8 @@ class _EventCreationPageState extends State<EventCreationPage> {
         showTitleActions: true,
         minTime: DateTime(2018, 3, 5),
         maxTime: DateTime(2019, 6, 7), onChanged: (date) {
-      print('change $date');
     }, onConfirm: (date) {
       _startTimeTEC.text = "$date"; //date as String;
-      print('confirm $date');
     }, currentTime: DateTime.now(), locale: LocaleType.en);
   }
 
@@ -488,10 +477,8 @@ class _EventCreationPageState extends State<EventCreationPage> {
         showTitleActions: true,
         minTime: DateTime(2018, 3, 5),
         maxTime: DateTime(2019, 6, 7), onChanged: (date) {
-      print('change $date');
     }, onConfirm: (date) {
       _endTimeTEC.text = "$date"; //date as String;
-      print('confirm $date');
     }, currentTime: DateTime.now(), locale: LocaleType.en);
   }
 }

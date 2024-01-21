@@ -242,7 +242,6 @@ class _ApprovalPageState extends State<ApprovalPage> {
         expectedRevenue: "0",
       ),
     );
-    print("'ok");
 
     if (mounted) {
       showDialog(
@@ -262,7 +261,6 @@ class _ApprovalPageState extends State<ApprovalPage> {
         });
       }
 
-      print("ok");
     }
 
     // ValueListenableBuilder<File?>(

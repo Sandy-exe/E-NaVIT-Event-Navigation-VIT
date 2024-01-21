@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import 'package:enavit/dashboard/constants.dart';
 import 'package:flutter/material.dart';
 
 class SquareCardInfo {

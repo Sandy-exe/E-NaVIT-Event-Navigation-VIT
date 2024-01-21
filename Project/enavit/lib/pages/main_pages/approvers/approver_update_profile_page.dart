@@ -91,7 +91,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
       }
     }
 
-    print(currentUserData['profileImageURL']);
   }
 
   @override
@@ -266,8 +265,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
         ? _profileImageURL.text
         : _profileImageURL.text;
 
-    print(email);
-    print(_profileImageURL.text);
 
     Map<String, dynamic> newinfo = {
       "email": email,
@@ -285,7 +282,6 @@ class _AProfileUpdatePageState extends State<AProfileUpdatePage> {
     await secureStorage.writer(
         key: "currentUserData", value: newUserDataString);
 
-    print(newinfo);
 
     Services services = Services();
     services.updateUser(currentUserData['userid'], newinfo);

@@ -48,7 +48,6 @@ class _CompleteEventDetailPageState extends State<CompleteEventDetailPage> {
 
     approvalList = await services.getApprovalList(
         currentUserData['userId'] ?? "1WUUvpRk77bPn6agLydmqvBMoiR2");
-    print(approvalList);
   }
 
   @override
