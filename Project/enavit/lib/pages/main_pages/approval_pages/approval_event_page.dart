@@ -20,6 +20,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
   final TextEditingController _coordinator1TEC = TextEditingController();
   final TextEditingController _coordinator2TEC = TextEditingController();
   final TextEditingController _coordinator3TEC = TextEditingController();
+  final TextEditingController _budgetTEC = TextEditingController();
 
   @override
   void initState() {
@@ -167,6 +168,18 @@ class _ApprovalPageState extends State<ApprovalPage> {
             const SizedBox(
               height: 32,
             ),
+            TextField(
+              controller: _budgetTEC,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  prefixIcon: const Icon(Icons.info),
+                  labelText: 'Budget',
+                  hintText: 'Optional',
+                  isDense: true),
+              style: const TextStyle(fontSize: 16),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -221,6 +234,12 @@ class _ApprovalPageState extends State<ApprovalPage> {
         coordinator1: _coordinator1TEC.text,
         coordinator2: _coordinator2TEC.text,
         coordinator3: _coordinator3TEC.text,
+        attendancePresent: "0",
+        issues: {},
+        expense: "0",
+        revenue: "0",
+        budget: _budgetTEC.text,
+        expectedRevenue: "0",
       ),
     );
     print("'ok");

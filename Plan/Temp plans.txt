@@ -71,6 +71,11 @@ Plans:
 12) create "create EVENT page" for approver
 
 
+13) add attendance field in OG_models and total attendance field in event model
+14) add a filed for issues and solved issues
+15) add 
+
+
 reference LINKS:
 1) https://www.youtube.com/watch?v=7RnYcmmg2-c&list=RDCMUCWiC79M4FJ-Ylvk7lkk3n5A&index=3
 2) github plan shop

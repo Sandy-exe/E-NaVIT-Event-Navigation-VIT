@@ -8,7 +8,6 @@ class ParticipantStat extends StatelessWidget {
   const ParticipantStat({
     super.key,
   });
-  
 
   @override
   Widget build(BuildContext context) {
@@ -31,30 +30,30 @@ class ParticipantStat extends StatelessWidget {
           ),
           SizedBox(height: defaultPadding),
           Chart(),
-          ParticipantStatCard(
-            pngSrc: "lib/images/SVG/CSEcore.png",
-            title: "CSE Core",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 1328,
-          ),
-          ParticipantStatCard(
-            pngSrc: "lib/images/SVG/robotics.png",
-            title: "Robotics",
-            amountOfFiles: "15.3GB",
-            numOfFiles: 1328,
-          ),
-          ParticipantStatCard(
-            pngSrc: "lib/images/SVG/ai.png",
-            title: "AI and ML",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 1328,
-          ),
-          ParticipantStatCard(
-            pngSrc: "lib/images/SVG/other.png",
-            title: "Others",
-            amountOfFiles: "1.3GB",
-            numOfFiles: 140,
-          ),
+          // ParticipantStatCard(
+          //   pngSrc: "lib/images/SVG/CSEcore.png",
+          //   title: "CSE Core",
+          //   amountOfFiles: "1.3GB",
+          //   numOfFiles: 1328,
+          // ),
+          // ParticipantStatCard(
+          //   pngSrc: "lib/images/SVG/robotics.png",
+          //   title: "Robotics",
+          //   amountOfFiles: "15.3GB",
+          //   numOfFiles: 1328,
+          // ),
+          // ParticipantStatCard(
+          //   pngSrc: "lib/images/SVG/ai.png",
+          //   title: "AI and ML",
+          //   amountOfFiles: "1.3GB",
+          //   numOfFiles: 1328,
+          // ),
+          // ParticipantStatCard(
+          //   pngSrc: "lib/images/SVG/other.png",
+          //   title: "Others",
+          //   amountOfFiles: "1.3GB",
+          //   numOfFiles: 140,
+          // ),
         ],
       ),
     );

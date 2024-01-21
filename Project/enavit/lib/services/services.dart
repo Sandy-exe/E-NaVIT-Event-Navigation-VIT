@@ -109,6 +109,12 @@ class Services {
           coordinator1: eventData['coordinator1'] ?? "old doc",
           coordinator2: eventData['coordinator2'] ?? "old doc",
           coordinator3: eventData['coordinator3'] ?? "old doc",
+          expense: eventData['expense'] ?? "0",
+          revenue: eventData['revenue'] ?? "0",
+          budget: eventData['budget'] ?? "0",
+          attendancePresent: eventData['attendancePresent'] ?? "0",
+          issues: Map<String, Map<String, String>>.from(eventData['issues']),
+          expectedRevenue: eventData['expectedRevenue'] ?? "0",
         ),
       );
 
@@ -128,11 +134,13 @@ class Services {
     print("inside eventClubData");
     for (final docSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
-      print(data);
+      
       Map<String, DateTime> dateTime = {
         'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
         'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
       };
+
+
 
       events.add(
         Event(
@@ -156,10 +164,17 @@ class Services {
           coordinator1: data['coordinator1'] ?? "old doc" ?? "old doc",
           coordinator2: data['coordinator2'] ?? "old doc" ?? "old doc",
           coordinator3: data['coordinator3'] ?? "old doc" ?? "old doc",
+          attendancePresent: data['attendancePresent'] ?? "0",
+          issues: Map<String, Map<String, String>>.from(data['issues']),
+          expense: data['expense'] ?? "0",
+          revenue: data['revenue'] ?? "0",
+          budget: data['budget'] ?? "0",
+          expectedRevenue: data['expectedRevenue'] ?? "0",
         ),
       );
       print(events);
     }
+    print("inga paaru");
     print(events);
 
     //Clubs list
@@ -304,6 +319,13 @@ class Services {
             coordinator1: data['coordinator1'] ?? "old doc",
             coordinator2: data['coordinator2'] ?? "old doc",
             coordinator3: data['coordinator3'] ?? "old doc",
+            attendancePresent: data['attendancePresent'] ?? "0",
+            issues: Map<String, Map<String, String>>.from(data['issues']),
+            expense: data['expense'] ?? "0",
+            revenue: data['revenue'] ?? "0",
+            budget: data['budget'] ?? "0",
+            expectedRevenue: data['expectedRevenue'] ?? "0",
+
           ),
         );
       } catch (e) {
@@ -342,6 +364,12 @@ class Services {
       "coordinator1": event.coordinator1,
       "coordinator2": event.coordinator2,
       "coordinator3": event.coordinator3,
+      "attendancePresent": event.attendancePresent,
+      "issues": event.issues,
+      "expense": event.expense,
+      "revenue": event.revenue,
+      "budget": event.budget,
+
     };
     await docref.set(obj);
 
@@ -444,7 +472,6 @@ class Services {
         'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
         'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
       };
-      print(data['eventName']);
 
       if (!currentUserData['organized_events'].contains(data['eventId'])) {
         continue;
@@ -472,10 +499,16 @@ class Services {
           coordinator1: data['coordinator1'] ?? "old doc",
           coordinator2: data['coordinator2'] ?? "old doc",
           coordinator3: data['coordinator3'] ?? "old doc",
+          attendancePresent: data['attendancePresent'] ?? "0",
+          issues: Map<String, Map<String, String>>.from(data['issues']),
+          expense: data['expense'] ?? "0",
+          revenue: data['revenue'] ?? "0",
+          budget: data['budget'] ?? "0",
+          expectedRevenue: data['expectedRevenue'] ?? "0",
+
         ),
       );
     }
-    print(Aevents);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<ApproverEventSearchModel>(context, listen: false)

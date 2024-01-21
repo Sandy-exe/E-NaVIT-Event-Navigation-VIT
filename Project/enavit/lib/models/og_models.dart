@@ -74,6 +74,12 @@ class Event {
   final String coordinator1;
   final String coordinator2;
   final String coordinator3;
+  final String attendancePresent;
+  final Map<String,Map<String,String>> issues;
+  final String expense;
+  final String expectedRevenue;
+  final String budget;
+  final String revenue;
 
   //Add this line
 
@@ -98,6 +104,13 @@ class Event {
     required this.coordinator1,
     required this.coordinator2,
     required this.coordinator3,
+    required this.attendancePresent,
+    required this.issues,
+    required this.expense,
+    required this.revenue,
+    required this.budget,
+    required this.expectedRevenue,
+
     // Add this line
   });
 }

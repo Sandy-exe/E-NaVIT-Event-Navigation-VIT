@@ -1,42 +1,112 @@
-import 'package:enavit/dashboard/models/D_models.dart';
+import 'package:enavit/dashboard/components/card_info.dart';
+import 'package:enavit/dashboard/constants.dart';
+import 'package:enavit/dashboard/models/stats_models.dart';
 import 'package:enavit/models/og_models.dart';
+import 'package:enavit/services/stats_services.dart';
 import 'package:flutter/material.dart';
-import 'card_info.dart';
 
-
-class StatInfoCardListView extends StatelessWidget {
+class StatInfoCardListView extends StatefulWidget {
   final Event event;
+   
   const StatInfoCardListView({
     super.key,
     required this.event,
   });
 
   @override
+  StatInfoCardListViewState createState() => StatInfoCardListViewState();
+}
+class StatInfoCardListViewState extends State<StatInfoCardListView> {
+
+  late Map<String, dynamic> statData;
+  late List attendanceIssue;
+  
+  @override
+  void initState() {
+    super.initState();
+
+    statDataRetreive(widget.event);
+  }
+
+  
+  Future<void> statDataRetreive(Event event) async {
+  
+
+    statData = await Stats().statData(event);
+    print("woaa");
+    print(statData['issuesSolved']);
+    print(statData['issuesSolved']);
+    attendanceIssue = [
+      SquareCardInfo(
+        title: "Attendance",
+        stat: statData['attendancePresent'],
+        pngSrc: "lib/images/SVG/attendance.png",
+        totalstat: statData['totalParticipants'].toString(),
+        color: primaryColor,
+        percentage: ((double.parse(statData['attendancePresent']) /
+                (statData['totalParticipants'] as int).toDouble() )*
+                100),
+      ),
+      SquareCardInfo(
+        title: "Issues",
+        stat: statData['issuesSolved'].toString(),
+        pngSrc: "lib/images/SVG/issues.png",
+        totalstat: statData['totalIssues'].toString(),
+        color: primaryColor,
+        percentage: ((statData['issuesSolved'] as int).toDouble() == 0.0 ? 1 : 0 /(statData['totalIssues'] as int ).toDouble())*100,
+      ),
+    ];
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Number of items in a row // Space between items vertically
-          ),
-          itemCount: displayRow1.length,
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 12.0, right: 5.0, left: 5.0),
-            child: StatInfoCard(info: displayRow1[index]),
-          ),
-        ),
-        ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: displayRow2.length,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(top: 5.0,bottom: 5.0,left: 5,right: 5), // Add space at the bottom
-          child: StatInfoCard(info: displayRow2[index]),
-        ),
-      )
-      ],
+    return FutureBuilder(
+      future: statDataRetreive(widget.event),
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Column(
+            children: [
+              GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      2, // Number of items in a row // Space between items vertically
+                ),
+                itemCount: attendanceIssue.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 12.0, right: 5.0, left: 5.0),
+                  child: StatInfoCard(info: attendanceIssue[index]),
+                ),
+              ),
+              ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: displayRow2.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.only(
+                      top: 5.0,
+                      bottom: 5.0,
+                      left: 5,
+                      right: 5), // Add space at the bottom
+                  child: FinanceCard(info: displayRow2[index]),
+                ),
+              )
+            ],
+          );
+        } else {
+          return const CircularProgressIndicator();
+          
+          }
+      },
     );
   }
 }
+
+
+
+
+
+
