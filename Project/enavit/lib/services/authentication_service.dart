@@ -55,6 +55,7 @@ class AuthenticationService {
           userId: uid,
           name: name,
           email: email,
+          
           clubs: [],
           events: [],
           organizedEvents: [],

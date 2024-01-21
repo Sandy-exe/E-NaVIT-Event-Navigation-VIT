@@ -4,7 +4,6 @@ import '../constants.dart';
 import '../models/stats_models.dart';
 
 class ParticipantStatCard extends StatelessWidget {
-
   const ParticipantStatCard({super.key, required this.card});
   final ParticipantDetailsCard card;
   @override
@@ -40,13 +39,7 @@ class ParticipantStatCard extends StatelessWidget {
                         .bodySmall!
                         .copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
                   ),
-                  Text(
-                    "${card.numOfParticipants} ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
-                  ),
+                  
                 ],
               ),
             ),

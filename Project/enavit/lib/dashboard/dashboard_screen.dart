@@ -36,7 +36,7 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         StatInfoCardListView(event: event),
                         const SizedBox(height: defaultPadding),
-                        const ParticipantStat(),
+                        ParticipantStat(event: event),
                       ],
                     ),
                   ),

@@ -1,13 +1,72 @@
+import 'package:enavit/dashboard/models/stats_models.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class Chart extends StatelessWidget {
-  const Chart({
-    super.key,
-  });
+class Chart extends StatefulWidget {
+  final List<ParticipantDetailsCard> participantData;
+  final int totalParticipants;
 
+  const Chart({super.key, required this.participantData, required this.totalParticipants});
+
+  @override
+  ChartState createState() => ChartState();
+}
+
+class ChartState extends State<Chart> {
+  late List<PieChartSectionData> paiChartSelectionData;
+
+
+  @override
+  void initState() {
+    super.initState();
+    
+    print("shit");
+    for (int i=0;i<4;i++){
+          print(double.parse(widget.participantData[i].totalparticipants));
+
+    }
+
+    paiChartSelectionData = [
+      PieChartSectionData(
+    color: primaryColor,
+    value: double.parse(widget.participantData[0].totalparticipants) *
+            100 /
+            widget.totalParticipants,  
+    showTitle: false,
+    radius: 25,
+  ),
+  PieChartSectionData(
+    color: const Color(0xFF26E5FF),
+    value: double.parse(widget.participantData[1].totalparticipants) *
+            100 /
+            widget.totalParticipants,
+    showTitle: false,
+    radius: 22,
+  ),
+  PieChartSectionData(
+    color: const Color(0xFFFFCF26),
+    value: double.parse(widget.participantData[2].totalparticipants) *
+            100 /
+            widget.totalParticipants,
+    showTitle: false,
+    radius: 19,
+  ),
+  PieChartSectionData(
+    color: const Color(0xFFEE2727),
+    value: double.parse(widget.participantData[3].totalparticipants) *
+            100 /
+            widget.totalParticipants,
+    showTitle: false,
+    radius: 16,
+  ),
+  
+
+    ];
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -28,7 +87,7 @@ class Chart extends StatelessWidget {
               children: [
                 const SizedBox(height: defaultPadding),
                 Text(
-                  "29.1",
+                  widget.totalParticipants.toString(),
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: const Color.fromARGB(255, 0, 0, 0),
                         fontWeight: FontWeight.w600,
@@ -36,12 +95,7 @@ class Chart extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: defaultPadding / 2),
-                const Text("of 128GB",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
-                    )),
+
               ],
             ),
           ),
@@ -51,35 +105,3 @@ class Chart extends StatelessWidget {
   }
 }
 
-List<PieChartSectionData> paiChartSelectionData = [
-  PieChartSectionData(
-    color: primaryColor,
-    value: 25,
-    showTitle: false,
-    radius: 25,
-  ),
-  PieChartSectionData(
-    color: const Color(0xFF26E5FF),
-    value: 20,
-    showTitle: false,
-    radius: 22,
-  ),
-  PieChartSectionData(
-    color: const Color(0xFFFFCF26),
-    value: 10,
-    showTitle: false,
-    radius: 19,
-  ),
-  PieChartSectionData(
-    color: const Color(0xFFEE2727),
-    value: 15,
-    showTitle: false,
-    radius: 16,
-  ),
-  PieChartSectionData(
-    color: primaryColor.withOpacity(0.1),
-    value: 25,
-    showTitle: false,
-    radius: 13,
-  ),
-];

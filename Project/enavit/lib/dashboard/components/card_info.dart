@@ -171,7 +171,7 @@ class FinanceCard extends StatelessWidget {
           const SizedBox(height: defaultPadding / 2),
           ProgressLine(
             color: info.color,
-            percentage: info.percentage,
+            percentage: info.expercentage,
           ),
           const SizedBox(height: defaultPadding / 2),
           Row(
@@ -206,7 +206,7 @@ class FinanceCard extends StatelessWidget {
           const SizedBox(height: defaultPadding / 2),
           ProgressLine(
             color: info.color,
-            percentage: info.percentage,
+            percentage: info.repercentage,
           ),
           const SizedBox(height: defaultPadding / 2),
           Row(

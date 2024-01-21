@@ -20,22 +20,20 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
 
   late Map<String, dynamic> statData;
   late List attendanceIssue;
+  late List financeCard;
   
   @override
   void initState() {
     super.initState();
-
     statDataRetreive(widget.event);
   }
 
   
   Future<void> statDataRetreive(Event event) async {
-  
-
+    
     statData = await Stats().statData(event);
-    print("woaa");
-    print(statData['issuesSolved']);
-    print(statData['issuesSolved']);
+    
+
     attendanceIssue = [
       SquareCardInfo(
         title: "Attendance",
@@ -56,6 +54,27 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
         percentage: ((statData['issuesSolved'] as int).toDouble() == 0.0 ? 1 : 0 /(statData['totalIssues'] as int ).toDouble())*100,
       ),
     ];
+
+    financeCard = [
+      FinanceCardInfo(
+        title: "Total Revenue",
+        color: primaryColor,
+        pngSrc: "lib/images/SVG/money-bag.png",
+        budget: statData['totalbudget'].toString(),
+        expectedRevenue: statData['expectedrevenue'].toString(),
+        expense: double.parse(statData['totalexpense']),
+        revenue: double.parse(statData['totalrevenue']),
+        repercentage: ((double.parse(statData['totalrevenue']) == 0.0 ? 1: 0.0 /
+            double.parse(statData['expectedrevenue'])) *
+          100),
+        expercentage: ((double.parse(statData['totalexpense']) == 0.0 ? 1 : 0.0 /
+            double.parse(statData['totalbudget'])) *
+          100),
+      ),
+    ];
+
+    
+    
     
   }
 
@@ -84,14 +103,14 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: displayRow2.length,
+                itemCount: financeCard.length,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.only(
                       top: 5.0,
                       bottom: 5.0,
                       left: 5,
                       right: 5), // Add space at the bottom
-                  child: FinanceCard(info: displayRow2[index]),
+                  child: FinanceCard(info: financeCard[index]),
                 ),
               )
             ],
