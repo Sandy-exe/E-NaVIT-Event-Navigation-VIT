@@ -58,6 +58,8 @@ dependencies:
   flutter_svg: ^2.0.5
   fl_chart: ^0.62.0
 
+  timezone: ^0.9.2
+
   timeline_tile:
 
   flutter_local_notifications:

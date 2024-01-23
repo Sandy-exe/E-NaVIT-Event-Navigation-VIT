@@ -6,6 +6,7 @@ import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
 import 'package:enavit/services/firebase_api.dart';
+import 'package:enavit/services/notification_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,15 @@ import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
 import 'package:provider/provider.dart';
 
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+
 import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SecureStorage securestorage = SecureStorage();
+  NotificationService().initialiseNotifications();
 
   //for testing in offline
   // Map<String, dynamic> currentUserData = {"userid": "123",
@@ -69,8 +74,14 @@ Future main() async {
     userRole = currentUserData["role"];
   }
 
+  tz.initializeTimeZones();
+
+// Testing local notifs
+  NotificationService().sendNotification("vrv", "Vervr");
+  NotificationService().scheduleNotification("test", "vody", DateTime.now());
+
   print(userRole);
-  
+
   runApp(
     Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
   );
