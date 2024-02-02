@@ -21,7 +21,7 @@ class NotificationService {
 
   void sendNotification(String title, String body) async {
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
+        const AndroidNotificationDetails(
       "channelId",
       "channelName",
       importance: Importance.max,
@@ -35,9 +35,10 @@ class NotificationService {
   }
 
   void scheduleNotification(
+    
       String title, String body, DateTime scheduledNotificationDateTime) async {
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
+        const AndroidNotificationDetails(
       "channelId",
       "channelName",
       importance: Importance.max,
@@ -53,7 +54,7 @@ class NotificationService {
       1,
       title,
       body,
-      tz.TZDateTime.now(tz.local).add(Duration(minutes: 1)),
+      tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)),
       notificationDetails,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,

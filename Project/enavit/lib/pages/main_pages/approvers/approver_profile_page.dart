@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/authentication_service.dart';
+import 'package:enavit/services/local_notification.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AProfilePage extends StatefulWidget {
@@ -36,7 +40,6 @@ class _AProfilePageState extends State<AProfilePage> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-    
   }
 
   @override
@@ -70,11 +73,13 @@ class _AProfilePageState extends State<AProfilePage> {
                                 width: 150,
                                 height: 150,
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: currentUserData['profileImageURL'] == null
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: currentUserData['profileImageURL'] ==
+                                            null
                                         ? Image.asset('lib/images/VIT_LOGO.png')
-                                        : Image.network(currentUserData['profileImageURL'],fit: BoxFit.cover )
-                                ),
+                                        : Image.network(
+                                            currentUserData['profileImageURL'],
+                                            fit: BoxFit.cover)),
                               ),
                               Positioned(
                                 bottom: 5,
@@ -155,12 +160,49 @@ class _AProfilePageState extends State<AProfilePage> {
                             },
                           ),
                           ProfileMenuWidget(
-                            text: 'Settings',
+                            text: 'Alaram ON(Settings)',
                             icon: FontAwesomeIcons.gear,
-                            onTap: () {
-                              _firebaseAuth.signOut(context);
+                            onTap: () async {
+                              print("Setting Alaram");
+                              print(DateTime.now().minute + 1);
+                              //Navigator.pushNamed(context, '/settings');
+                              // AndroidAlarmManager.oneShotAt(DateTime(
+                              //     DateTime.now().year,
+                              //     DateTime.now().month,
+                              //     DateTime.now().day,
+                              //     DateTime.now().hour,
+                              //     DateTime.now().minute + 1),46 , () {
+                              //       print("Alaram fired");
+                              //     });
+
+                              AndroidAlarmManager.oneShot(
+                                const Duration(seconds: 5),
+                                0,
+                                () {
+                                  print("Alaram fired");
+                                },
+                                exact: true,
+                                wakeup: true,
+                              );
+
+                              // LocalNotification.showScheduleNotification(
+                              //     title: 'title',
+                              //     body: 'body',
+                              //     payload: 'payload');
+
+                              print("Alaram set");
                             },
                           ),
+                          const SizedBox(height: 15),
+                          ProfileMenuWidget(
+                              text: 'Alaram Off',
+                              icon: FontAwesomeIcons.gear,
+                              onTap: () async {
+                                print("Setting Alaram");
+                                //Navigator.pushNamed(context, '/settings');
+                                await LocalNotification.cancelAllfunc();
+                                print("Alaram off");
+                              }),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Log Out',
@@ -176,8 +218,6 @@ class _AProfilePageState extends State<AProfilePage> {
         });
   }
 }
-
-
 
 class ProfileMenuWidget extends StatelessWidget {
   final String text;
@@ -215,19 +255,19 @@ class ProfileMenuWidget extends StatelessWidget {
         ),
       ),
       trailing: Padding(
-              padding: const EdgeInsets.only(left: 50.0),
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(
-                  FontAwesomeIcons.angleRight,
-                  size: 15,
-                  color: Colors.black,
-                ),
-              ),
-            ));
+        padding: const EdgeInsets.only(left: 50.0),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Icon(
+            FontAwesomeIcons.angleRight,
+            size: 15,
+            color: Colors.black,
+          ),
+        ),
+      ));
 }
