@@ -14,7 +14,7 @@
         - Issues, Ratings
 
         Formula: 
-        (
+        ( 
         self.num_events * 1.0 +
             self.num_members * 0.8 +
             self.num_likes * 0.5 +
@@ -54,7 +54,7 @@
             len(self.issues) * 1.0 +
             self.average_rating() * 0.8
         ) / 5.6
-        
+
 6) Recommendations System (less priority)
 7) Chat Option, Announcement Notifications, Polls (under notification ICON) 
 8) LLM for AI insights (less priority)
