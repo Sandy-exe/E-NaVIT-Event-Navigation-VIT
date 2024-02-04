@@ -1,0 +1,62 @@
+1) Club Edit/Update Page
+2) Add like and save for events 
+3) Ratings and Reviews 
+4) Event Feedback
+5) Leaderboard
+   1) CLUB LEADERBOARD:
+        Metrics: 
+        - Number of events
+        - Number of members
+        - Number of likes
+        - Number of saves
+        - Number of shares
+        - Number of Participants
+        - Issues, Ratings
+
+        Formula: 
+        (
+        self.num_events * 1.0 +
+            self.num_members * 0.8 +
+            self.num_likes * 0.5 +
+            self.num_saves * 0.6 +
+            self.num_shares * 0.7 +
+            self.num_participants * 0.9 -
+            len(self.issues) * 1.0 +
+            self.average_rating() * 0.8
+        ) / 7.5
+
+    2) Participants Leaderboard
+        Metrics:
+        - Number of events participated
+        - Issues, Ratings given by the participants 
+
+        Formula:
+        (
+        self.num_events_participated * 1.0 +
+            len(self.issues_raised) * 1.0 +
+            self.average_rating_given() * 0.8 
+        )
+
+    3) Event Leaderboard
+        Metrics:
+        - Number of participants
+        - Number of likes
+        - Number of saves
+        - Number of shares
+        - Issues, Ratings
+
+        Formula:
+        (
+        self.num_participants * 1.0 +
+            self.num_likes * 0.5 +
+            self.num_saves * 0.6 +
+            self.num_shares * 0.7 -
+            len(self.issues) * 1.0 +
+            self.average_rating() * 0.8
+        ) / 5.6
+        
+6) Recommendations System (less priority)
+7) Chat Option, Announcement Notifications, Polls (under notification ICON) 
+8) LLM for AI insights (less priority)
+9) Add Event Collaborators in event model
+10) Maps and Navigation (less priority)
