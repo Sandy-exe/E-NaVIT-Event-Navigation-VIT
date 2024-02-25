@@ -49,13 +49,15 @@ class _EventCreationPageState extends State<EventCreationPage> {
     SecureStorage secureStorage = SecureStorage();
     String userData =
         await secureStorage.reader(key: "currentUserData") ?? "null";
-    print(userData)
+    
     if (userData == "null") return;
+    
     Map<String, dynamic> currentUserData = jsonDecode(userData);
+    print(currentUserData);
     String clubId = currentUserData["clubs"][0];
     String userId = currentUserData["userid"];
     String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
-
+    
     Reference ref = FirebaseStorage.instance
         .ref()
         .child("$clubId/images")

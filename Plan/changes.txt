@@ -1,0 +1,3 @@
+1) CHECK for naming conventions of all keys and values present
+2) note the type of error while rectifying it
+3) proper organizatin of files and folders

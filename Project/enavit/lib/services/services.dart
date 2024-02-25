@@ -131,13 +131,11 @@ class Services {
     List<Event> events = [];
     for (final docSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
-      
+
       Map<String, DateTime> dateTime = {
         'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
         'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
       };
-
-
 
       events.add(
         Event(
@@ -284,7 +282,6 @@ class Services {
         'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
       };
 
-
       try {
         events.add(
           Event(
@@ -314,13 +311,9 @@ class Services {
             revenue: data['revenue'] ?? "0",
             budget: data['budget'] ?? "0",
             expectedRevenue: data['expectedRevenue'] ?? "0",
-
           ),
         );
-      } catch (e) {
-      }
-
-
+      } catch (e) {}
     }
 
     return events;
@@ -354,7 +347,6 @@ class Services {
       "expense": event.expense,
       "revenue": event.revenue,
       "budget": event.budget,
-
     };
     await docref.set(obj);
 
@@ -389,10 +381,32 @@ class Services {
       "eventImageURL": approval.eventImageURL,
       "approved": approval.approved
     };
-
     for (var organiser in approval.organisers) {
-      final orgRef = firestore.collection("app_users").doc(organiser);
-      final org = await orgRef.get();
+      var orgRef = firestore.collection("app_users").doc(organiser);
+      var org = await orgRef.get();
+      if (org.data() == null) {
+        orgRef = firestore
+            .collection("app_users")
+            .doc("kBm7TDAkjyTSV8DisavuuuthSs92");
+        org = await orgRef.get();
+        obj = {
+          "clubId": approval.clubId,
+          "dateTime": approval.dateTime,
+          "description": approval.description,
+          "approvalId": approval.approvalId,
+          "eventName": approval.eventName,
+          "location": approval.location,
+          "fee": approval.fee,
+          "organisers": ["kBm7TDAkjyTSV8DisavuuuthSs92"],
+          "comments": approval.comments,
+          "participants": approval.participants,
+          "likes": approval.likes,
+          "eventImageURL": approval.eventImageURL,
+          "approved": approval.approved
+        };
+      }
+      print("done");
+      print(org.data());
       Map<String, dynamic> orgData = org.data()!;
       List<String> approvalEvents =
           List<String>.from(orgData["approval_events"]);
@@ -488,7 +502,6 @@ class Services {
           revenue: data['revenue'] ?? "0",
           budget: data['budget'] ?? "0",
           expectedRevenue: data['expectedRevenue'] ?? "0",
-
         ),
       );
     }
