@@ -49,7 +49,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
     SecureStorage secureStorage = SecureStorage();
     String userData =
         await secureStorage.reader(key: "currentUserData") ?? "null";
-
+    print(userData)
     if (userData == "null") return;
     Map<String, dynamic> currentUserData = jsonDecode(userData);
     String clubId = currentUserData["clubs"][0];
@@ -65,6 +65,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
       downloadUrl = await ref.getDownloadURL();
       _eventImageURL.text = downloadUrl!;
     });
+    print(_eventImageURL.text);
     // var imageURL = "";
   }
 

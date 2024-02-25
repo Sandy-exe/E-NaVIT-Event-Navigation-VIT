@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:enavit/Data/DB_sql.dart';
+
 import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
@@ -42,8 +42,8 @@ Future main() async {
   await LocalNotification.init();
   //await AndroidAlarmManager.initialize();
   SecureStorage securestorage = SecureStorage();
-  await DBSql.initDb();
-  await GetStorage.init();
+  // await DBSql.initDb();
+  // await GetStorage.init();
   
   // NotificationService().initialiseNotifications();
 
