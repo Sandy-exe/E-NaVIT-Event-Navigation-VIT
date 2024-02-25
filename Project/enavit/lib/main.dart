@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:enavit/Data/DB_sql.dart';
 import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
@@ -27,6 +28,7 @@ import 'package:enavit/pages/main_pages/organisers/organiser_update_profile_page
 import 'package:enavit/pages/main_pages/approvers/approver_index_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -38,8 +40,11 @@ import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotification.init();
-  await AndroidAlarmManager.initialize();
+  //await AndroidAlarmManager.initialize();
   SecureStorage securestorage = SecureStorage();
+  await DBSql.initDb();
+  await GetStorage.init();
+  
   // NotificationService().initialiseNotifications();
 
   //for testing in offline
