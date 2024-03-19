@@ -63,3 +63,6 @@
 8) LLM for AI insights (less priority)
 9) Add Event Collaborators in event model
 10) Maps and Navigation (less priority)
+
+
+11) add captain role

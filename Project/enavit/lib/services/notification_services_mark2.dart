@@ -33,7 +33,7 @@ class NotifyHelper {
     } else {
       print("Notification Done");
     }
-
+  
     Get.to(()=> Container(color:Colors.white));
   }
 
