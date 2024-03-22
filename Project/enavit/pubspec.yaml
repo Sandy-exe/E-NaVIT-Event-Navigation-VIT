@@ -58,7 +58,6 @@ dependencies:
 
   flutter_svg: ^2.0.5
   fl_chart: ^0.66.2
-  implicitly_animated_reorderable_list_2:
   flutter_timezone: ^1.0.8
   rxdart: ^0.27.7
   android_alarm_manager_plus:
