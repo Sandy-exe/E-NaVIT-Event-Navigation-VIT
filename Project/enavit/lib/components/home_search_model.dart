@@ -72,6 +72,7 @@ class SearchModel extends ChangeNotifier {
     eventClubListHome = [newValue];
     
     _suggestions = history;
+    
     notifyListeners();
   }
 }

@@ -15,6 +15,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthenticationService _firebaseAuth = AuthenticationService();
+  FocusNode _emailFocusNode = FocusNode();
+
 
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _passwordTEC = TextEditingController();
@@ -46,30 +48,32 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextField(
+                    TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailTEC,
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.mail),
-                          labelText: 'Email address',
-                          hintText: 'Enter email address',
-                          isDense: true),
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.mail),
+                        labelText: 'Email address',
+                        hintText: 'Enter email address',
+                        isDense: true
+                      ),
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(
                       height: 24,
                     ),
-                    TextField(
+                    TextFormField(
                       keyboardType: TextInputType.visiblePassword,
                       controller: _passwordTEC,
                       obscureText: true,
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.key),
-                          labelText: 'Password',
-                          hintText: 'Enter password',
-                          isDense: true),
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.key),
+                        labelText: 'Password',
+                        hintText: 'Enter password',
+                        isDense: true
+                      ),
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(

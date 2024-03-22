@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:provider/provider.dart';
-import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
-import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
+// import 'package:implicitly_animated_reorderable_list_2/implicitly_animated_reorderable_list_2.dart';
+// import 'package:implicitly_animated_reorderable_list_2/transitions.dart';
 import 'home_search_model.dart';
 import '../models/og_models.dart';
 class FloatingSearchBarWidget extends StatefulWidget {
@@ -95,35 +95,52 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
             ),
           ],
           builder: (context, transition) {
-            return Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            
+            return 
+            
+            ClipRRect(
+            borderRadius: BorderRadius.circular(8),
             child: Material(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              clipBehavior: Clip.antiAlias,
-              child: ImplicitlyAnimatedList<Object>(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                items: value.suggestions,
-                insertDuration: const Duration(milliseconds: 500),
-                itemBuilder: (BuildContext context, Animation<double> animation,
-                    Object item, _) {
-                  return SizeFadeTransition(
-                    animation: animation,
-                    child: buildItem(context, item),
-                    );
-                },
-                updateItemBuilder: (BuildContext context,
-                    Animation<double> animation, Object item) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: buildItem(context, item),
-                  );
-                },
-                areItemsTheSame: (Object a, Object b) => a == b,
+              elevation: 4.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: value.suggestions.map((suggestion) {
+                  return buildItem(context, suggestion);
+                }).toList(),
               ),
             ),
           );
+          
+          // Container(
+          //   padding: const EdgeInsets.symmetric(vertical: 16),
+          //   child: Material(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.circular(8),
+          //     clipBehavior: Clip.antiAlias,
+          //     child: ImplicitlyAnimatedList<Object>(
+          //       shrinkWrap: true,
+          //       physics: const NeverScrollableScrollPhysics(),
+          //       items: value.suggestions,
+          //       insertDuration: const Duration(milliseconds: 500),
+          //       itemBuilder: (BuildContext context, Animation<double> animation,
+          //           Object item, _) {
+          //         return SizeFadeTransition(
+          //           animation: animation,
+          //           child: buildItem(context, item),
+          //           );
+          //       },
+          //       updateItemBuilder: (BuildContext context,
+          //           Animation<double> animation, Object item) {
+          //         return FadeTransition(
+          //           opacity: animation,
+          //           child: buildItem(context, item),
+          //         );
+          //       },
+          //       areItemsTheSame: (Object a, Object b) => a == b,
+          //     ),
+          //   ),
+          // );
           },
       
         // child: const TextField(

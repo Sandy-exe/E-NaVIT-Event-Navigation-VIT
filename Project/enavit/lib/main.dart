@@ -6,13 +6,9 @@ import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
-import 'package:enavit/services/firebase_api.dart';
-import 'package:enavit/services/local_notification.dart';
-import 'package:enavit/services/notification_services.dart';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
 
@@ -28,18 +24,12 @@ import 'package:enavit/pages/main_pages/organisers/organiser_update_profile_page
 import 'package:enavit/pages/main_pages/approvers/approver_index_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await LocalNotification.init();
   //await AndroidAlarmManager.initialize();
   SecureStorage securestorage = SecureStorage();
   // await DBSql.initDb();
@@ -110,23 +100,6 @@ class Enavit extends StatefulWidget {
 }
 
 class EnavitState extends State<Enavit> {
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  listenToNotification(){
-    print("listening to notifications");
-    LocalNotification.onClickNotification.listen((event) {
-      print("Notification clicked");
-      print(event);
-      // you can set the route to navigate to based on the payload and navigate to different screens
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

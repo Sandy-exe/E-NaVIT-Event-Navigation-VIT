@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/authentication_service.dart';
-import 'package:enavit/services/local_notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -200,7 +199,6 @@ class _AProfilePageState extends State<AProfilePage> {
                               onTap: () async {
                                 print("Setting Alaram");
                                 //Navigator.pushNamed(context, '/settings');
-                                await LocalNotification.cancelAllfunc();
                                 print("Alaram off");
                               }),
                           const SizedBox(height: 15),

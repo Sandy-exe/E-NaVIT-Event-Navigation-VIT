@@ -167,6 +167,7 @@ class Services {
           expectedRevenue: data['expectedRevenue'] ?? "0",
         ),
       );
+
     }
 
     //Clubs list
@@ -191,6 +192,7 @@ class Services {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<SearchModel>(context, listen: false)
           .initEventClubList(events, clubs);
+          
     });
 
     // for (final docSnapshot in querySnapshot.docs) {
@@ -504,6 +506,7 @@ class Services {
           expectedRevenue: data['expectedRevenue'] ?? "0",
         ),
       );
+      print(Aevents);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
