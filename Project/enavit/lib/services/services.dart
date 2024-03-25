@@ -185,6 +185,7 @@ class Services {
           email: data['email'],
           events: List<String>.from(data['events']),
           approvers: List<String>.from(data['approvers']),
+          followers: List<String>.from(data['followers']),
         ),
       );
     }
@@ -228,6 +229,8 @@ class Services {
         regNo: data['reg_no'],
         profileImageURL: data['profileImageURL'] ?? "null",
         fcmToken: data['fcmToken'] ?? "",
+        favorites: List<String>.from(data['favorites']),
+        followingCLubs: List<String>.from(data['followingCLubs']),
       ));
     }
 
@@ -515,6 +518,83 @@ class Services {
     });
   }
 
+
+  Future<bool> toggleFavEvents(String eventId) async {
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<String> favEvents = List<String>.from(currentUserData['favorites']);
+    
+    final EventRef = firestore.collection("Events").doc(eventId);
+    bool isFav = false;
+
+    final event = await EventRef.get();
+    Map<String, dynamic> eventData = event.data()!;
+    if (favEvents.contains(eventId)) {
+      favEvents.remove(eventId);
+      eventData.update("likes", (value) => value - 1);
+      await EventRef.update(eventData);
+      isFav = false;
+    } else {
+      favEvents.add(eventId);
+      eventData.update("likes", (value) => value + 1);
+      await EventRef.update(eventData);
+      isFav = true;
+    }
+
+    currentUserData['favorites'] = favEvents;
+
+// Convert the map back to a JSON string
+    String updatedUserData = jsonEncode(currentUserData);
+
+// Store the updated user data back to secure storage
+    await secureStorage.writer(key: "currentUserData", value: updatedUserData);
+
+    final userRef = firestore.collection("app_users").doc(currentUserData['userid']);
+    await userRef.update({"favorites": favEvents});
+
+    return isFav;
+
+  }
+
+
+  Future<bool> toggleFollowClubs(String clubId) async {
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<String> followedClubs =
+        List<String>.from(currentUserData['followingClubs']);
+
+    final ClubRef = firestore.collection("Clubs").doc(clubId);
+    bool isFollowing = false;
+
+    final club = await ClubRef.get();
+    Map<String, dynamic> clubData = club.data()!;
+    List<String> followers = List<String>.from(clubData['followers']);
+    if (followedClubs.contains(clubId)) {
+      followedClubs.remove(clubId);
+      clubData['followers'] = followers;
+      await ClubRef.update(clubData);
+      isFollowing = false;
+    } else {
+      followedClubs.add(clubId);
+      clubData['followers'] = followers;
+      await ClubRef.update(clubData);
+      isFollowing = true;
+    }
+
+    currentUserData['followingClubs'] = followedClubs;
+
+// Convert the map back to a JSON string
+    String updatedUserData = jsonEncode(currentUserData);
+
+// Store the updated user data back to secure storage
+    await secureStorage.writer(key: "currentUserData", value: updatedUserData);
+
+    final userRef =
+        firestore.collection("app_users").doc(currentUserData['userid']);
+    await userRef.update({"followingClubs": followedClubs});
+    return isFollowing;
+    
+  }
   //Creating Dummy Data
   // Future<void> createDummyData() async {
   //   // Create dummy data for clubs

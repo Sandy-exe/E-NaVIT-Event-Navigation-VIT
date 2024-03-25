@@ -22,6 +22,15 @@ class _ClubBioState extends State<ClubBio> {
     super.initState();
   }
 
+  bool isFollow = false; //random
+
+  void toggleFollow() {
+    setState(() async {
+      Services services = Services();
+      isFollow = await services.toggleFollowClubs(widget.club.clubId);
+    });
+  }
+
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
     eventList = await service.getClubEvents(clubId);
@@ -340,13 +349,15 @@ class _ClubBioState extends State<ClubBio> {
                                     ),
                                     const Spacer(),
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: toggleFollow,
                                       style: TextButton.styleFrom(
                                           backgroundColor: Colors.black),
-                                      child: const Text('Follow',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                    ),
+                                      child: Text(
+                                        isFollow ? 'Unfollow' : 'Follow',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),

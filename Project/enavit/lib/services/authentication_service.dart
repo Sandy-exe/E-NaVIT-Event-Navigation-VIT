@@ -55,7 +55,7 @@ class AuthenticationService {
           userId: uid,
           name: name,
           email: email,
-          
+          favorites: [],
           clubs: [],
           events: [],
           organizedEvents: [],
@@ -64,7 +64,8 @@ class AuthenticationService {
           phoneNo: phoneno,
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning
-          fcmToken: "");
+          fcmToken: "",
+          followingCLubs: []);
       await service.addUser(newUser);
       return "success";
     } on FirebaseAuthException catch (e) {

@@ -1,36 +1,39 @@
+import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
 import '../pages/main_pages/general_pages/about_event_page.dart';
 
-class EventTile extends StatelessWidget {
+class EventTile extends StatefulWidget {
   final Event event;
-  const EventTile({super.key, required this.event,});
+  const EventTile({super.key, required this.event});
 
-  
+  @override
+  _EventTileState createState() => _EventTileState();
+}
+
+class _EventTileState extends State<EventTile> {
+  bool isFavorited = false;//random
+
+  void toggleFavorite() {
+    setState(() async {
+      Services services = Services();
+      isFavorited = await services.toggleFavEvents(widget.event.eventId);
+    });
+  }
+
+  void share(Event event) {
+    // function to share event
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-    void addEventToUser(Event event) {
-      // get a Event from Event list
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Successfully Added'),
-          content: Text(
-              'You have successfully added ${event.eventName} to your list'),
-        ),
-      );
-    }
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => AboutEvent(
-              event: event,
+              event: widget.event,
             ),
           ),
         );
@@ -45,51 +48,47 @@ class EventTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //Event Image
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0 , top:5, bottom:5),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: SizedBox(
-                        width: 250.0, // desired width
-                        child: event.eventImageURL == "null" ? Image.asset('lib/images/Vit_poster.jpg') : Image.network(event.eventImageURL, fit: BoxFit.cover,),
-                      ),
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0, top: 5, bottom: 5),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: SizedBox(
+                      width: 250.0, // desired width
+                      child: widget.event.eventImageURL == "null"
+                          ? Image.asset('lib/images/Vit_poster.jpg')
+                          : Image.network(
+                              widget.event.eventImageURL,
+                              fit: BoxFit.cover,
+                            ),
                     ),
-                    const SizedBox(height: 10,),
-
-
-                    SizedBox(
-                      width: 250,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                              onTap: () => addEventToUser(event),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: 250,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: toggleFavorite,
                               child: Container(
                                 padding: const EdgeInsets.all(1),
-                                child: const Icon(
-                                  Icons.favorite_border_outlined,
-                                  color: Color.fromARGB(255, 90, 88, 88),
+                                child: Icon(
+                                  isFavorited
+                                      ? Icons.favorite
+                                      : Icons.favorite_border_outlined,
+                                  color: const Color.fromARGB(255, 90, 88, 88),
                                   size: 30.0,
                                 ),
                               ),
-                                                      ),
-                                                      GestureDetector(
-                              onTap: () => addEventToUser(event),
-                              child: Container(
-                                padding: const EdgeInsets.all(1),
-                                child: const Icon(
-                                  Icons.comment_outlined,
-                                  color: Color.fromARGB(255, 90, 88, 88),
-                                  size: 30.0,
-                                ),
-                              ),
-                                                      ),
-                                                      GestureDetector(
-                              onTap: () => addEventToUser(event),
+                            ),
+                            GestureDetector(
+                              onTap: () => share(widget.event),
                               child: Container(
                                 padding: const EdgeInsets.all(1),
                                 child: const Icon(
@@ -98,84 +97,20 @@ class EventTile extends StatelessWidget {
                                   size: 30.0,
                                 ),
                               ),
-                                                      ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () => addEventToUser(event),
-                            child: Container(
-                              padding: const EdgeInsets.all(1),
-                              child: const Icon(
-                                Icons.bookmark_border_outlined,
-                                color: Color.fromARGB(255, 90, 88, 88),
-                                size: 30.0,
-                              ),
                             ),
-                          ),
-
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-            //Description, event name, event fee, and plus button
-            // Expanded(
-              
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: Colors.grey[100],
-            //       borderRadius: BorderRadius.circular(12.0),
-            //     ),
-            //     padding: const EdgeInsets.all(4.0),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         //Event Name
-            //         // Padding(
-            //         //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-            //         //   child: Text(
-            //         //     event.name,
-            //         //     style: const TextStyle(
-            //         //       fontsize: 30.0,
-            //         //       fontWeight: FontWeight.bold,
-            //         //     ),
-            //         //   ),
-            //         // ),
-
-            //         // //Event Description
-            //         // Padding(
-            //         //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-            //         //   child: Text(
-            //         //     event.description,
-            //         //     style: const TextStyle(
-            //         //       fontSize: 16.0,
-            //         //     ),
-            //         //   ),
-            //         // ),
-
-            //         // //Event Fee
-            //         // Padding(
-            //         //   padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-            //         //   child: Text(
-            //         //     event.fee,
-            //         //     style: const TextStyle(
-            //         //       fontSize: 16.0,
-            //         //     ),
-            //         //   ),
-            //         // ),
-
-            //         //Plus Button
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            ),
 
             SizedBox(
               // color: Colors.red,
               height: 400,
-              width:80,
+              width: 80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -187,8 +122,6 @@ class EventTile extends StatelessWidget {
                           image: AssetImage('lib/images/VIT_LOGO.png')),
                     ),
                   ),
-                  
-                  
                 ],
               ),
             ),

@@ -42,6 +42,7 @@ class Club {
   final String email;
   final List<String> events;
   final List<String> approvers;
+  final List<String> followers;
 
   Club({
     required this.clubId,
@@ -50,6 +51,8 @@ class Club {
     required this.email,
     required this.events,
     required this.approvers,
+
+    required this.followers,
   });
 }
 
@@ -151,6 +154,9 @@ class Users {
   final List<String> clubs;
   final String profileImageURL;
   final String fcmToken;
+  final List<String> favorites;
+  final List<String> followingCLubs;
+
 
   Users({
     required this.email,
@@ -165,5 +171,7 @@ class Users {
     required this.clubs,
     required this.profileImageURL,
     required this.fcmToken,
+    required this.favorites,
+    required this.followingCLubs,
   });
 }
