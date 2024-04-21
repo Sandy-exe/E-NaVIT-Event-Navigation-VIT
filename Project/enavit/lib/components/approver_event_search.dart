@@ -193,7 +193,7 @@ class _FloatingSearchBarWidgetApproverEventState extends State<FloatingSearchBar
                       const SizedBox(height: 4),
                       Text(
                         event.clubId,
-                        style: textTheme.caption,
+                        style: textTheme.labelMedium,
                       ),
                       
                     ],
