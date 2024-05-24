@@ -163,7 +163,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             text: 'Settings',
                             icon: FontAwesomeIcons.gear,
                             onTap: () {
-                              _firebaseAuth.signOut(context);
                             },
                             role: role,
                           ),
@@ -173,6 +172,25 @@ class _ProfilePageState extends State<ProfilePage> {
                             icon: FontAwesomeIcons.powerOff,
                             onTap: () {
                               _firebaseAuth.signOut(context);
+                            },
+                            role: role,
+                          ),
+                          const SizedBox(height: 15),
+                          ProfileMenuWidget(
+                            text: 'Liked Events',
+                            icon: FontAwesomeIcons.solidHeart,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/participant_liked_events');
+                            },
+                            role: role,
+                          ),
+                          const SizedBox(height: 15),
+                          ProfileMenuWidget(
+                            text: 'Following Clubs',
+                            icon: FontAwesomeIcons.users,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/participant_following_clubs');
+
                             },
                             role: role,
                           ),

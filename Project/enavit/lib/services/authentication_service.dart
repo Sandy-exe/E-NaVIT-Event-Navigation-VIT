@@ -24,6 +24,7 @@ class AuthenticationService {
         await service.updateFcmToken(uid);
         await service.getUserData(uid);
         secureStorage.writer(key: "isLoggedIn", value: "true");
+        print("Logged in");
       }
 
       return "success";
@@ -65,7 +66,7 @@ class AuthenticationService {
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning
           fcmToken: "",
-          followingCLubs: []);
+          followingClubs: []);
       await service.addUser(newUser);
       return "success";
     } on FirebaseAuthException catch (e) {

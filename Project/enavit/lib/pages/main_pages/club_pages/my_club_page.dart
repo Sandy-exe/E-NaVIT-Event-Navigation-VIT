@@ -23,13 +23,15 @@ class _ClubBioState extends State<ClubBio> {
   }
 
   bool isFollow = false; //random
+void toggleFollow() async {
+  Services services = Services();
+  bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
+  setState(() {
+    isFollow = newFollowStatus;
+  });
+}
 
-  void toggleFollow() {
-    setState(() async {
-      Services services = Services();
-      isFollow = await services.toggleFollowClubs(widget.club.clubId);
-    });
-  }
+
 
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
@@ -348,14 +350,19 @@ class _ClubBioState extends State<ClubBio> {
                                       ),
                                     ),
                                     const Spacer(),
-                                    TextButton(
-                                      onPressed: toggleFollow,
-                                      style: TextButton.styleFrom(
-                                          backgroundColor: Colors.black),
-                                      child: Text(
-                                        isFollow ? 'Unfollow' : 'Follow',
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                    GestureDetector(
+                                      onTap: toggleFollow,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                        child: Text(
+                                          isFollow ? 'Unfollow' : 'Follow',
+                                          style: const TextStyle(color: Colors.white),
+                                        ),
                                       ),
                                     )
                                   ],

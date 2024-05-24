@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class Approval {
   final String clubId;
@@ -155,7 +154,7 @@ class Users {
   final String profileImageURL;
   final String fcmToken;
   final List<String> favorites;
-  final List<String> followingCLubs;
+  final List<String> followingClubs;
 
 
   Users({
@@ -172,6 +171,6 @@ class Users {
     required this.profileImageURL,
     required this.fcmToken,
     required this.favorites,
-    required this.followingCLubs,
+    required this.followingClubs,
   });
 }

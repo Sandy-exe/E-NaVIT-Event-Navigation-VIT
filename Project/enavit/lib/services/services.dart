@@ -30,6 +30,7 @@ class Services {
       "role": newUser.role,
       "phone_no": newUser.phoneNo,
       "reg_no": newUser.regNo,
+
     };
 
     await docref.set(obj); //push the object
@@ -84,6 +85,7 @@ class Services {
         "comments": Map<String, String>.from(eventData['comments']),
         "participants": List<String>.from(eventData['participants']),
         "likes": eventData['likes'],
+
       };
 
       eventListObj.add(
@@ -120,6 +122,10 @@ class Services {
       String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
     }
+    
+    print("userdata: $events");
+
+
 
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
@@ -169,6 +175,7 @@ class Services {
       );
 
     }
+    
 
     //Clubs list
     final clubquerySnapshot = await firestore.collection("Clubs").get();
@@ -177,6 +184,9 @@ class Services {
     for (final docSnapshot in clubquerySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
 
+
+      
+
       clubs.add(
         Club(
           clubId: data['clubId'],
@@ -184,16 +194,19 @@ class Services {
           bio: data['bio'],
           email: data['email'],
           events: List<String>.from(data['events']),
-          approvers: List<String>.from(data['approvers']),
-          followers: List<String>.from(data['followers']),
+          approvers: List<String>.from(data['approvers'] ?? []), 
+          followers: List<String>.from(data['followers']), 
         ),
       );
+
     }
+
+    
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<SearchModel>(context, listen: false)
           .initEventClubList(events, clubs);
-          
+
     });
 
     // for (final docSnapshot in querySnapshot.docs) {
@@ -230,7 +243,7 @@ class Services {
         profileImageURL: data['profileImageURL'] ?? "null",
         fcmToken: data['fcmToken'] ?? "",
         favorites: List<String>.from(data['favorites']),
-        followingCLubs: List<String>.from(data['followingCLubs']),
+        followingClubs: List<String>.from(data['followingCLubs']),
       ));
     }
 
@@ -571,11 +584,13 @@ class Services {
     List<String> followers = List<String>.from(clubData['followers']);
     if (followedClubs.contains(clubId)) {
       followedClubs.remove(clubId);
+      followers.remove(currentUserData['userid']);
       clubData['followers'] = followers;
       await ClubRef.update(clubData);
       isFollowing = false;
     } else {
       followedClubs.add(clubId);
+      followers.add(currentUserData['userid']);
       clubData['followers'] = followers;
       await ClubRef.update(clubData);
       isFollowing = true;
@@ -708,4 +723,81 @@ class Services {
   //       firestore.collection('tasks').doc(documentId);
   //   await documentReference.delete();
   // }
+
+
+  Future<List<Event>> getLikedEvents(BuildContext context) async{
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<String> favEvents = List<String>.from(currentUserData['favorites']);
+    List<Event> likedEvents = [];
+
+    for (final eventId in favEvents) {
+      final event = await firestore.collection("Events").doc(eventId).get();
+      Map<String, dynamic> eventData = event.data()!;
+
+      Map<String, DateTime> dateTime = {
+        'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate(),
+        'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
+      };
+
+      likedEvents.add(
+        Event(
+          clubId: eventData['clubId'],
+          dateTime: dateTime,
+          description: eventData['description'],
+          eventId: eventData['eventId'],
+          eventName: eventData['eventName'],
+          location: eventData['location'],
+          fee: eventData['fee'],
+          organisers: List<String>.from(eventData['organisers']),
+          comments: Map<String, String>.from(eventData['comments']),
+          participants: List<String>.from(eventData['participants']),
+          likes: eventData['likes'],
+          eventImageURL: eventData['eventImageURL'] ?? "null",
+          discussionPoints: eventData['discussionPoints'] ?? "old doc",
+          eventType: eventData['eventType'] ?? "old doc",
+          eventCategory: eventData['eventCategory'] ?? "old doc",
+          fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+          schoolCentre: eventData['schoolCentre'] ?? "old doc",
+          coordinator1: eventData['coordinator1'] ?? "old doc",
+          coordinator2: eventData['coordinator2'] ?? "old doc",
+          coordinator3: eventData['coordinator3'] ?? "old doc",
+          attendancePresent: eventData['attendancePresent'] ?? "0",
+          issues: Map<String, Map<String, String>>.from(eventData['issues']),
+          expense: eventData['expense'] ?? "0",
+          revenue: eventData['revenue'] ?? "0",
+          budget: eventData['budget'] ?? "0",
+          expectedRevenue: eventData['expectedRevenue'] ?? "0",
+        ),
+      );
+    }
+    return likedEvents;
+  }
+
+  Future<List<Club>> getFollowedClubs(BuildContext context) async{
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+
+    List<String> followedClubs = List<String>.from(currentUserData['followingClubs']);
+    List<Club> clubs = [];
+
+    for (final clubId in followedClubs) {
+      final club = await firestore.collection("Clubs").doc(clubId).get();
+      Map<String, dynamic> clubData = club.data()!;
+
+      clubs.add(
+        Club(
+          clubId: clubData['clubId'],
+          clubName: clubData['clubName'],
+          bio: clubData['bio'],
+          email: clubData['email'],
+          events: List<String>.from(clubData['events']),
+          approvers: List<String>.from(clubData['approvers']),
+          followers: List<String>.from(clubData['followers']),
+        ),
+      );
+    }
+    
+    return clubs;     
+  }
 }

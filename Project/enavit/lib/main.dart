@@ -6,6 +6,8 @@ import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
+import 'package:enavit/pages/main_pages/participants/view_following_club_page.dart';
+import 'package:enavit/pages/main_pages/participants/view_liked_events_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -137,6 +139,8 @@ class EnavitState extends State<Enavit> {
             '/participant_index': (context) => const IndexPage(),
             '/participant_profile': (context) => const ProfilePage(),
             '/participant_update_profile': (context) => const UpdateProfile(),
+            '/participant_liked_events': (context) => const LikedEvents(),
+            '/participant_following_clubs': (context) => const FollowedClubs(),
             //organisers
             '/organiser_index': (context) => const OIndexPage(),
             '/organiser_profile': (context) => const OProfilePage(),

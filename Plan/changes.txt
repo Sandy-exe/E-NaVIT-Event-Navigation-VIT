@@ -1,3 +1,8 @@
 1) CHECK for naming conventions of all keys and values present
 2) note the type of error while rectifying it
 3) proper organizatin of files and folders
+
+
+///
+
+1) find better way to load the liked Events instead of checking with cloud everytime
