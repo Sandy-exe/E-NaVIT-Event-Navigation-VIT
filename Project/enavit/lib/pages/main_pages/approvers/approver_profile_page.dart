@@ -161,7 +161,7 @@ class _AProfilePageState extends State<AProfilePage> {
                             text: 'Liked Events',
                             icon: Icons.favorite,
                             onTap: () {
-                              Navigator.pushNamed(context, '/participant_liked_events');
+                              Navigator.pushNamed(context, '/Liked_events');
                             },
                           ),
                           const SizedBox(height: 15),
@@ -169,7 +169,7 @@ class _AProfilePageState extends State<AProfilePage> {
                             text: 'Following Clubs',
                             icon: Icons.star,
                             onTap: () {
-                              Navigator.pushNamed(context, '/participant_following_clubs');
+                              Navigator.pushNamed(context, '/Following_clubs');
                             },
                           ),
                         ],

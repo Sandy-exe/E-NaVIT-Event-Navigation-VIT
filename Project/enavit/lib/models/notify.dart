@@ -1,32 +1,27 @@
-class Notify {
-  String? title;
-  String? body;
-  String? image;
-   String? time;
-   String? date;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Notify({
-    required this.title,
-    required this.body,
-    required this.image, 
-    required this.time,
-    required this.date
+class BellNotification {
+  final String name;
+  final String profilePic;
+  final String content;
+  final String postImage;
+  final Timestamp time;
+
+  BellNotification({
+    required this.name, 
+    required this.profilePic, 
+    required this.content,
+    required this.postImage, 
+    required this.time
   });
 
-  Notify.fromJson(Map<String, dynamic> json) 
-    : title = json['title'],
-      body = json['body'],
-      image = json['image'],
-      time = json['time'],
-      date = json['date'];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['title'] = title;
-    data['body'] = body;
-    data['image'] = image;
-    data['time'] = time;
-    data['date'] = date;
-    return data;
+  factory BellNotification.fromJson(Map<String, dynamic> json) {
+    return BellNotification(
+      name: json['name'],
+      profilePic: json['profilePic'],
+      content: json['content'],
+      postImage: json['postImage'],
+      time: json['time'],
+    );
   }
 }

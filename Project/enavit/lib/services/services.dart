@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/approver_event_search_model.dart';
+import 'package:enavit/models/notify.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/home_search_model.dart';
@@ -244,6 +245,7 @@ class Services {
         fcmToken: data['fcmToken'] ?? "",
         favorites: List<String>.from(data['favorites']),
         followingClubs: List<String>.from(data['followingCLubs']),
+        notifications: List<String>.from(data['notifications']),
       ));
     }
 
@@ -816,5 +818,32 @@ class Services {
     return clubs;     
   }
 
+  Future<List<BellNotification>> getNotifications() async {
 
-}
+    final querySnapshot = await firestore.collection("Notifications").get();
+    List<BellNotification> notifications = [];
+    for (final docSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+      notifications.add(
+        BellNotification.fromJson(data),
+      );
+    }
+
+    
+    Map<String, dynamic> currentUserData = jsonDecode(
+    await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<dynamic> notificationsList = jsonDecode(currentUserData['notifications']);
+    notifications.addAll(notificationsList.map((notification) => BellNotification.fromJson(notification)).toList());
+    notifications.sort((a, b) => b.time.toDate().compareTo(a.time.toDate()));
+    return notifications;
+
+      // Now you can use the notifications list
+    }
+
+    
+  }
+
+
+
+
+

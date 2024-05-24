@@ -21,10 +21,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> initPrefs() async {
-    print("InitPrefs");
     Services service = Services();
     await service.getEventClubData(context);
-    print("InitPrefs");
   }
 
   @override

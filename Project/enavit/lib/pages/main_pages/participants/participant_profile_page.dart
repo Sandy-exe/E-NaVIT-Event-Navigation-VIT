@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             text: 'Liked Events',
                             icon: FontAwesomeIcons.solidHeart,
                             onTap: () {
-                              Navigator.pushNamed(context, '/participant_liked_events');
+                              Navigator.pushNamed(context, '/Liked_events');
                             },
                             role: role,
                           ),
@@ -189,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             text: 'Following Clubs',
                             icon: FontAwesomeIcons.users,
                             onTap: () {
-                              Navigator.pushNamed(context, '/participant_following_clubs');
+                              Navigator.pushNamed(context, '/Following_clubs');
 
                             },
                             role: role,
@@ -211,7 +211,7 @@ class ProfileMenuWidget extends StatelessWidget {
   Future<void> updateRoleStateSecure(String booly) async {
     SecureStorage secureStorage = SecureStorage();
     await secureStorage.writer(key: 'roleState', value: booly);
-  }
+  }// for changing the role state
 
   const ProfileMenuWidget({
     required this.text,

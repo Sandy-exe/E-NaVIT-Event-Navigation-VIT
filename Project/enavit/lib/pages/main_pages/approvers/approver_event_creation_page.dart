@@ -19,8 +19,6 @@ class CompleteEventDetailPage extends StatefulWidget {
 class _CompleteEventDetailPageState extends State<CompleteEventDetailPage> {
   final AuthenticationService _firebaseAuth = AuthenticationService();
   SecureStorage secureStorage = SecureStorage();
-  late String role;
-
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
   late List<Approval> approvalList;
@@ -36,7 +34,6 @@ class _CompleteEventDetailPageState extends State<CompleteEventDetailPage> {
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
-    role = await secureStorage.reader(key: 'roleState') ?? 'true';
 
     if (isLoggedIn) {
       String? currentUserDataString =

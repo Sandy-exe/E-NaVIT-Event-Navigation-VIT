@@ -66,7 +66,8 @@ class AuthenticationService {
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning
           fcmToken: "",
-          followingClubs: []);
+          followingClubs: [],
+          notifications: []);
       await service.addUser(newUser);
       return "success";
     } on FirebaseAuthException catch (e) {

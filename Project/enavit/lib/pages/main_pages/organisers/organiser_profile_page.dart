@@ -32,9 +32,10 @@ class _OProfilePageState extends State<OProfilePage> {
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
     role = await secureStorage.reader(key: 'roleState') ?? 'true';
+    print(role);
 
     if (isLoggedIn) {
-      String? currentUserDataString =
+      String? currentUserDataString = 
           await secureStorage.reader(key: "currentUserData");
       if (currentUserDataString != null) {
         currentUserData = jsonDecode(currentUserDataString);
@@ -156,7 +157,6 @@ class _OProfilePageState extends State<OProfilePage> {
                             text: 'Organizer Mode',
                             icon: Icons.group,
                             onTap: () {
-                              _firebaseAuth.signOut(context);
                             },
                             role: role,
                           ),
@@ -164,7 +164,6 @@ class _OProfilePageState extends State<OProfilePage> {
                             text: 'Settings',
                             icon: FontAwesomeIcons.gear,
                             onTap: () {
-                              _firebaseAuth.signOut(context);
                             },
                             role: role,
                           ),

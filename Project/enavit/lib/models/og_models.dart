@@ -155,6 +155,7 @@ class Users {
   final String fcmToken;
   final List<String> favorites;
   final List<String> followingClubs;
+  final List<String> notifications;
 
 
   Users({
@@ -172,5 +173,6 @@ class Users {
     required this.fcmToken,
     required this.favorites,
     required this.followingClubs,
+    required this.notifications,
   });
 }

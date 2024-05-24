@@ -6,6 +6,7 @@ import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/notification_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
 
@@ -33,27 +34,6 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await AndroidAlarmManager.initialize();
   SecureStorage securestorage = SecureStorage();
-  // await DBSql.initDb();
-  // await GetStorage.init();
-  
-  // NotificationService().initialiseNotifications();
-
-  //for testing in offline
-  // Map<String, dynamic> currentUserData = {"userid": "123",
-  //     "name": "santhosh",
-  //     "email": "santhosh.kumarasdfas@sadfj",
-  //     "clubs": [],
-  //     "events": [],
-  //     "organized_events": [],
-  //     "role": 0,
-  //     "phone_no": "9500882564",
-  //     "reg_no": "21BCE1829",
-  //   };
-  // String currentUserDataString = jsonEncode(currentUserData);
-  // await securestorage.writer(key: "currentUserData", value: currentUserDataString);
-  // await securestorage.writer(key: "isLoggedIn", value: "true" );
-  //offline test ends here
-
   bool isLoggedIn = await securestorage.reader(key: "isLoggedIn") == 'true';
 
   await Firebase.initializeApp(
@@ -137,8 +117,12 @@ class EnavitState extends State<Enavit> {
             '/participant_index': (context) => const IndexPage(),
             '/participant_profile': (context) => const ProfilePage(),
             '/participant_update_profile': (context) => const UpdateProfile(),
-            '/participant_liked_events': (context) => const LikedEvents(),
-            '/participant_following_clubs': (context) => const FollowedClubs(),
+
+            //General Pages
+            '/Liked_events': (context) => const LikedEvents(),
+            '/Following_clubs': (context) => const FollowedClubs(),
+            '/Notification_page' : (context) => const NotificationPage(),
+
             //organisers
             '/organiser_index': (context) => const OIndexPage(),
             '/organiser_profile': (context) => const OProfilePage(),
