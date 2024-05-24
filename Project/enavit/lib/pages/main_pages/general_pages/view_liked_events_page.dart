@@ -1,6 +1,5 @@
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:enavit/components/Event_tile.dart';
 import 'package:enavit/models/og_models.dart';
 
@@ -20,11 +19,8 @@ class _LikedEventsState extends State<LikedEvents> {
   }
 
   Future<void> initPrefs() async {
-    print("InitPrefs");
     Services service = Services();
     likedEvents = await service.getLikedEvents(context);
-    print(likedEvents);
-    print("InitPrefs");
 
   }
   Widget build(BuildContext context) {
@@ -52,7 +48,6 @@ class _LikedEventsState extends State<LikedEvents> {
                       itemCount: likedEvents.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        print(index);
                         // get an event
                         Event event = likedEvents[index];
                         return EventTile(event: event);

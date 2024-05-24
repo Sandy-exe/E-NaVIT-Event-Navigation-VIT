@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/authentication_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AProfilePage extends StatefulWidget {
@@ -158,55 +156,20 @@ class _AProfilePageState extends State<AProfilePage> {
                               Navigator.pushNamed(context, '/set_role');
                             },
                           ),
+                          const SizedBox(height: 15),
                           ProfileMenuWidget(
-                            text: 'Alaram ON(Settings)',
-                            icon: FontAwesomeIcons.gear,
-                            onTap: () async {
-                              print("Setting Alaram");
-                              print(DateTime.now().minute + 1);
-                              //Navigator.pushNamed(context, '/settings');
-                              // AndroidAlarmManager.oneShotAt(DateTime(
-                              //     DateTime.now().year,
-                              //     DateTime.now().month,
-                              //     DateTime.now().day,
-                              //     DateTime.now().hour,
-                              //     DateTime.now().minute + 1),46 , () {
-                              //       print("Alaram fired");
-                              //     });
-
-                              AndroidAlarmManager.oneShot(
-                                const Duration(seconds: 5),
-                                0,
-                                () {
-                                  print("Alaram fired");
-                                },
-                                exact: true,
-                                wakeup: true,
-                              );
-
-                              // LocalNotification.showScheduleNotification(
-                              //     title: 'title',
-                              //     body: 'body',
-                              //     payload: 'payload');
-
-                              print("Alaram set");
+                            text: 'Liked Events',
+                            icon: Icons.favorite,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/participant_liked_events');
                             },
                           ),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
-                              text: 'Alaram Off',
-                              icon: FontAwesomeIcons.gear,
-                              onTap: () async {
-                                print("Setting Alaram");
-                                //Navigator.pushNamed(context, '/settings');
-                                print("Alaram off");
-                              }),
-                          const SizedBox(height: 15),
-                          ProfileMenuWidget(
-                            text: 'Log Out',
-                            icon: FontAwesomeIcons.powerOff,
+                            text: 'Following Clubs',
+                            icon: Icons.star,
                             onTap: () {
-                              _firebaseAuth.signOut(context);
+                              Navigator.pushNamed(context, '/participant_following_clubs');
                             },
                           ),
                         ],

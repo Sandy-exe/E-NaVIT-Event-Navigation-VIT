@@ -15,8 +15,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthenticationService _firebaseAuth = AuthenticationService();
-  FocusNode _emailFocusNode = FocusNode();
-
 
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _passwordTEC = TextEditingController();

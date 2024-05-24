@@ -569,6 +569,20 @@ class Services {
 
   }
 
+  Future<bool> checkFavEvents(String eventId) async {
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<String> favEvents = List<String>.from(currentUserData['favorites']);
+    return favEvents.contains(eventId);
+  }
+
+  Future<bool> checkFollowClub(String clubId) async {
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+    List<String> followedClubs = List<String>.from(currentUserData['followingClubs']);
+    return followedClubs.contains(clubId);
+  }
+
 
   Future<bool> toggleFollowClubs(String clubId) async {
     Map<String, dynamic> currentUserData = jsonDecode(
@@ -774,6 +788,7 @@ class Services {
     return likedEvents;
   }
 
+
   Future<List<Club>> getFollowedClubs(BuildContext context) async{
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
@@ -800,4 +815,6 @@ class Services {
     
     return clubs;     
   }
+
+
 }

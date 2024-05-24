@@ -16,13 +16,23 @@ class ClubBio extends StatefulWidget {
 class _ClubBioState extends State<ClubBio> {
   late List<dynamic> eventList = [];
   late int eventListLength;
+  
+  bool isFollow = false; //random
 
   @override
   void initState() {
     super.initState();
+    checkFollow();
   }
 
-  bool isFollow = false; //random
+  void checkFollow() async {
+    Services services = Services();
+    bool followStatus = await services.checkFollowClub(widget.club.clubId);
+    setState(() {
+      isFollow = followStatus;
+    });
+  }
+
 void toggleFollow() async {
   Services services = Services();
   bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);

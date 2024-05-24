@@ -6,11 +6,10 @@ import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
-import 'package:enavit/pages/main_pages/participants/view_following_club_page.dart';
-import 'package:enavit/pages/main_pages/participants/view_liked_events_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/Data/secure_storage.dart';
 
@@ -83,7 +82,6 @@ Future main() async {
 //   NotificationService().sendNotification("vrv", "Vervr");
 //   NotificationService().scheduleNotification("test", "vody", DateTime.now());
 
-  print(userRole);
 
   runApp(
 

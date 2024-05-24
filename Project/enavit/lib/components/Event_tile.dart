@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
@@ -15,17 +13,28 @@ class EventTile extends StatefulWidget {
 
 class _EventTileState extends State<EventTile> {
   
- 
+  @override
+  void initState() {
+    super.initState();
+    checkFavoriteStatus();
+  }
+
+  void checkFavoriteStatus() async {
+    Services services = Services();
+    bool favoriteStatus = await services.checkFavEvents(widget.event.eventId);
+    setState(() {
+      isFavorited = favoriteStatus;
+    });
+  }
+
   bool isFavorited = false;//random
 
   void toggleFavorite() async {
-    print("Toggling Favorite");
     Services services = Services();
     bool newFavoriteStatus = await services.toggleFavEvents(widget.event.eventId);
     setState(() {
       isFavorited = newFavoriteStatus;
     });
-    print('Favorite Toggled');
   }
 
   void share(Event event) {
