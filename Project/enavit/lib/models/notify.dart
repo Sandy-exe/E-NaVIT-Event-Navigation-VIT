@@ -24,4 +24,6 @@ class BellNotification {
       time: json['time'],
     );
   }
+
+  toJson() {}
 }

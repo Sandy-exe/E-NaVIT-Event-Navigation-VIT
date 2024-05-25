@@ -1,4 +1,4 @@
-import 'package:enavit/services/services.dart';
+import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/notify.dart';
 
@@ -12,13 +12,14 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   late List<BellNotification> notifications;
 
+  @override
   void initState() {
     super.initState();
     checkForNotification();
   }
 
   void checkForNotification() async {
-    Services service = Services();
+    NotificationService service = NotificationService();
     notifications = await service.getNotifications();
   }
 

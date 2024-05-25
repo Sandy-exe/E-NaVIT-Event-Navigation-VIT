@@ -73,7 +73,7 @@ Plans:
 
 13) add attendance field in OG_models and total attendance field in event model
 14) add a filed for issues and solved issues
-15) add 
+
 
 
 reference LINKS:
@@ -93,7 +93,10 @@ Event tab
 Check profile
 
 
-
+NOTIFICATION:
+1) Get notification from approver/organizer when any changes are made to the event from approver/organizer (using update event button)
+by deleting the old notification with old timing to change it to new timings (After Thananjeyan's part)
+2) Send notification from approver/organizer to all participants in real Time (MOST notifications)
 
 
 

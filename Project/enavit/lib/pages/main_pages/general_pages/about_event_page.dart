@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -82,9 +84,49 @@ class _AboutEventState extends State<AboutEvent> {
     }
   }
 
-  void handlePaymentSuccess(PaymentSuccessResponse response) {
+  void handlePaymentSuccess(PaymentSuccessResponse response) async {
     razorPayDialogBox("Payment Successfull");
     updateUserAndEventDetails(currentUserData['userid'], widget.event.eventId);
+
+    DateTime now = DateTime.now();
+    debugPrint('Now: $now');
+    DateTime inputDateTime = widget.event.dateTime['startTime'];
+    debugPrint('Input: $inputDateTime');
+    
+    // Calculate the seconds for each notification
+    int twoHoursBefore = inputDateTime.difference(now).inSeconds - 2 * 60 * 60;
+    int oneHourBefore = inputDateTime.difference(now).inSeconds - 1 * 60 * 60;
+    int tenMinutesBefore = inputDateTime.difference(now).inSeconds - 10 * 60;
+    int eventStarts = inputDateTime.difference(now).inSeconds;
+
+
+    
+    String eventName = widget.event.eventName;
+    // Schedule the notifications
+    await NotificationService.showNotification(
+      title: 'Event Reminder',
+      body: 'Event will start in 2 hours',
+      scheduled: true,
+      interval: twoHoursBefore,
+    );
+    await NotificationService.showNotification(
+      title: 'Event Reminder',
+      body: '$eventName Event will start in 1 hour',
+      scheduled: true,
+      interval: oneHourBefore,
+    );
+    await NotificationService.showNotification(
+      title: 'Event Reminder',
+      body: 'Event will start in 10 minutes',
+      scheduled: true,
+      interval: tenMinutesBefore,
+    );
+    await NotificationService.showNotification(
+      title: 'Event Reminder',
+      body: 'Event is starting now',
+      scheduled: true,
+      interval: eventStarts,
+    );
   }
 
   void handlePaymentError(PaymentFailureResponse response) {

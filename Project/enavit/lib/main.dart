@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
@@ -9,6 +10,7 @@ import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/notification_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
+import 'package:enavit/services/notification_service.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +57,9 @@ Future main() async {
         jsonDecode(currentUserDataString); //null not checked properly
     userRole = currentUserData["role"];
   }
+  await NotificationService.initializeNotification();
+  
+  
 
 //   tz.initializeTimeZones();
 
@@ -80,6 +85,21 @@ class Enavit extends StatefulWidget {
 }
 
 class EnavitState extends State<Enavit> {
+
+  @override
+  void initState() {
+    super.initState();
+    checkNotificationPermission();
+  }
+
+
+  Future<void> checkNotificationPermission() async {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
