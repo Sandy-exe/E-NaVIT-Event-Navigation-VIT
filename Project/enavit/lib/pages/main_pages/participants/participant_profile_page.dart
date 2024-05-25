@@ -190,7 +190,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             icon: FontAwesomeIcons.users,
                             onTap: () {
                               Navigator.pushNamed(context, '/Following_clubs');
-
+                            },
+                            role: role,
+                          ),
+                          const SizedBox(height: 15),
+                                                    ProfileMenuWidget(
+                            text: 'Organized Events',
+                            icon: FontAwesomeIcons.users,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/Organized_events');
                             },
                             role: role,
                           ),
@@ -222,30 +230,35 @@ class ProfileMenuWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => ListTile(
-      leading: GestureDetector(
-        onTap: () => onTap(),
-        child: Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(
-            icon,
-            color: Colors.black,
-          ),
+  Widget build(BuildContext context) => Row(
+  children: [
+    
+    const SizedBox(width: 15),
+    GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.black,
         ),
       ),
-      title: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
+    ),
+    const SizedBox(width: 20),
+    Expanded(
+      child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-      ),
-      trailing: text == "Organizer Mode"
+    ), text == "Organizer Mode"
           ? Container(
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -304,5 +317,5 @@ class ProfileMenuWidget extends StatelessWidget {
                 ),
               ),
             )
-            );
+  ]);
 }

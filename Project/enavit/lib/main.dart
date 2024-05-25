@@ -10,6 +10,7 @@ import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/notification_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/view_organized_events_page.dart';
 import 'package:enavit/services/notification_service.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -58,6 +59,9 @@ Future main() async {
     userRole = currentUserData["role"];
   }
   await NotificationService.initializeNotification();
+
+  bool role = await securestorage.reader(key: 'roleState') == "true"? true : false;
+
   
   
 
@@ -70,15 +74,16 @@ Future main() async {
 
   runApp(
 
-    Enavit(isLoggedIn: isLoggedIn, userRole: userRole),
+    Enavit(isLoggedIn: isLoggedIn, userRole: userRole, role: role),
   );
 }
 
 class Enavit extends StatefulWidget {
   final bool isLoggedIn;
   final int userRole;
+  final bool role;
 
-  const Enavit({super.key, required this.isLoggedIn, required this.userRole});
+  const Enavit({super.key, required this.isLoggedIn, required this.userRole, required this.role});
 
   @override
   EnavitState createState() => EnavitState();
@@ -124,7 +129,7 @@ class EnavitState extends State<Enavit> {
           initialRoute: widget.isLoggedIn
               ? (widget.userRole == 0
                   ? '/approver_index'
-                  : (widget.userRole == 1 ? '/organiser_index' : '/participant_index'))
+                  : (widget.userRole == 1 && widget.role ? '/organiser_index' : '/participant_index'))
               : '/',
           //initialRoute: '/',
           routes: {
@@ -142,6 +147,7 @@ class EnavitState extends State<Enavit> {
             '/Liked_events': (context) => const LikedEvents(),
             '/Following_clubs': (context) => const FollowedClubs(),
             '/Notification_page' : (context) => const NotificationPage(),
+            '/Organized_events'  : (context) => const OrganizedEvents(),
 
             //organisers
             '/organiser_index': (context) => const OIndexPage(),

@@ -204,87 +204,91 @@ class ProfileMenuWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => ListTile(
-      leading: GestureDetector(
-        onTap: () => onTap(),
-        child: Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: Colors.grey[300],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(
-            icon,
-            color: Colors.black,
+  Widget build(BuildContext context) => Row(children: [
+        const SizedBox(width: 15),
+        GestureDetector(
+          onTap: () => onTap(),
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              icon,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      title: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
+        const SizedBox(width: 20),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
-      ),
-      trailing: text == "Organizer Mode"
-          ? Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Transform.scale(
-                scale: 0.65,
-                child: LiteRollingSwitch(
-                  width: 120.0,
-                  value: role=="true" ? true : false,
-                  textOn: 'ON',
-                  textOff: 'OFF',
-                  textOnColor: Colors.white,
-                  textOffColor: Colors.white,
-                  colorOn: const Color.fromRGBO(0, 200, 83, 1),
-                  colorOff: const Color.fromRGBO(213, 0, 0, 1),
-                  iconOn: Icons.done,
-                  iconOff: Icons.remove_circle_outline,
-                  textSize: 20.0,
-                  onChanged: (bool state) {
-                    if (state) {
-                      updateRoleStateSecure(state.toString());
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/organiser_index', (r) => false);
-                    } else {
-                      updateRoleStateSecure(state.toString());
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/participant_index', (r) => false);
-                    }
-                  },
-                  onTap: () {
-                    debugPrint('Click');
-                    //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
-                  },
-                  onDoubleTap: () {
-                    debugPrint('Double Tap');
-                  },
-                  onSwipe: () {
-                    debugPrint('Swipe');
-                  },
-                ),
-              ))
-          : Padding(
-              padding: const EdgeInsets.only(left: 50.0),
-              child: Container(
-                height: 40,
-                width: 125,
+        text == "Organizer Mode"
+            ? Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(
-                  FontAwesomeIcons.angleRight,
-                  size: 15,
-                  color: Colors.black,
+                child: Transform.scale(
+                  scale: 0.65,
+                  child: LiteRollingSwitch(
+                    width: 120.0,
+                    value: role == "true" ? true : false,
+                    textOn: 'ON',
+                    textOff: 'OFF',
+                    textOnColor: Colors.white,
+                    textOffColor: Colors.white,
+                    colorOn: const Color.fromRGBO(0, 200, 83, 1),
+                    colorOff: const Color.fromRGBO(213, 0, 0, 1),
+                    iconOn: Icons.done,
+                    iconOff: Icons.remove_circle_outline,
+                    textSize: 20.0,
+                    onChanged: (bool state) {
+                      if (state) {
+                        updateRoleStateSecure(state.toString());
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/organiser_index', (r) => false);
+                      } else {
+                        updateRoleStateSecure(state.toString());
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/participant_index', (r) => false);
+                      }
+                    },
+                    onTap: () {
+                      debugPrint('Click');
+                      //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                    },
+                    onDoubleTap: () {
+                      debugPrint('Double Tap');
+                    },
+                    onSwipe: () {
+                      debugPrint('Swipe');
+                    },
+                  ),
+                ))
+            : Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Container(
+                  height: 40,
+                  width: 125,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    FontAwesomeIcons.angleRight,
+                    size: 15,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-            )
-            );
+              )
+      ]);
 }
