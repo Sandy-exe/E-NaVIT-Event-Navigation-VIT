@@ -93,15 +93,55 @@ Event tab
 Check profile
 
 
-NOTIFICATION:
-1) Get notification from approver/organizer when any changes are made to the event from approver/organizer (using update event button)
-by deleting the old notification with old timing to change it to new timings (After Thananjeyan's part)
-2) Send notification from approver/organizer to all participants in real Time (MOST notifications)
+
+Mostly after thanan's work----------------------
+
+ONLINE notifications:
+
+Approver Side Notifications:
+
+    Notifications Received: 
+        1) Receive notification from organizer when an event is requested for approval.  
+        2) Receive notification from participants when their role is accepted or rejected.(captain and organizers)
+        3) Receive notification when an issue is raised by the participant.
+        4) Receive notification when an issue is solved. 
+        5) Receive notification when an General announcement is made.
+        6) Receive notification when an event is created.
+        7) Receive a notification whenever there are updates to the event (triggered by the 'Update Event' button). 
+        The previous notification, which contains the old event timing, will be replaced with a new notification 
+        reflecting the updated timing.
+
+Organizer Side Notifications:
+
+    Notifications Received:
+        1) Receive notification from approver when their event is accepted or rejected.
+        2) Receive notification from participants when their role is accepted or rejected. (other organizers)
+        3) Receive notification when an issue is raised by the participant.
+        4) Receive notification when an issue is solved. 
+        5) Receive notification when an General announcement is made.
+        6) Receive notification when an event is created. 
+        7) Receive a notification whenever there are updates to the event (triggered by the 'Update Event' button). 
+        The previous notification, which contains the old event timing, will be replaced with a new notification 
+        reflecting the updated timing.
+        8) Receive notification from approver requests for a role. (captain role)
+
+Participant Side Notifications:
+
+    Notifications Received: 
+        1) Receive notification from approver when any changes are made to the event.
+        2) Receive notification from approver when role is requested for approval.
+        3) Receive notification from organizer/Approver when an announcement is made.
+        4) Receive notification when participant's issue is solved. 
+        5) Receive notification when an General announcement is made.
+        6) Receive notification when participant's issue created successfully.
+        7) Receive a notification whenever there are updates to the event (triggered by the 'Update Event' button). 
+        The previous notification, which contains the old event timing, will be replaced with a new notification 
+        reflecting the updated timing.
 
 
+OffLine notifications: 
 
-
-
+1) Event Schedule Notification
 
 
 
