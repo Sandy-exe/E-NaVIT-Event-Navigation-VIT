@@ -16,34 +16,24 @@ class ClubBio extends StatefulWidget {
 class _ClubBioState extends State<ClubBio> {
   late List<dynamic> eventList = [];
   late int eventListLength;
-
+  
   bool isFollow = false; //random
 
-  @override
-  void initState() {
-    super.initState();
-    checkFollow();
-  }
 
-  void checkFollow() async {
-    Services services = Services();
-    bool followStatus = await services.checkFollowClub(widget.club.clubId);
-    setState(() {
-      isFollow = followStatus;
-    });
-  }
+void toggleFollow() async {
+  Services services = Services();
+  bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
+  setState(() {
+    isFollow = newFollowStatus;
+  });
+}
 
-  void toggleFollow() async {
-    Services services = Services();
-    bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
-    setState(() {
-      isFollow = newFollowStatus;
-    });
-  }
+
 
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
     eventList = await service.getClubEvents(clubId);
+    isFollow = await service.checkFollowClub(clubId);
   }
 
   @override
@@ -162,7 +152,7 @@ class _ClubBioState extends State<ClubBio> {
                                                                 .bodyText1,
                                                       ),
                                                       Text(
-                                                        'Posts',
+                                                        'Events',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -260,7 +250,7 @@ class _ClubBioState extends State<ClubBio> {
                                                                 .bodyText1,
                                                       ),
                                                       Text(
-                                                        'Following',
+                                                        'Posts',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -366,12 +356,10 @@ class _ClubBioState extends State<ClubBio> {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 16.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                                         child: Text(
                                           isFollow ? 'Unfollow' : 'Follow',
-                                          style: const TextStyle(
-                                              color: Colors.white),
+                                          style: const TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     )
@@ -380,7 +368,7 @@ class _ClubBioState extends State<ClubBio> {
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 200, 10),
+                                    10, 10, 140, 10),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -405,10 +393,20 @@ class _ClubBioState extends State<ClubBio> {
                                               style: TextButton.styleFrom(
                                                   backgroundColor:
                                                       Colors.black),
+                                              child: const Text('Events',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.black),
                                               child: const Text('Bio',
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                             ),
+
                                           ],
                                         ),
                                       ),

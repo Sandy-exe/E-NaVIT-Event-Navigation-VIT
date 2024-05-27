@@ -1,0 +1,11 @@
+
+1) Approver: 
+    1) user role: 0
+    2) clubids list : clubid
+2) organizer:
+    1) user role: 1
+    1) clubids list:  clubid
+
+3) only Participant 
+    1) user Role: 2
+    1) clubids list: Empty

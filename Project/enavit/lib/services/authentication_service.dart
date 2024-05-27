@@ -67,7 +67,8 @@ class AuthenticationService {
           profileImageURL: "null", //add profile image in the beginning
           fcmToken: "",
           followingClubs: [],
-          notifications: []);
+          notifications: [],
+          clubIds: []);
       await service.addUser(newUser);
       return "success";
     } on FirebaseAuthException catch (e) {

@@ -245,6 +245,7 @@ class Services {
         favorites: List<String>.from(data['favorites']),
         followingClubs: List<String>.from(data['followingCLubs']),
         notifications: List<String>.from(data['notifications']),
+        clubIds: List<String>.from(data['clubIds']),
       ));
     }
 
@@ -757,9 +758,38 @@ class Services {
     return clubs;     
   }
 
-  
+  Future<Club> getOrganizerClubDetails() async {
     
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+
+    final club = await firestore.collection("Clubs").doc(currentUserData['clubIds'][0]).get();
+  
+    return Club(
+      clubId: club['clubId'],
+      clubName: club['clubName'],
+      bio: club['bio'],
+      email: club['email'],
+      events: List<String>.from(club['events']),
+      approvers: List<String>.from(club['approvers']),
+      followers: List<String>.from(club['followers']),
+    );
   }
+
+  Future<void> updateClubDetails(Club updatedClub) async {
+    final clubRef = firestore.collection("Clubs").doc(updatedClub.clubId);
+    await clubRef.update({
+      "clubName": updatedClub.clubName,
+      "bio": updatedClub.bio,
+      "email": updatedClub.email,
+    });
+  }
+
+
+
+
+
+}
 
 
 

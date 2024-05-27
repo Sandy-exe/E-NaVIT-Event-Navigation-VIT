@@ -1,6 +1,6 @@
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
-import 'package:enavit/pages/main_pages/club_pages/my_club_page.dart';
+import 'package:enavit/pages/main_pages/club_pages/club_page.dart';
 import 'package:flutter/material.dart';
 
 class ClubTile extends StatelessWidget {

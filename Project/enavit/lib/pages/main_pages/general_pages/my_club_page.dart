@@ -1,57 +1,54 @@
+import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/event_tile.dart';
+import 'package:enavit/pages/main_pages/general_pages/edit_my_club_page.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
 
-class ClubBio extends StatefulWidget {
-  final Club club;
-  const ClubBio({super.key, required this.club});
+class MyClubBio extends StatefulWidget {
+  const MyClubBio({super.key});
 
   @override
-  State<ClubBio> createState() => _ClubBioState();
+  State<MyClubBio> createState() => _MyClubBioState();
 }
 
-class _ClubBioState extends State<ClubBio> {
+class _MyClubBioState extends State<MyClubBio> {
   late List<dynamic> eventList = [];
   late int eventListLength;
-  
+  late Club club = Club(approvers: List.empty(),
+  clubName: "VIT", 
+  clubId: "1",
+  bio: "VIT is a club",
+  email: "sfd@sdf.com",
+  events: List.empty(),
+  followers: List.empty()
+  ); 
+
+
   bool isFollow = false; //random
 
-  @override
-  void initState() {
-    super.initState();
-    checkFollow();
-  }
 
-  void checkFollow() async {
+  void toggleFollow() async {
     Services services = Services();
-    bool followStatus = await services.checkFollowClub(widget.club.clubId);
+    bool newFollowStatus = await services.toggleFollowClubs(club.clubId);
     setState(() {
-      isFollow = followStatus;
+      isFollow = newFollowStatus;
     });
   }
 
-void toggleFollow() async {
-  Services services = Services();
-  bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
-  setState(() {
-    isFollow = newFollowStatus;
-  });
-}
-
-
-
-  Future<void> initPrefs(String clubId) async {
+  Future<void> initPrefs() async {
     Services service = Services();
-    eventList = await service.getClubEvents(clubId);
+    club = await service.getOrganizerClubDetails();
+    eventList = await service.getClubEvents(club.clubId);
+    isFollow = await service.checkFollowClub(club.clubId);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: initPrefs(widget.club.clubId),
+        future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
@@ -164,7 +161,7 @@ void toggleFollow() async {
                                                                 .bodyText1,
                                                       ),
                                                       Text(
-                                                        'Posts',
+                                                        'Events',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -262,7 +259,7 @@ void toggleFollow() async {
                                                                 .bodyText1,
                                                       ),
                                                       Text(
-                                                        'Following',
+                                                        'Posts',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -319,7 +316,7 @@ void toggleFollow() async {
                                     Column(
                                       children: [
                                         Text(
-                                          widget.club.clubName,
+                                          club.clubName,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
@@ -330,7 +327,7 @@ void toggleFollow() async {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Text(
-                                                '@${widget.club.clubName}',
+                                                '@${club.clubName}',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -368,10 +365,12 @@ void toggleFollow() async {
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
-                                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 16.0),
                                         child: Text(
                                           isFollow ? 'Unfollow' : 'Follow',
-                                          style: const TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     )
@@ -380,8 +379,9 @@ void toggleFollow() async {
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 200, 10),
-                                child: Row(
+                                    10, 10, 0, 10),
+                                child: Row(                                  
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Expanded(
                                       child: Padding(
@@ -391,28 +391,73 @@ void toggleFollow() async {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.black),
-                                              child: const Text('Posts',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                            Flexible(
+                                              flex: 1,
+                                              child: TextButton(
+                                                onPressed: () {},
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black),
+                                                child: const Text('Posts',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                              ),
                                             ),
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.black),
-                                              child: const Text('Bio',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
+                                            Flexible(
+                                              flex: 1,
+                                              child: TextButton(
+                                                onPressed: () {},
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black),
+                                                child: const Text('Events',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                              ),
                                             ),
+
+                                            
+                                            Flexible(
+                                              flex: 1,
+                                              child: TextButton(
+                                                onPressed: () {},
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.black),
+                                                child: const Text('Bio',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                              ),
+                                            ),
+                                                                       
                                           ],
                                         ),
                                       ),
                                     ),
+
+                                    const SizedBox(width: 20,),
+         
+                                    TextButton(
+                                      onPressed: () {
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditMyClub(club: club),
+                                          ),
+                                        );
+                                      },
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: Colors.black),
+                                      child: const Text('Edit Profile',
+                                          style: TextStyle(color: Colors.white)),
+                                    ),
+                                
+                                    const SizedBox(width: 20,)
+                                    
+                                
+                                
                                   ],
                                 ),
                               ),

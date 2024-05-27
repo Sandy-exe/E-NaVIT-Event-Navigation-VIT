@@ -7,10 +7,12 @@ import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/edit_my_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/notification_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_organized_events_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:enavit/services/notification_service.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -32,6 +34,10 @@ import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.d
 import 'package:provider/provider.dart';
 
 import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
+
+
+
+
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -148,12 +154,12 @@ class EnavitState extends State<Enavit> {
             '/Following_clubs': (context) => const FollowedClubs(),
             '/Notification_page' : (context) => const NotificationPage(),
             '/Organized_events'  : (context) => const OrganizedEvents(),
+            '/My_club' : (context) => const MyClubBio(),
 
             //organisers
             '/organiser_index': (context) => const OIndexPage(),
             '/organiser_profile': (context) => const OProfilePage(),
-            '/organiser_update_profile': (context) =>
-                const OProfileUpdatePage(),
+            '/organiser_update_profile': (context) => const OProfileUpdatePage(),
             //approvers
             '/approver_index': (context) => const AIndexPage(),
             '/approver_profile': (context) => const AProfilePage(),

@@ -156,6 +156,7 @@ class Users {
   final List<String> favorites;
   final List<String> followingClubs;
   final List<String> notifications;
+  final List<String> clubIds;
 
 
   Users({
@@ -174,5 +175,6 @@ class Users {
     required this.favorites,
     required this.followingClubs,
     required this.notifications,
+    required this.clubIds,
   });
 }
