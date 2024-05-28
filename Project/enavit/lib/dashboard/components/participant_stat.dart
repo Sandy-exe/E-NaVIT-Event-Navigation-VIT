@@ -19,8 +19,8 @@ class ParticipantStat extends StatefulWidget {
 class ParticipantStatState extends State<ParticipantStat> {
 
   late Map<String, dynamic> statData;
-  late List<ParticipantDetailsCard> participantList;
-  late int totalParticipants;
+  late List<ParticipantDetailsCard> participantList=[];
+  late int totalParticipants = 0;
   
   @override
   void initState() {

@@ -17,18 +17,16 @@ class MyClubBio extends StatefulWidget {
 class _MyClubBioState extends State<MyClubBio> {
   late List<dynamic> eventList = [];
   late int eventListLength;
-  late Club club = Club(approvers: List.empty(),
-  clubName: "VIT", 
-  clubId: "1",
-  bio: "VIT is a club",
-  email: "sfd@sdf.com",
-  events: List.empty(),
-  followers: List.empty()
-  ); 
-
+  late Club club = Club(
+      approvers: List.empty(),
+      clubName: "VIT",
+      clubId: "1",
+      bio: "VIT is a club",
+      email: "sfd@sdf.com",
+      events: List.empty(),
+      followers: List.empty());
 
   bool isFollow = false; //random
-
 
   void toggleFollow() async {
     Services services = Services();
@@ -283,7 +281,7 @@ class _MyClubBioState extends State<MyClubBio> {
                                                     const EdgeInsetsDirectional
                                                         .fromSTEB(5, 0, 0, 0),
                                                 child: Container(
-                                                  width: 30,
+                                                  width: 35,
                                                   height: 50,
                                                   decoration: BoxDecoration(
                                                     color: Colors.white,
@@ -291,11 +289,45 @@ class _MyClubBioState extends State<MyClubBio> {
                                                         BorderRadius.circular(
                                                             10),
                                                   ),
-                                                  child: const Icon(
-                                                    Icons
-                                                        .arrow_drop_down_rounded,
-                                                    color: Color(0xFF333333),
-                                                    size: 20,
+                                                  child: PopupMenuButton<int>(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    color: Colors.white,
+                                                    icon: const Icon(
+                                                      Icons.more_horiz,
+                                                      color: Color(0xFF333333),
+                                                      size: 20,
+                                                    ),
+                                                    itemBuilder: (context) => [
+                                                      const PopupMenuItem(
+                                                        value: 1,
+                                                        child: Text("Edit Profile"),
+                                                      ),
+                                                      const PopupMenuItem(
+                                                        value: 2,
+                                                        child: Text("View Stats"),
+                                                      ),
+                                                    ],
+                                                    onSelected: (value) {
+
+                                                      if (value == 1) {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                EditMyClub(club: club),
+                                                          ),
+                                                        );
+                                                      }
+
+                                                      if (value == 2) {
+                                                        print("sdf");
+                                                      }
+                                                    },
                                                   ),
                                                 ),
                                               ),
@@ -379,9 +411,8 @@ class _MyClubBioState extends State<MyClubBio> {
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 0, 10),
-                                child: Row(                                  
-                                  mainAxisSize: MainAxisSize.max,
+                                    10, 10, 140, 10),
+                                child: Row(
                                   children: [
                                     Expanded(
                                       child: Padding(
@@ -391,76 +422,41 @@ class _MyClubBioState extends State<MyClubBio> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            Flexible(
-                                              flex: 1,
-                                              child: TextButton(
-                                                onPressed: () {},
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.black),
-                                                child: const Text('Posts',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                              ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.black),
+                                              child: const Text('Posts',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
                                             ),
-                                            Flexible(
-                                              flex: 1,
-                                              child: TextButton(
-                                                onPressed: () {},
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.black),
-                                                child: const Text('Events',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                              ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.black),
+                                              child: const Text('Events',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
                                             ),
-
-                                            
-                                            Flexible(
-                                              flex: 1,
-                                              child: TextButton(
-                                                onPressed: () {},
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.black),
-                                                child: const Text('Bio',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                              ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.black),
+                                              child: const Text('Bio',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
                                             ),
-                                                                       
                                           ],
                                         ),
                                       ),
                                     ),
-
-                                    const SizedBox(width: 20,),
-         
-                                    TextButton(
-                                      onPressed: () {
-
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditMyClub(club: club),
-                                          ),
-                                        );
-                                      },
-                                      style: TextButton.styleFrom(
-                                          backgroundColor: Colors.black),
-                                      child: const Text('Edit Profile',
-                                          style: TextStyle(color: Colors.white)),
-                                    ),
-                                
-                                    const SizedBox(width: 20,)
-                                    
-                                
-                                
                                   ],
                                 ),
                               ),
+                             
                               Container(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     0, 0, 0, 0),

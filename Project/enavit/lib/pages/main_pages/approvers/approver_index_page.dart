@@ -1,6 +1,7 @@
 
 import 'package:enavit/pages/main_pages/approvers/approver_event_creation_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_event_list_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
 import '../../../components/approver_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
@@ -31,14 +32,14 @@ class _AIndexPageState extends State<AIndexPage> {
   final List<Widget> pages = [
     const HomePage(),
     const CompleteEventDetailPage(),
-    const ApproverEvents(),
+    const MyClubBio(),
     const AProfilePage(),
   ];
 
   final List<String> pageTitles = [
     'Home',
     'Approvals',
-    'Stats',
+    'My Club',
     'Profile',
   ];
 
@@ -52,7 +53,7 @@ class _AIndexPageState extends State<AIndexPage> {
       appBar: AppBar(
         title: Text(pageTitles[selectedIndex]),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.grey[300],
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(

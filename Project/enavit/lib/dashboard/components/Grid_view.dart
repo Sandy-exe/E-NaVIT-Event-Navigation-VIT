@@ -19,8 +19,8 @@ class StatInfoCardListView extends StatefulWidget {
 class StatInfoCardListViewState extends State<StatInfoCardListView> {
 
   late Map<String, dynamic> statData;
-  late List attendanceIssue;
-  late List financeCard;
+  late List attendanceIssue= [];
+  late List financeCard=[];
   
   @override
   void initState() {

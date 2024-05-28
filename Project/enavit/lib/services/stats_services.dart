@@ -12,7 +12,7 @@ class Stats {
         await secureStorage.reader(key: "currentUserData") ?? "null");
     //List<Event> eventListObj = jsonDecode(await secureStorage.reader(key: "events")?? "null");
 
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0 || currentUserData['role'] == 1) {
       Map<String, dynamic> statdata = {};
       statdata['totalParticipants'] = event.participants.length;
       statdata['attendancePresent'] = event.attendancePresent;
