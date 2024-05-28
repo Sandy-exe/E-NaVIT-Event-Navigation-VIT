@@ -63,6 +63,8 @@ dependencies:
   android_alarm_manager_plus:
   intl:
   sqflite:
+  go_router:
+  app_links:
 
   timeline_tile:
 
