@@ -172,6 +172,17 @@ class _AProfilePageState extends State<AProfilePage> {
                               Navigator.pushNamed(context, '/Following_clubs');
                             },
                           ),
+
+                          const SizedBox(height: 15),
+                          ProfileMenuWidget(
+                            text: 'Organized Events',
+                            icon: Icons.star,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/Organized_events');
+                            },
+                          ),
+
+                          
                         ],
                       ))),
             );

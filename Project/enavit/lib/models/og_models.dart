@@ -6,33 +6,51 @@ class Approval {
   final String approvalId;
   final String eventName;
   final String location;
-  final String fee;
+  //final String fee;
   final List<String> organisers;
-  final int likes;
-  final Map<String, String> comments;
-  final List<String> participants;
-  final String eventImageURL;
+  //final int likes;
+  //final Map<String, String> comments;
+  //final List<String> participants;
+  //final String eventImageURL;
   final int approved;
-
+  final String discussionPoints;
+  final String eventType;
+  final String eventCategory;
+  final String fdpProposedBy;
+  final String schoolCentre;
+  final String coordinator1;
+  final String coordinator2;
+  final String coordinator3;
+  final String budget;
   //Add this line
 
-  Approval({
-    required this.clubId,
-    required this.dateTime,
-    required this.description,
-    required this.approvalId,
-    required this.eventName,
-    required this.location,
-    required this.organisers,
-    required this.comments,
-    required this.participants,
-    required this.likes,
-    required this.fee,
-    required this.eventImageURL,
-    required this.approved,
-    // Add this line
-  });
+  Approval(
+      {required this.clubId,
+      required this.dateTime,
+      required this.description,
+      required this.approvalId,
+      required this.eventName,
+      required this.location,
+      required this.organisers,
+      //required this.comments,
+      //required this.participants,
+      //required this.likes,
+      //required this.fee,
+      //required this.eventImageURL,
+      required this.approved,
+      required this.discussionPoints,
+      required this.eventType,
+      required this.eventCategory,
+      required this.fdpProposedBy,
+      required this.schoolCentre,
+      required this.coordinator1,
+      required this.coordinator2,
+      required this.coordinator3,
+      required this.budget
+      // Add this line
+      });
 }
+
 
 class Club {
   final String clubId;

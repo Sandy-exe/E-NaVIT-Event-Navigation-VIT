@@ -1,24 +1,16 @@
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
-import 'package:enavit/pages/main_pages/approvers/approver_approve_approval_event_page.dart';
 import 'package:flutter/material.dart';
 
-class ApprovalTile extends StatelessWidget {
+class PendingTile extends StatelessWidget {
   final Approval approval;
-  const ApprovalTile({super.key, required this.approval});
+  const PendingTile({super.key, required this.approval});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ApprovalPage(
-              approval: approval,
-            ),
-          ),
-        );
+        //add pending page later
       },
       child: Container(
         margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),

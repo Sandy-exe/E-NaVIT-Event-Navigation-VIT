@@ -9,6 +9,7 @@ import 'package:enavit/components/home_search_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 // import 'package:enavit/services/authentication_service.dart';
 
 class Services {
@@ -370,9 +371,6 @@ class Services {
     };
     await docref.set(obj);
 
-    // update approved status
-    final approvalRef = firestore.collection("Approvals").doc(event.eventId);
-    await approvalRef.update({"approved": 1});
 
     //update club events
     final clubref = firestore.collection("Clubs").doc(event.clubId);
@@ -383,58 +381,115 @@ class Services {
     await clubref.update({"events": events});
   }
 
+  Future<void> approveApproval(String approvalID, Approval approval) async {
+    final approvalRef = firestore.collection("Approvals").doc(approvalID);
+    //await approvalRef.update({"approved": 1});
+
+    //final docref = firestore.collection("app_users").doc(uid);
+    // AuthenticationService auth = AuthenticationService();
+    // auth.updateMail(newinfo["email"]);
+    await approvalRef.update({
+      "clubId": approval.clubId,
+      "dateTime": approval.dateTime,
+      "description": approval.description,
+      //approvalId": approval.approvalId,
+      "eventName": approval.eventName,
+      "location": approval.location,
+      //"fee": approval.fee,
+      "organisers": approval.organisers,
+      //"comments": approval.comments,
+      //"participants": approval.participants,
+      //"likes": approval.likes,
+      //"eventImageURL": approval.eventImageURL,
+      "approved": 1,
+      "discussionPoints": approval.discussionPoints,
+      "eventType": approval.eventType,
+      "eventCategory": approval.eventCategory,
+      "fdpProposedBy": approval.fdpProposedBy,
+      "schoolCentre": approval.schoolCentre,
+      "coordinator1": approval.coordinator1,
+      "coordinator2": approval.coordinator2,
+      "coordinator3": approval.coordinator3,
+      "budget": approval.budget
+    }); //push the object
+  }
+
+  Future<void> closeApproval(String approvalID) async {
+    final approvalRef = firestore.collection("Approvals").doc(approvalID);
+    //await approvalRef.update({"approved": 1});
+
+    //final docref = firestore.collection("app_users").doc(uid);
+    // AuthenticationService auth = AuthenticationService();
+    // auth.updateMail(newinfo["email"]);
+    await approvalRef.update({
+      //"comments": approval.comments,
+      //"participants": approval.participants,
+      //"likes": approval.likes,
+      //"eventImageURL": approval.eventImageURL,1
+      "approved": 3,
+    }); //push the object
+  }
+
+  Future<String> generateUniqueApprovalId() async {
+    var uuid = Uuid();
+    String uniqueApprovalId;
+
+    // Fetch all existing approval IDs
+    final approvalRefs = await firestore.collection("Approvals").get();
+    final existingApprovalIds = approvalRefs.docs.map((doc) => doc.id).toList();
+
+    do {
+      uniqueApprovalId = uuid.v1();
+    } while (existingApprovalIds.contains(uniqueApprovalId));
+
+    return uniqueApprovalId;
+  }
+
   Future<void> addApproval(Approval approval) async {
-    final docref =
-        firestore.collection("Approvals").doc(approval.approvalId.toString());
+    print(approval);
+    String approverID = await generateUniqueApprovalId();
+
+    print(approverID);
     Map<String, dynamic> obj = {
       "clubId": approval.clubId,
       "dateTime": approval.dateTime,
       "description": approval.description,
-      "approvalId": approval.approvalId,
+      "approvalId": approverID,
       "eventName": approval.eventName,
       "location": approval.location,
-      "fee": approval.fee,
+      //"fee": approval.fee,
       "organisers": approval.organisers,
-      "comments": approval.comments,
-      "participants": approval.participants,
-      "likes": approval.likes,
-      "eventImageURL": approval.eventImageURL,
-      "approved": approval.approved
+      //"comments": approval.comments,
+      //"participants": approval.participants,
+      //"likes": approval.likes,
+      //"eventImageURL": approval.eventImageURL,
+      "approved": approval.approved,
+      "discussionPoints": approval.discussionPoints,
+      "eventType": approval.eventType,
+      "eventCategory": approval.eventCategory,
+      "fdpProposedBy": approval.fdpProposedBy,
+      "schoolCentre": approval.schoolCentre,
+      "coordinator1": approval.coordinator1,
+      "coordinator2": approval.coordinator2,
+      "coordinator3": approval.coordinator3,
+      "budget": approval.budget
     };
+
     for (var organiser in approval.organisers) {
-      var orgRef = firestore.collection("app_users").doc(organiser);
-      var org = await orgRef.get();
-      if (org.data() == null) {
-        orgRef = firestore
-            .collection("app_users")
-            .doc("kBm7TDAkjyTSV8DisavuuuthSs92");
-        org = await orgRef.get();
-        obj = {
-          "clubId": approval.clubId,
-          "dateTime": approval.dateTime,
-          "description": approval.description,
-          "approvalId": approval.approvalId,
-          "eventName": approval.eventName,
-          "location": approval.location,
-          "fee": approval.fee,
-          "organisers": ["kBm7TDAkjyTSV8DisavuuuthSs92"],
-          "comments": approval.comments,
-          "participants": approval.participants,
-          "likes": approval.likes,
-          "eventImageURL": approval.eventImageURL,
-          "approved": approval.approved
-        };
-      }
-      print("done");
-      print(org.data());
+      print(organiser);
+      final orgRef = firestore.collection("app_users").doc(organiser);
+      final org = await orgRef.get();
       Map<String, dynamic> orgData = org.data()!;
       List<String> approvalEvents =
           List<String>.from(orgData["approval_events"]);
-      approvalEvents.add(approval.approvalId);
+      approvalEvents.add(approverID);
       await orgRef.update({"approval_events": approvalEvents});
+
+      print("approval_events: $approvalEvents");
     }
 
-    await docref.set(obj);
+    await firestore.collection("Approvals").doc(approverID).set(obj);
+
 
     //update club events
     // final clubref = firestore.collection("Clubs").doc(event.clubId);
@@ -447,10 +502,14 @@ class Services {
 
   Future<List<Approval>> getApprovalList(String organiserId) async {
     List<Approval> approvalList = [];
+    
     final orgRef = firestore.collection("app_users").doc(organiserId);
     final org = await orgRef.get();
     Map<String, dynamic> currentOrgData = org.data()!;
+    print("organiserId: $organiserId");
+    print(currentOrgData);
     for (var approvalId in currentOrgData['approval_events']) {
+      
       final approval =
           await firestore.collection("Approvals").doc(approvalId).get();
       Map<String, dynamic> approvalData = approval.data()!;
@@ -463,13 +522,84 @@ class Services {
             approvalId: approvalData['approvalId'],
             eventName: approvalData['eventName'],
             location: approvalData['location'],
-            fee: approvalData['fee'],
+            //fee: approvalData['fee'],
             organisers: List<String>.from(approvalData['organisers']),
-            comments: Map<String, String>.from(approvalData['comments']),
-            participants: List<String>.from(approvalData['participants']),
-            likes: approvalData['likes'],
-            eventImageURL: approvalData['eventImageURL'] ?? "null",
+            //comments: Map<String, String>.from(approvalData['comments']),
+            //participants: List<String>.from(approvalData['participants']),
+            //likes: approvalData['likes'],
+            //eventImageURL: approvalData['eventImageURL'] ?? "null",
             approved: approvalData['approved'],
+            discussionPoints:
+                approvalData['discussionPoints'] ?? "old doc" ?? "old doc",
+            eventType: approvalData['eventType'] ?? "old doc" ?? "old doc",
+            eventCategory:
+                approvalData['eventCategory'] ?? "old doc" ?? "old doc",
+            fdpProposedBy:
+                approvalData['fdpProposedBy'] ?? "old doc" ?? "old doc",
+            schoolCentre:
+                approvalData['schoolCentre'] ?? "old doc" ?? "old doc",
+            coordinator1:
+                approvalData['coordinator1'] ?? "old doc" ?? "old doc",
+            coordinator2:
+                approvalData['coordinator2'] ?? "old doc" ?? "old doc",
+            coordinator3:
+                approvalData['coordinator3'] ?? "old doc" ?? "old doc",
+            budget: approvalData['budget'] ?? "old doc" ?? "old doc",
+          ),
+        );
+      }
+    }
+    return approvalList;
+  }
+
+
+  
+
+  Future<List<Approval>> getApprovedApprovalsList(String organiserId) async {
+
+    print("organiserId: $organiserId");
+    List<Approval> approvalList = [];
+    final orgRef = firestore.collection("app_users").doc(organiserId);
+    final org = await orgRef.get();
+    Map<String, dynamic> currentOrgData = org.data()!;
+    print(currentOrgData['approval_events']);
+    for (var approvalId in currentOrgData['approval_events']) {
+      print(approvalId);
+      final approval =
+          await firestore.collection("Approvals").doc(approvalId).get();
+      Map<String, dynamic> approvalData = approval.data()!;
+      if (approvalData['approved'] == 1) {
+        approvalList.add(
+          Approval(
+            clubId: approvalData['clubId'],
+            dateTime: approvalData['dateTime'],
+            description: approvalData['description'],
+            approvalId: approvalData['approvalId'],
+            eventName: approvalData['eventName'],
+            location: approvalData['location'],
+            //fee: approvalData['fee'],
+            organisers: List<String>.from(approvalData['organisers']),
+            //comments: Map<String, String>.from(approvalData['comments']),
+            //participants: List<String>.from(approvalData['participants']),
+            //likes: approvalData['likes'],
+            //eventImageURL: approvalData['eventImageURL'] ?? "null",
+            approved: approvalData['approved'],
+            discussionPoints:
+                approvalData['discussionPoints'] ?? "old doc" ?? "old doc",
+            eventType: approvalData['eventType'] ?? "old doc" ?? "old doc",
+            eventCategory:
+                approvalData['eventCategory'] ?? "old doc" ?? "old doc",
+            fdpProposedBy:
+                approvalData['fdpProposedBy'] ?? "old doc" ?? "old doc",
+            schoolCentre:
+                approvalData['schoolCentre'] ?? "old doc" ?? "old doc",
+            coordinator1:
+                approvalData['coordinator1'] ?? "old doc" ?? "old doc",
+            coordinator2:
+                approvalData['coordinator2'] ?? "old doc" ?? "old doc",
+            coordinator3:
+                approvalData['coordinator3'] ?? "old doc" ?? "old doc",
+            budget: approvalData['coordinator3'] ?? "old doc" ?? "old doc",
           ),
         );
       }

@@ -8,19 +8,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'dart:io';
 
-class EventCreationPage extends StatefulWidget {
-  const EventCreationPage({super.key});
+class CreateEventPage extends StatefulWidget {
+  const CreateEventPage({super.key});
 
   @override
-  _EventCreationPageState createState() => _EventCreationPageState();
+  _CreateEventPageState createState() => _CreateEventPageState();
 }
 
-class _EventCreationPageState extends State<EventCreationPage> {
+class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController _startTimeTEC = TextEditingController();
   final TextEditingController _endTimeTEC = TextEditingController();
   final TextEditingController _eventNameTEC = TextEditingController();
   final TextEditingController _eventDescriptionTEC = TextEditingController();
   final TextEditingController _eventLocationTEC = TextEditingController();
+  final TextEditingController _eventApproverTEC = TextEditingController();
+  final TextEditingController _eventClubTEC = TextEditingController();
   final TextEditingController _eventImageURL = TextEditingController();
   final TextEditingController _discussionPointsTEC = TextEditingController();
   final TextEditingController _eventTypeTEC = TextEditingController();
@@ -31,6 +33,8 @@ class _EventCreationPageState extends State<EventCreationPage> {
   final TextEditingController _coordinator2TEC = TextEditingController();
   final TextEditingController _coordinator3TEC = TextEditingController();
   final TextEditingController _budgetTEC = TextEditingController();
+  final TextEditingController _eventFeeTEC = TextEditingController();
+
 
   File? _image;
   final picker = ImagePicker();
@@ -70,6 +74,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
       downloadUrl = await ref.getDownloadURL();
       _eventImageURL.text = downloadUrl!;
     });
+    // var imageURL = "";
   }
 
   showSnackBar(String message, Duration d) {
@@ -390,10 +395,57 @@ class _EventCreationPageState extends State<EventCreationPage> {
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(
+                    height: 16,
+                  ),
+                  TextField(
+                    controller: _eventFeeTEC,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        prefixIcon: const Icon(Icons.money),
+                        labelText: 'Event fees',
+                        hintText: 'Enter event fee',
+                        isDense: true),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      onPressed: () async {
+                        ImagePickerMethod();
+                      },
+                      child: _image == null
+                          ? const Text(
+                              "Choose Image",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text(
+                              "Change Image",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            )),
+                  //view image
+                  _buildImage(context, _image),
+                  const SizedBox(
                     height: 30,
                   ),
                   SizedBox(
-                    width: 260,
+                    width: 160,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -403,10 +455,10 @@ class _EventCreationPageState extends State<EventCreationPage> {
                       ),
                       onPressed: () {
                         // Implement event creation logic here
-                        addApproval();
+                        addEvent();
                       },
                       child: const Text(
-                        'Create Approval Request',
+                        'Send Approval Request',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -424,37 +476,115 @@ class _EventCreationPageState extends State<EventCreationPage> {
     );
   }
 
-  //create function to add approval using service and check if approval is updated and user approval event field is getting updated
+
+  Widget _buildImage(BuildContext context, [File? image]) {
+    if (image != null) {
+      return Image.file(image);
+    } else {
+      return const Text('Take a picture');
+    }
+  }
+
+
+  Future addEvent() async {
+    // await uploadImage().whenComplete(() =>
+    //     showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
+    await uploadImage().whenComplete(() =>
+        showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
+    Services services = Services();
+    //await services.closeApproval(widget.approval.approvalId);
+    await services.addEvent(
+      Event(
+        clubId: _eventClubTEC.text,
+        dateTime: {
+          "endTime": DateTime.parse(_endTimeTEC.text),
+          "startTime": DateTime.parse(_startTimeTEC.text),
+        },
+        description: _eventDescriptionTEC.text,
+        eventId: _eventNameTEC.text,
+        eventName: _eventNameTEC.text,
+        location: _eventLocationTEC.text,
+        organisers: [_eventApproverTEC.text],
+        comments: {"user1": "naice"},
+        participants: ["part1", "part2"],
+        likes: 100,
+        fee: _eventFeeTEC.text, //widget.approval.fee,
+        eventImageURL: _eventImageURL.text, //widget.approval.eventImageURL,
+        discussionPoints: _discussionPointsTEC.text,
+        eventType: _eventTypeTEC.text,
+        eventCategory: _eventCategoryTEC.text,
+        fdpProposedBy: _fdpProposedByTEC.text,
+        schoolCentre: _schoolCentreTEC.text,
+        coordinator1: _coordinator1TEC.text,
+        coordinator2: _coordinator2TEC.text,
+        coordinator3: _coordinator3TEC.text,
+        attendancePresent: "0",
+        issues: {},
+        expense: "0",
+        revenue: "0",
+        budget: _budgetTEC.text,
+        expectedRevenue: "0",
+      ),
+    );
+
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            title: Text('Upload Status'),
+            content: Text('Event published successfully'),
+          );
+        },
+      );
+
+      if (mounted) {
+        Future.delayed(const Duration(seconds: 2), () async {
+          SecureStorage secureStorage = SecureStorage();
+          String userData =
+              await secureStorage.reader(key: "currentUserData") ?? "null";
+          //if (userData == "null") return;
+          Map<String, dynamic> currentUserData = jsonDecode(userData);
+          if (currentUserData["role"] == 1) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, "/organiser_index", (r) => false);
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, "/approver_index", (r) => false);
+          }
+        });
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   Future addApproval() async {
-    
-    SecureStorage secureStorage = SecureStorage();
-    String userData =
-        await secureStorage.reader(key: "currentUserData") ?? "null";
-
-    if (userData == "null") return;
-    Map<String, dynamic> currentUserData = jsonDecode(userData);
-    print(currentUserData);
-    String clubId = currentUserData["clubIds"][0];
-
-    Club clubDetail = await Services().getOrganizerClubDetails();
-    String approverId = clubDetail.approvers[0];
-
-    List<String> approverIDs = [approverId,currentUserData["userid"]];
-
-
     Services services = Services();
     await services.addApproval(
       Approval(
-        clubId: clubId,
+        clubId: _eventClubTEC.text,
         dateTime: {
           "endTime": DateTime.parse(_endTimeTEC.text),
           "startTime": DateTime.parse(_startTimeTEC.text)
         },
         description: _eventDescriptionTEC.text,
-        approvalId: "IDS",
+        approvalId: _eventNameTEC.text,
         eventName: _eventNameTEC.text,
         location: _eventLocationTEC.text,
-        organisers: approverIDs,
+        organisers: [_eventApproverTEC.text],
         approved: 0,
         discussionPoints: _discussionPointsTEC.text,
         eventType: _eventTypeTEC.text,
@@ -486,6 +616,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
         });
       }
     }
+
   }
 
   void dateTimePickerStartWidget(BuildContext context) {

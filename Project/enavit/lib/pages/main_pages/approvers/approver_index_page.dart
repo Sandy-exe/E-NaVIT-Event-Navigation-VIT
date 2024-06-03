@@ -1,6 +1,5 @@
 
-import 'package:enavit/pages/main_pages/approvers/approver_event_creation_page.dart';
-import 'package:enavit/pages/main_pages/approvers/approver_event_list_page.dart';
+import 'package:enavit/pages/main_pages/approvers/approver_approve_publish_create_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
 import '../../../components/approver_bottom_nav_bar.dart';
@@ -31,8 +30,9 @@ class _AIndexPageState extends State<AIndexPage> {
   //pages to display
   final List<Widget> pages = [
     const HomePage(),
-    const CompleteEventDetailPage(),
+    const ChoiceApprovePublishCreatePage(),
     const MyClubBio(),
+
     const AProfilePage(),
   ];
 

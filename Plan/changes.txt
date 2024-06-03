@@ -6,3 +6,21 @@
 ///
 
 1) find better way to load the liked Events instead of checking with cloud everytime
+
+
+Log of Changes:
+1) for now every organizer has only one club (use a list)
+2) every club has only one approver for now (use a list)
+
+some aspects: 
+    1) role variable:
+        2 ==> participant
+        1 ==> organizer
+        0 ==> approver
+    2) Approval status variable:
+        0 ==> pending
+        1 ==> approved
+        2 ==> rejected
+        3 ==> Ended
+    
+

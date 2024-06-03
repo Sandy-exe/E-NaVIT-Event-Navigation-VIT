@@ -65,8 +65,10 @@ dependencies:
   sqflite:
   go_router:
   app_links:
+  uuid:
 
   timeline_tile:
+  boxy:
 
   flutter_local_notifications:
   awesome_notifications:

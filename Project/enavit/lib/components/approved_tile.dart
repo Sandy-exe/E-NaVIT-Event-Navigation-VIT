@@ -1,11 +1,12 @@
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_approve_approval_event_page.dart';
+import 'package:enavit/pages/main_pages/publish_pages/complete_publish_page.dart';
 import 'package:flutter/material.dart';
 
-class ApprovalTile extends StatelessWidget {
+class ApprovedTile extends StatelessWidget {
   final Approval approval;
-  const ApprovalTile({super.key, required this.approval});
+  const ApprovedTile({super.key, required this.approval});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class ApprovalTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ApprovalPage(
+            builder: (context) => PublishEventPage(
               approval: approval,
             ),
           ),
