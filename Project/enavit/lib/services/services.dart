@@ -381,6 +381,23 @@ class Services {
     await clubref.update({"events": events});
   }
 
+
+  Future<void> rejectApproval(String approvalID) async {
+    final approvalRef = firestore.collection("Approvals").doc(approvalID);
+    //await approvalRef.update({"approved": 1});
+
+    //final docref = firestore.collection("app_users").doc(uid);
+    // AuthenticationService auth = AuthenticationService();
+    // auth.updateMail(newinfo["email"]);
+    await approvalRef.update({
+      //"comments": approval.comments,
+      //"participants": approval.participants,
+      //"likes": approval.likes,
+      //"eventImageURL": approval.eventImageURL,1
+      "approved": 2,
+    }); //push the object
+  }
+
   Future<void> approveApproval(String approvalID, Approval approval) async {
     final approvalRef = firestore.collection("Approvals").doc(approvalID);
     //await approvalRef.update({"approved": 1});
@@ -513,7 +530,7 @@ class Services {
       final approval =
           await firestore.collection("Approvals").doc(approvalId).get();
       Map<String, dynamic> approvalData = approval.data()!;
-      if (approvalData['approved'] == 0) {
+      if (approvalData['approved'] == 0 || approvalData['approved'] == 2) {
         approvalList.add(
           Approval(
             clubId: approvalData['clubId'],

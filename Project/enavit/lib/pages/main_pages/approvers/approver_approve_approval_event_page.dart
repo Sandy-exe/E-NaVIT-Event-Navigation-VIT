@@ -373,7 +373,29 @@ class _ApprovalPageState extends State<ApprovalPage> {
                     approveApproval();
                   },
                   child: const Text(
-                    "Approve event",
+                    "Approve Request",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  onPressed: () async {
+                    RejectApproval();
+                  },
+                  child: const Text(
+                    "Reject Request",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -403,7 +425,29 @@ class _ApprovalPageState extends State<ApprovalPage> {
     // Return the date and time in ISO 8601 format
     return "$year-$month-$day $hour:$minute:$second";
   }
+  
+  Future RejectApproval() async {
+    Services services = Services();
+    await services.rejectApproval(widget.approval.approvalId);
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            title: Text('Approval Status'),
+            content: Text('Rejected successfully'),
+          );
+        },
+      );
 
+      if (mounted) {
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/approver_index", (r) => false);
+        });
+      }
+    }
+  }
 
   Future approveApproval() async {
     Services services = Services();

@@ -15,7 +15,14 @@ class PendingTile extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+
+          
+          color: approval.approved == 2
+              ? Colors.red[300]
+              : approval.approved == 1
+                  ? Colors.green[300]
+                  : Colors.yellow[300],
+          
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Row(
