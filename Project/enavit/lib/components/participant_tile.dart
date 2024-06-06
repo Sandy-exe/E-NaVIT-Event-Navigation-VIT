@@ -1,5 +1,6 @@
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
+import 'package:enavit/pages/main_pages/general_pages/view_user_profile_page.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,12 @@ class ParticipantTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => updateUserRole(user.userId,context),
+      onTap: () {
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ViewProfile(user: user)),
+  );
+      },
       child: Container(
         margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
         decoration: BoxDecoration(
@@ -77,7 +83,7 @@ class ParticipantTile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(7, 0, 7, 0),
                       child: Text(
-                        user.role == 1 ? "Organiser Approved" : "Participant",
+                        user.role == 1 ? "Oraganizer of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}" : "Participant",
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Poppins',

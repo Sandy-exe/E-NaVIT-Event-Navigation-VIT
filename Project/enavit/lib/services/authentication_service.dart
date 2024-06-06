@@ -69,6 +69,8 @@ class AuthenticationService {
           followingClubs: [],
           notifications: [],
           clubIds: []);
+
+      print(newUser);
       await service.addUser(newUser);
       return "success";
     } on FirebaseAuthException catch (e) {
@@ -78,6 +80,7 @@ class AuthenticationService {
       if (e.code == 'weak-password') {
         return "The password provided is too weak";
       } else if (e.code == 'email-already-in-use') {
+        print(e.code);
         return "The account already exists for that email";
       }
     }

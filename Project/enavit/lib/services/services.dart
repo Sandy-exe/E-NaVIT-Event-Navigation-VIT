@@ -31,7 +31,12 @@ class Services {
       "role": newUser.role,
       "phone_no": newUser.phoneNo,
       "reg_no": newUser.regNo,
-
+      "profileImageURL": newUser.profileImageURL,
+      "fcmToken": newUser.fcmToken,
+      "favorites": newUser.favorites,
+      "followingClubs": newUser.followingClubs,
+      "notifications": newUser.notifications,
+      "clubIds": newUser.clubIds,      
     };
 
     await docref.set(obj); //push the object
@@ -225,7 +230,11 @@ class Services {
 
     for (final docSnapshot in querySnapshotusers.docs) {
       Map<String, dynamic> data = docSnapshot.data();
+      
+      
+      try{
 
+      
       if (data['role'] == 0) {
         continue;
       }
@@ -244,10 +253,15 @@ class Services {
         profileImageURL: data['profileImageURL'] ?? "null",
         fcmToken: data['fcmToken'] ?? "",
         favorites: List<String>.from(data['favorites']),
-        followingClubs: List<String>.from(data['followingCLubs']),
+        followingClubs: List<String>.from(data['followingClubs']),
         notifications: List<String>.from(data['notifications']),
         clubIds: List<String>.from(data['clubIds']),
       ));
+      } catch (e) {
+        print(e);
+        print(data['userid']);
+      }
+      
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -932,6 +946,8 @@ class Services {
     });
   }
 
+  
+  
 
 
 

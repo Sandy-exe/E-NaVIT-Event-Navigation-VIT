@@ -2,11 +2,9 @@
 2) note the type of error while rectifying it
 3) proper organizatin of files and folders
 
-
 ///
 
 1) find better way to load the liked Events instead of checking with cloud everytime
-
 
 Log of Changes:
 1) for now every organizer has only one club (use a list)
@@ -22,5 +20,10 @@ some aspects:
         1 ==> approved
         2 ==> rejected
         3 ==> Ended
+
+Future update:
+    1) Role Request Acceptance and Rejection by participants
+    2) leaderBoards
+
     
 

@@ -20,6 +20,7 @@ class ApproverSearchModel extends ChangeNotifier {
     Future<void> initPrefs() async {
       userListObj = userList;
       userListApprover = userList;
+      print(userListApprover.length);
     }
 
     await initPrefs();
