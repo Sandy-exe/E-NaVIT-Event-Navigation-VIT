@@ -36,7 +36,7 @@ class Services {
       "favorites": newUser.favorites,
       "followingClubs": newUser.followingClubs,
       "notifications": newUser.notifications,
-      "clubIds": newUser.clubIds,      
+      "clubIds": newUser.clubIds,
     };
 
     await docref.set(obj); //push the object
@@ -91,7 +91,6 @@ class Services {
         "comments": Map<String, String>.from(eventData['comments']),
         "participants": List<String>.from(eventData['participants']),
         "likes": eventData['likes'],
-
       };
 
       eventListObj.add(
@@ -128,10 +127,8 @@ class Services {
       String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
     }
-    
+
     print("userdata: $events");
-
-
 
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
@@ -179,9 +176,7 @@ class Services {
           expectedRevenue: data['expectedRevenue'] ?? "0",
         ),
       );
-
     }
-    
 
     //Clubs list
     final clubquerySnapshot = await firestore.collection("Clubs").get();
@@ -190,9 +185,6 @@ class Services {
     for (final docSnapshot in clubquerySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
 
-
-      
-
       clubs.add(
         Club(
           clubId: data['clubId'],
@@ -200,19 +192,15 @@ class Services {
           bio: data['bio'],
           email: data['email'],
           events: List<String>.from(data['events']),
-          approvers: List<String>.from(data['approvers'] ?? []), 
-          followers: List<String>.from(data['followers']), 
+          approvers: List<String>.from(data['approvers'] ?? []),
+          followers: List<String>.from(data['followers']),
         ),
       );
-
     }
-
-    
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<SearchModel>(context, listen: false)
           .initEventClubList(events, clubs);
-
     });
 
     // for (final docSnapshot in querySnapshot.docs) {
@@ -230,38 +218,34 @@ class Services {
 
     for (final docSnapshot in querySnapshotusers.docs) {
       Map<String, dynamic> data = docSnapshot.data();
-      
-      
-      try{
 
-      
-      if (data['role'] == 0) {
-        continue;
-      }
+      try {
+        if (data['role'] == 0) {
+          continue;
+        }
 
-      userList.add(Users(
-        userId: data['userid'],
-        name: data['name'],
-        email: data['email'],
-        clubs: List<String>.from(data['clubs']),
-        events: List<String>.from(data['events']),
-        organizedEvents: List<String>.from(data['organized_events']),
-        approvalEvents: List<String>.from(data['approval_events']),
-        role: data['role'],
-        phoneNo: data['phone_no'],
-        regNo: data['reg_no'],
-        profileImageURL: data['profileImageURL'] ?? "null",
-        fcmToken: data['fcmToken'] ?? "",
-        favorites: List<String>.from(data['favorites']),
-        followingClubs: List<String>.from(data['followingClubs']),
-        notifications: List<String>.from(data['notifications']),
-        clubIds: List<String>.from(data['clubIds']),
-      ));
+        userList.add(Users(
+          userId: data['userid'],
+          name: data['name'],
+          email: data['email'],
+          clubs: List<String>.from(data['clubs']),
+          events: List<String>.from(data['events']),
+          organizedEvents: List<String>.from(data['organized_events']),
+          approvalEvents: List<String>.from(data['approval_events']),
+          role: data['role'],
+          phoneNo: data['phone_no'],
+          regNo: data['reg_no'],
+          profileImageURL: data['profileImageURL'] ?? "null",
+          fcmToken: data['fcmToken'] ?? "",
+          favorites: List<String>.from(data['favorites']),
+          followingClubs: List<String>.from(data['followingClubs']),
+          notifications: List<String>.from(data['notifications']),
+          clubIds: List<String>.from(data['clubIds']),
+        ));
       } catch (e) {
         print(e);
         print(data['userid']);
       }
-      
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -356,6 +340,19 @@ class Services {
 
   Future<void> addEvent(Event event) async {
     final docref = firestore.collection("Events").doc(event.eventId.toString());
+
+    //update club events
+    final clubref = firestore.collection("Clubs").doc(event.clubId);
+    final club = await clubref.get();
+    Map<String, dynamic> clubData = club.data()!;
+    List<String> events = List<String>.from(clubData["events"]);
+    events.add(event.eventId);
+    await clubref.update({"events": events});
+
+    List<String> organisers = List<String>.from(clubData["approvers"]);
+    organisers.addAll(event.organisers);
+
+    //organiser is changed in the below obj
     Map<String, dynamic> obj = {
       "clubId": event.clubId,
       "dateTime": event.dateTime,
@@ -364,7 +361,7 @@ class Services {
       "eventName": event.eventName,
       "location": event.location,
       "fee": event.fee,
-      "organisers": event.organisers,
+      "organisers": organisers.toSet().toList(),
       "comments": event.comments,
       "participants": event.participants,
       "likes": event.likes,
@@ -385,16 +382,16 @@ class Services {
     };
     await docref.set(obj);
 
-
-    //update club events
-    final clubref = firestore.collection("Clubs").doc(event.clubId);
-    final club = await clubref.get();
-    Map<String, dynamic> clubData = club.data()!;
-    List<String> events = List<String>.from(clubData["events"]);
-    events.add(event.eventId);
-    await clubref.update({"events": events});
+    for (var orga in organisers) {
+      final orgRef = firestore.collection("app_users").doc(orga);
+      final org = await orgRef.get();
+      Map<String, dynamic> orgData = org.data()!;
+      List<String> orgEvents = List<String>.from(orgData["organized_events"]);
+      orgEvents.add(event.eventId);
+      await orgRef.update({"organized_events": orgEvents});
+    }
+    
   }
-
 
   Future<void> rejectApproval(String approvalID) async {
     final approvalRef = firestore.collection("Approvals").doc(approvalID);
@@ -521,7 +518,6 @@ class Services {
 
     await firestore.collection("Approvals").doc(approverID).set(obj);
 
-
     //update club events
     // final clubref = firestore.collection("Clubs").doc(event.clubId);
     // final club = await clubref.get();
@@ -533,14 +529,13 @@ class Services {
 
   Future<List<Approval>> getApprovalList(String organiserId) async {
     List<Approval> approvalList = [];
-    
+
     final orgRef = firestore.collection("app_users").doc(organiserId);
     final org = await orgRef.get();
     Map<String, dynamic> currentOrgData = org.data()!;
     print("organiserId: $organiserId");
     print(currentOrgData);
     for (var approvalId in currentOrgData['approval_events']) {
-      
       final approval =
           await firestore.collection("Approvals").doc(approvalId).get();
       Map<String, dynamic> approvalData = approval.data()!;
@@ -583,11 +578,7 @@ class Services {
     return approvalList;
   }
 
-
-  
-
   Future<List<Approval>> getApprovedApprovalsList(String organiserId) async {
-
     print("organiserId: $organiserId");
     List<Approval> approvalList = [];
     final orgRef = firestore.collection("app_users").doc(organiserId);
@@ -694,12 +685,11 @@ class Services {
     });
   }
 
-
   Future<bool> toggleFavEvents(String eventId) async {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
     List<String> favEvents = List<String>.from(currentUserData['favorites']);
-    
+
     final EventRef = firestore.collection("Events").doc(eventId);
     bool isFav = false;
 
@@ -725,11 +715,11 @@ class Services {
 // Store the updated user data back to secure storage
     await secureStorage.writer(key: "currentUserData", value: updatedUserData);
 
-    final userRef = firestore.collection("app_users").doc(currentUserData['userid']);
+    final userRef =
+        firestore.collection("app_users").doc(currentUserData['userid']);
     await userRef.update({"favorites": favEvents});
 
     return isFav;
-
   }
 
   Future<bool> checkFavEvents(String eventId) async {
@@ -742,10 +732,10 @@ class Services {
   Future<bool> checkFollowClub(String clubId) async {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
-    List<String> followedClubs = List<String>.from(currentUserData['followingClubs']);
+    List<String> followedClubs =
+        List<String>.from(currentUserData['followingClubs']);
     return followedClubs.contains(clubId);
   }
-
 
   Future<bool> toggleFollowClubs(String clubId) async {
     Map<String, dynamic> currentUserData = jsonDecode(
@@ -785,10 +775,9 @@ class Services {
         firestore.collection("app_users").doc(currentUserData['userid']);
     await userRef.update({"followingClubs": followedClubs});
     return isFollowing;
-    
   }
-  
-  Future<List<Event>> getLikedEvents(BuildContext context) async{
+
+  Future<List<Event>> getLikedEvents(BuildContext context) async {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
     List<String> favEvents = List<String>.from(currentUserData['favorites']);
@@ -842,7 +831,7 @@ class Services {
 
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
-  
+
     for (final eventId in currentUserData['organized_events']) {
       final eventDoc = await firestore.collection("Events").doc(eventId).get();
 
@@ -852,12 +841,12 @@ class Services {
         continue;
       }
       Map<String, dynamic> eventData = eventDataNullable;
-  
+
       Map<String, DateTime> dateTime = {
         'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate(),
         'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
       };
-  
+
       organizedEvents.add(
         Event(
           clubId: eventData['clubId'],
@@ -892,11 +881,12 @@ class Services {
     return organizedEvents;
   }
 
-  Future<List<Club>> getFollowedClubs(BuildContext context) async{
+  Future<List<Club>> getFollowedClubs(BuildContext context) async {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
-    List<String> followedClubs = List<String>.from(currentUserData['followingClubs']);
+    List<String> followedClubs =
+        List<String>.from(currentUserData['followingClubs']);
     List<Club> clubs = [];
 
     for (final clubId in followedClubs) {
@@ -915,17 +905,19 @@ class Services {
         ),
       );
     }
-    
-    return clubs;     
+
+    return clubs;
   }
 
   Future<Club> getOrganizerClubDetails() async {
-    
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
-    final club = await firestore.collection("Clubs").doc(currentUserData['clubIds'][0]).get();
-  
+    final club = await firestore
+        .collection("Clubs")
+        .doc(currentUserData['clubIds'][0])
+        .get();
+
     return Club(
       clubId: club['clubId'],
       clubName: club['clubName'],
@@ -945,16 +937,4 @@ class Services {
       "email": updatedClub.email,
     });
   }
-
-  
-  
-
-
-
-
 }
-
-
-
-
-
