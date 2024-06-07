@@ -176,6 +176,28 @@ class _OProfilePageState extends State<OProfilePage> {
                             },
                             role: role,
                           ),
+                          const SizedBox(height: 15),
+                   
+                            ProfileMenuWidget(
+                                  text: 'Organized Events',
+                                  icon: FontAwesomeIcons.users,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/Organized_events');
+                                  },
+                                  role: role,
+                                ),
+                              const SizedBox(
+                                  height: 15,
+                                ),
+                            ProfileMenuWidget(
+                            text: 'Set Role',
+                            icon: FontAwesomeIcons.users,
+                            onTap: () {
+                              Navigator.pushNamed(context, '/organiser_setRole');
+                            },
+                            role: role,
+                          ),
                         ],
                       ))),
             );

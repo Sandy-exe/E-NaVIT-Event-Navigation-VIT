@@ -153,7 +153,7 @@ class _AProfilePageState extends State<AProfilePage> {
                             text: 'Set Roles',
                             icon: Icons.group,
                             onTap: () {
-                              Navigator.pushNamed(context, '/set_role');
+                              Navigator.pushNamed(context, '/set_role_index');
                             },
                           ),
                           const SizedBox(height: 15),

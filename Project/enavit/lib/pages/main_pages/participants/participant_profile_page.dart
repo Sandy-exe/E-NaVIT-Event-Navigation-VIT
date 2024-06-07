@@ -194,13 +194,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             role: role,
                           ),
                           const SizedBox(height: 15),
-                                                    ProfileMenuWidget(
+                                                    
+                                                    
+                            currentUserData['role'] == 1 || currentUserData['role'] == 2 ? ProfileMenuWidget(
                             text: 'Organized Events',
                             icon: FontAwesomeIcons.users,
                             onTap: () {
                               Navigator.pushNamed(context, '/Organized_events');
                             },
                             role: role,
+                          ): 
+                          const SizedBox(
+                            height: 0,
                           ),
                         ],
                       ))),

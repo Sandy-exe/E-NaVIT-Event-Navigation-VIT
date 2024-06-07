@@ -1,32 +1,13 @@
 import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_user_profile_page.dart';
-import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantTile extends StatelessWidget {
   final Users user;
-  const ParticipantTile({super.key, required this.user});
+  final String setType;
+  const ParticipantTile({super.key, required this.user, required this.setType});
 
-  void updateUserRole (String uid,context) {
-        Services service = Services();
-
-        Map<String, dynamic> newinfo = {
-          if (user.role == 1) 'role': 2 else 'role': 1,
-        };
-
-
-        service.updateUser(uid, newinfo);
-        
-        Navigator.pop(context);
-        showDialog(
-      context: context,
-      builder: (context) => const AlertDialog(
-        title: Text("Approve Status"),
-        content: Text("User Role Changed"),
-      ),
-    );
-      }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +15,7 @@ class ParticipantTile extends StatelessWidget {
       onTap: () {
         Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => ViewProfile(user: user)),
+    MaterialPageRoute(builder: (context) => ViewProfile(user: user, setType: setType,)),
   );
       },
       child: Container(
@@ -83,7 +64,7 @@ class ParticipantTile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(7, 0, 7, 0),
                       child: Text(
-                        user.role == 1 ? "Oraganizer of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}" : "Participant",
+                        user.role == 1 ? "Captain/Member of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}" : user.role == 2 ? "Organised Events" : "Participant",
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Poppins',

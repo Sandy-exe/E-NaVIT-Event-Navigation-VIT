@@ -6,17 +6,17 @@ import 'package:enavit/services/services.dart';
 import 'package:enavit/components/participants_search.dart';
 import 'package:provider/provider.dart';
 
-class SetRole extends StatefulWidget {
-  const SetRole({super.key});
-
+class SetRoleCaptain extends StatefulWidget {
+  const SetRoleCaptain({super.key});
   @override
-  State<SetRole> createState() => _SetRoleState();
+  State<SetRoleCaptain> createState() => _SetRoleCaptainState();
 }
 
-class _SetRoleState extends State<SetRole> {
+class _SetRoleCaptainState extends State<SetRoleCaptain> {
   @override
   void initState() {
     super.initState();
+    initPrefs();
   }
 
   Future<void> initPrefs() async {
@@ -38,14 +38,15 @@ class _SetRoleState extends State<SetRole> {
             return Scaffold(
               backgroundColor: Colors.grey[300],
               appBar: AppBar(
-                  backgroundColor: Colors.grey[300],
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  title: const Text("Send Request")),
+                backgroundColor: Colors.grey[300],
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: const Text("Set Captain Roles"),
+              ),
               body: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -100,7 +101,7 @@ class _SetRoleState extends State<SetRole> {
                 // get a user
                 Users user = value.userListApprover[index];
                 print(user);
-                return ParticipantTile(user: user);
+                return ParticipantTile(user: user, setType: "Set Captain");
               },
             ),
           ),

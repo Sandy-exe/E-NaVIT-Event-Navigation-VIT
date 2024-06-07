@@ -1,9 +1,9 @@
 
-import 'package:enavit/pages/main_pages/organisers/organiser_approval_publish_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_approval_publish_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/components/organiser_bottom_nav_bar.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_profile_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_profile_page.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/pages/main_pages/general_pages/home_page.dart';
 

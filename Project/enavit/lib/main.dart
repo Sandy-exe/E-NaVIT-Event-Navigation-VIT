@@ -6,9 +6,11 @@ import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/compute.dart';
 import 'package:enavit/components/home_search_model.dart';
-import 'package:enavit/pages/main_pages/approvers/approver_set_role_page.dart';
+import 'package:enavit/pages/main_pages/approvers/approver_SetRole_Button_Index.dart';
+import 'package:enavit/pages/main_pages/general_pages/approver_set_role_event_organiser_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/edit_my_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/notification_page.dart';
+import 'package:enavit/pages/main_pages/general_pages/Captain_set_role_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_organized_events_page.dart';
@@ -25,15 +27,15 @@ import 'package:enavit/pages/authentication/signup_page.dart';
 import 'package:enavit/pages/main_pages/participants/participant_index_page.dart';
 import 'package:enavit/pages/main_pages/participants/participant_profile_page.dart';
 import 'package:enavit/pages/main_pages/participants/participant_update_profile_page.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_index_page.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_profile_page.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_update_profile_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_index_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_profile_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_update_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_index_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_update_profile_page.dart';
 import 'package:provider/provider.dart';
 
-import 'pages/main_pages/organisers/organiser_approval_creation_page.dart';
+import 'pages/main_pages/Captain/organiser_approval_creation_page.dart';
 
 
 
@@ -155,16 +157,22 @@ class EnavitState extends State<Enavit> {
             '/Notification_page' : (context) => const NotificationPage(),
             '/Organized_events'  : (context) => const OrganizedEvents(),
             '/My_club' : (context) => const MyClubBio(),
+            '/organiser_setRole': (context) => const SetRoleOrganiser(),
+
+            //Captain
+            '/captain_setRole': (context) => const SetRoleCaptain(),
+
 
             //organisers
             '/organiser_index': (context) => const OIndexPage(),
             '/organiser_profile': (context) => const OProfilePage(),
             '/organiser_update_profile': (context) => const OProfileUpdatePage(),
+
             //approvers
             '/approver_index': (context) => const AIndexPage(),
             '/approver_profile': (context) => const AProfilePage(),
             '/approver_update_profile': (context) => const AProfileUpdatePage(),
-            '/set_role': (context) => const SetRole(),
+            '/set_role_index': (context) => const SetRoleButtonIndexPage(),
             '/event_creation': (context) => const EventCreationPage(),
           }),
     );

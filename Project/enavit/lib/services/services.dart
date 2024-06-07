@@ -134,6 +134,20 @@ class Services {
     await secureStorage.writer(key: "events", value: eventsString);
   }
 
+  Future<Club> getClubData(String clubId) async {
+    final club = await firestore.collection("Clubs").doc(clubId).get();
+    Map<String, dynamic> clubData = club.data()!;
+    return Club(
+      clubId: clubData['clubId'],
+      clubName: clubData['clubName'],
+      bio: clubData['bio'],
+      email: clubData['email'],
+      events: List<String>.from(clubData['events']),
+      approvers: List<String>.from(clubData['approvers']),
+      followers: List<String>.from(clubData['followers']),
+    );
+  }
+
   //details of all clubs and events
   Future<void> getEventClubData(BuildContext context) async {
     final querySnapshot = await firestore.collection("Events").get();
@@ -261,6 +275,11 @@ class Services {
     await docref.update(newinfo); //push the object
   }
 
+  Future<void> updateClub(String clubid, Map<String, dynamic> newinfo) async {
+    final docref = firestore.collection("Clubs").doc(clubid);
+    await docref.update(newinfo); //push the object
+  }
+
   Future<void> updateEvent(String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
     await docref.update(newinfo); //push the object
@@ -279,6 +298,8 @@ class Services {
     String eventsString = events.join("JOIN");
     await secureStorage.writer(key: "events", value: eventsString);
   }
+
+
 
   //details of specific club
   Future<List<Event>> getClubEvents(String clubId) async {

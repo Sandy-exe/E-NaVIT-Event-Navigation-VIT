@@ -6,14 +6,21 @@
 
 1) find better way to load the liked Events instead of checking with cloud everytime
 
+
+
+
 Log of Changes:
 1) for now every organizer has only one club (use a list)
 2) every club has only one approver for now (use a list)
+3) every club has only one captain (use a list)
+4) every club has multiple members (use a list)
 
+5) for captain and memeber roles changed...approvers in club is changed
 some aspects: 
     1) role variable:
-        2 ==> participant
-        1 ==> organizer
+        3 ==> participant
+        2 ==> Organiser
+        1 ==> Captain/Members
         0 ==> approver
     2) Approval status variable:
         0 ==> pending
@@ -24,6 +31,7 @@ some aspects:
 Future update:
     1) Role Request Acceptance and Rejection by participants
     2) leaderBoards
+    3) Multiple clubs for approver and captains and memebers
 
     
 

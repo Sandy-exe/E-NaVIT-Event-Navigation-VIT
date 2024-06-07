@@ -61,7 +61,7 @@ class AuthenticationService {
           events: [],
           organizedEvents: [],
           approvalEvents: [],
-          role: 2,
+          role: 3,
           phoneNo: phoneno,
           regNo: regno,
           profileImageURL: "null", //add profile image in the beginning

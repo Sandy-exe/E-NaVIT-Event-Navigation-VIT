@@ -1,6 +1,6 @@
 import 'package:boxy/flex.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_approval_creation_page.dart';
-import 'package:enavit/pages/main_pages/organisers/organiser_approval_pending_request.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_approval_creation_page.dart';
+import 'package:enavit/pages/main_pages/Captain/organiser_approval_pending_request.dart';
 import 'package:enavit/pages/main_pages/publish_pages/list_of_approved_page.dart';
 import 'package:flutter/material.dart';
 
