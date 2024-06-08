@@ -10,10 +10,10 @@
 
 
 Log of Changes:
-1) for now every organizer has only one club (use a list)
-2) every club has only one approver for now (use a list)
-3) every club has only one captain (use a list)
-4) every club has multiple members (use a list)
+1) for now every organizer has only one club (use a list) and their events are added in organizedEvents
+2) every club has only one approver for now (use a list) 0th index is approver list in club
+3) every club has only one captain (use a list) 1st index is captain list in club
+4) every club has multiple members (use a list) from 2nd index onwards are members list in club
 
 5) for captain and memeber roles changed...approvers in club is changed
 some aspects: 
