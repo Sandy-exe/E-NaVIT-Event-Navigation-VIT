@@ -194,7 +194,8 @@ class _OProfilePageState extends State<OProfilePage> {
                             text: 'Set Role',
                             icon: FontAwesomeIcons.users,
                             onTap: () {
-                              Navigator.pushNamed(context, '/organiser_setRole');
+                              Navigator.pushNamed(
+                                  context, '/organiser_setRole');
                             },
                             role: role,
                           ),

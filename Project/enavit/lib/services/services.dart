@@ -285,6 +285,10 @@ class Services {
     await docref.update(newinfo); //push the object
     List<String> events = [];
 
+
+
+
+    //check on the below code and its usage
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
