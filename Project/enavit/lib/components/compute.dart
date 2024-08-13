@@ -48,12 +48,15 @@ class Compute with ChangeNotifier {
       print(eventsString);
     }
 
-    print(eventsString);
+
 
     if (eventsString == "null" || eventsString.isEmpty) return;
 
-    List<String> userEvent = eventsString.split("JOIN");
+    eventsString = (await secureStorage.reader(key: "events"))!;
 
+    List<String> userEvent = eventsString.split("JOIN");
+    
+    print(userEvent.length);
     events.add({
       "name": "",
       "startTime": "23:59",
@@ -114,7 +117,7 @@ class Compute with ChangeNotifier {
     });
 
     timeLineEvents = events;
-    print(events);
+    // print(events);
   }
 
   void datePickerWeek(int selectedIndex) {
@@ -216,7 +219,6 @@ class Compute with ChangeNotifier {
         DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
 
     timeLineEvents = events;
-    print(timeLineEvents);
   }
 
   void datePickerMonth(int selectedIndex) {

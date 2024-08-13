@@ -269,6 +269,7 @@ class Services {
   }
 
   Future<void> updateUser(String uid, Map<String, dynamic> newinfo) async {
+    debugPrint("from user update" + newinfo.toString());
     final docref = firestore.collection("app_users").doc(uid);
     // AuthenticationService auth = AuthenticationService();
     // auth.updateMail(newinfo["email"]);
@@ -282,25 +283,66 @@ class Services {
 
   Future<void> updateEvent(String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
-    await docref.update(newinfo); //push the object
+    await docref.update(newinfo);
+    
+     //push the object
     List<String> events = [];
-
-
-
 
     //check on the below code and its usage
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
+    if (!currentUserData['events'].contains(eventId)) {
+      currentUserData['events'].add(eventId);
+    }
+
     for (final eventId in currentUserData['events']) {
       final event = await firestore.collection("Events").doc(eventId).get();
       Map<String, dynamic> eventData = event.data()!;
-      String eventDataString = jsonEncode(eventData);
+      Map<String, String> dateTime = {
+        'startTime': (eventData['dateTime']['startTime'] as Timestamp)
+            .toDate()
+            .toString(),
+        'endTime':
+            (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
+      };
+      
+
+      Map<String, dynamic> eventObj = {
+        "clubId": eventData['clubId'],
+        "dateTime": dateTime,
+        "description": eventData['description'],
+        "eventId": eventData['eventId'],
+        "eventName": eventData['eventName'],
+        "location": eventData['location'],
+        "fee": eventData['fee'],
+        "organisers": List<String>.from(eventData['organisers']),
+        "comments": Map<String, String>.from(eventData['comments']),
+        "participants": List<String>.from(eventData['participants']),
+        "likes": eventData['likes'],
+      };
+      String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
+
+      
+      String updatedUserData = jsonEncode(currentUserData);
+
+      await secureStorage.writer(key: "currentUserData", value: updatedUserData);
     }
 
+    
+
+
     String eventsString = events.join("JOIN");
+
+    print(events.length);
+    
     await secureStorage.writer(key: "events", value: eventsString);
+    String eventString = await secureStorage.reader(key: "events") ?? "null";
+    
+    List<String> userEvent = eventString.split("JOIN");
+    print(userEvent.length);
+    print("eventString: $userEvent");
   }
 
 
