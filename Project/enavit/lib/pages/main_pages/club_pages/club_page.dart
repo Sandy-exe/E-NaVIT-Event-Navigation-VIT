@@ -366,71 +366,71 @@ void toggleFollow() async {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 140, 10),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 8, 0, 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.black),
-                                              child: const Text('Posts',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.black),
-                                              child: const Text('Events',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.black),
-                                              child: const Text('Bio',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                            ),
+                              // Padding(
+                              //   padding: const EdgeInsetsDirectional.fromSTEB(
+                              //       10, 10, 140, 10),
+                              //   child: Row(
+                              //     children: [
+                              //       Expanded(
+                              //         child: Padding(
+                              //           padding: const EdgeInsetsDirectional
+                              //               .fromSTEB(0, 8, 0, 8),
+                              //           child: Row(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.spaceEvenly,
+                              //             children: [
+                              //               TextButton(
+                              //                 onPressed: () {},
+                              //                 style: TextButton.styleFrom(
+                              //                     backgroundColor:
+                              //                         Colors.black),
+                              //                 child: const Text('Posts',
+                              //                     style: TextStyle(
+                              //                         color: Colors.white)),
+                              //               ),
+                              //               TextButton(
+                              //                 onPressed: () {},
+                              //                 style: TextButton.styleFrom(
+                              //                     backgroundColor:
+                              //                         Colors.black),
+                              //                 child: const Text('Events',
+                              //                     style: TextStyle(
+                              //                         color: Colors.white)),
+                              //               ),
+                              //               TextButton(
+                              //                 onPressed: () {},
+                              //                 style: TextButton.styleFrom(
+                              //                     backgroundColor:
+                              //                         Colors.black),
+                              //                 child: const Text('Bio',
+                              //                     style: TextStyle(
+                              //                         color: Colors.white)),
+                              //               ),
 
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    0, 0, 0, 0),
-                                child: ListView.builder(
-                                    itemCount: eventList.length,
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      // get a Event from Event list
-                                      Object object = eventList[index];
+                              //             ],
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                              // Container(
+                              //   padding: const EdgeInsetsDirectional.fromSTEB(
+                              //       0, 0, 0, 0),
+                              //   child: ListView.builder(
+                              //       itemCount: eventList.length,
+                              //       shrinkWrap: true,
+                              //       physics:
+                              //           const NeverScrollableScrollPhysics(),
+                              //       itemBuilder: (context, index) {
+                              //         // get a Event from Event list
+                              //         Object object = eventList[index];
 
-                                      return EventTile(
-                                        event: object as Event,
-                                      );
-                                    }),
-                              ),
+                              //         return EventTile(
+                              //           event: object as Event,
+                              //         );
+                              //       }),
+                              // ),
                             ],
                           ),
                         ),

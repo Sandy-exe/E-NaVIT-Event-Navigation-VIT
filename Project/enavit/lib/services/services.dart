@@ -341,8 +341,6 @@ class Services {
     String eventString = await secureStorage.reader(key: "events") ?? "null";
     
     List<String> userEvent = eventString.split("JOIN");
-    print(userEvent.length);
-    print("eventString: $userEvent");
   }
 
 

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:enavit/dashboard/dashboard_screen.dart';
 import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +23,7 @@ class _AboutEventState extends State<AboutEvent> {
   late bool isLoggedIn;
   late Map<String, dynamic> currentUserData;
   late bool isOrganized = false;
+  late bool ifRegistered = false;
 
   void razorPayDialogBox(String content) {
     //Provider.of<AddEvent>(context, listen: false).addEventToUser(event);
@@ -138,6 +138,8 @@ class _AboutEventState extends State<AboutEvent> {
   }
 
   Future<void> initPrefs() async {
+
+    
     Services service = Services();
     List<Event> events = await service.getOrganizedEventsView(context);
 
@@ -146,6 +148,27 @@ class _AboutEventState extends State<AboutEvent> {
         isOrganized = true;
       }
     }
+
+    SecureStorage secureStorage = SecureStorage();
+
+    String eventString = await secureStorage.reader(key: "events") ?? "null"; 
+
+    if (eventString == '' || eventString == 'null') {
+      return;
+    }
+
+    List<String> userEvent = eventString.split("JOIN");
+
+    for (String event in userEvent) {
+        
+        Map<String,dynamic> eventDetail = jsonDecode(event);
+        if (eventDetail['eventId'] == widget.event.eventId) {
+          ifRegistered = true;
+        }
+    }
+
+    
+    // print(userEvent);
   }
 
   @override
@@ -210,7 +233,7 @@ class _AboutEventState extends State<AboutEvent> {
                             itemBuilder: (context) => [
                               const PopupMenuItem(
                                 value: 1,
-                                child: Text("Edit Profile"),
+                                child: Text("Edit Event Profile"),
                               ),
                               const PopupMenuItem(
                                 value: 2,
@@ -360,7 +383,28 @@ class _AboutEventState extends State<AboutEvent> {
                         ),
                         MaterialButton(
                           onPressed: () {
+                            if (isOrganized) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DashboardScreen(
+                                          event: widget.event)));
+                            } else if (ifRegistered) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const AlertDialog(
+                                  title: Text("Registration Status"),
+                                  content: Text("You Already Registered"),
+                                ),
+                              );
+
+                              Future.delayed(const Duration(seconds: 2), () {
+                                Navigator.of(context).pop();
+                              });
+
+                            } else {
                             openCheckout();
+                            }
                           },
                           height: 50,
                           elevation: 0,
@@ -368,11 +412,11 @@ class _AboutEventState extends State<AboutEvent> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           color: Colors.yellow[800],
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Go to Payment Page",
+                              isOrganized ? "View DashBoard" : ifRegistered ? "Already Registered" : "Go to Payment",
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                                  const TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
                         )
