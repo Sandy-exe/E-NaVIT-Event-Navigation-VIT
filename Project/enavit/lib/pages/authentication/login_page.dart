@@ -1,6 +1,6 @@
 
 import 'dart:convert';
-
+import 'package:enavit/Custom_widgets/custom_scaffold_authentication.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/pages/authentication/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -8,32 +8,7 @@ import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/theme/theme.dart';
 
 
-class CustomScaffold extends StatelessWidget {
-  const CustomScaffold({super.key, this.child});
-  final Widget? child;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Image.asset(
-            'lib/images/Campus_vitchennai.jpg',
-            fit: BoxFit.cover,
-          ),
-          SafeArea(
-            child: child!,
-          ),
-        ],
-      ),
-    );
-  }
-}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

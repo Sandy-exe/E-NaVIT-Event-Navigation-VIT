@@ -2,6 +2,7 @@ import 'package:enavit/pages/authentication/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/theme/theme.dart';
+import 'package:enavit/Custom_widgets/custom_scaffold_authentication.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
