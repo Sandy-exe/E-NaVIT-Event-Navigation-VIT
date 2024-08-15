@@ -8,7 +8,10 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:enavit/Data/secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
+
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class PublishEventPage extends StatefulWidget {
   final Approval approval;
@@ -176,27 +179,74 @@ class _PublishEventPageState extends State<PublishEventPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _startTimeTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Start Time',
-                      border: OutlineInputBorder(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
                     ),
-                    // Add any other properties as needed
+                  ),
+                  onPressed: () async {
+                    final List<DateTime>? dateTime =
+                        await showOmniDateTimeRangePicker(context: context);
+
+                    if (dateTime == null) return;
+
+                    String formattedTime1 =
+                        DateFormat('kk:mm').format(dateTime[0]);
+                    String formattedDate1 =
+                        DateFormat('yyyy-MM-dd').format(dateTime[0]);
+
+                    String formattedTime2 =
+                        DateFormat('kk:mm').format(dateTime[1]);
+                    String formattedDate2 =
+                        DateFormat('yyyy-MM-dd').format(dateTime[1]);
+
+                    _startTimeTEC.text = "$formattedDate1 $formattedTime1";
+                    _endTimeTEC.text = "$formattedDate2 $formattedTime2";
+                  },
+                  child: const Text(
+                    'Pick Time Range',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _endTimeTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'End Time',
-                      border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+
+                // Start Date and Time
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _startTimeTEC,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Start Date and Time',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
                     ),
-                    // Add any other properties as needed
-                  ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _endTimeTEC,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          labelText: 'End Date and Time',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),

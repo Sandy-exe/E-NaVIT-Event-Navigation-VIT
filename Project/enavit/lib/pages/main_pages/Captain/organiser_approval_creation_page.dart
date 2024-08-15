@@ -6,7 +6,9 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:enavit/Data/secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class EventCreationPage extends StatefulWidget {
   const EventCreationPage({super.key});
@@ -166,74 +168,70 @@ class _EventCreationPageState extends State<EventCreationPage> {
                   const SizedBox(
                     height: 16,
                   ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final List<DateTime>? dateTime =
+                          await showOmniDateTimeRangePicker(context: context);
+
+                      if (dateTime == null) return;
+
+                      String formattedTime1 =
+                          DateFormat('kk:mm').format(dateTime[0]);
+                      String formattedDate1 =
+                          DateFormat('yyyy-MM-dd').format(dateTime[0]);
+
+                      String formattedTime2 =
+                          DateFormat('kk:mm').format(dateTime[1]);
+                      String formattedDate2 =
+                          DateFormat('yyyy-MM-dd').format(dateTime[1]);
+
+                      _startTimeTEC.text = "$formattedDate1 $formattedTime1";
+                      _endTimeTEC.text = "$formattedDate2 $formattedTime2";
+                    },
+                    child: const Text(
+                      'Pick Time Range',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Start Date and Time
                   Row(
                     children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width - 200,
+                      Expanded(
                         child: TextField(
                           controller: _startTimeTEC,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      SizedBox(
-                        width: 160,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          onPressed: () {
-                            dateTimePickerStartWidget(context);
-                          },
-                          child: const Text(
-                            'Pick start time',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Start Date and Time',
+                            border: OutlineInputBorder(),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  const SizedBox(height: 16),
+
+                  // End Date and Time
                   Row(
                     children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width - 200,
+                      Expanded(
                         child: TextField(
                           controller: _endTimeTEC,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      SizedBox(
-                        width: 160,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          onPressed: () {
-                            dateTimePickerEndWidget(context);
-                          },
-                          child: const Text(
-                            'Pick end time',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                          readOnly: true,
+                          decoration: const InputDecoration(
+                            labelText: 'End Date and Time',
+                            border: OutlineInputBorder(),
                           ),
                         ),
                       ),

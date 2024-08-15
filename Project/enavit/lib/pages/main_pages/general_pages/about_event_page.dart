@@ -6,6 +6,7 @@ import 'package:enavit/dashboard/dashboard_screen.dart';
 import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
+import 'package:intl/intl.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/services/services.dart';
@@ -330,66 +331,57 @@ class _AboutEventState extends State<AboutEvent> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.88,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        widget.event.eventName,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 70,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: const Image(
-                                              image: AssetImage(
-                                                  'lib/images/VIT_LOGO.png')),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  // widget.product.brand,
-                                  "",
-                                  style: TextStyle(
-                                    color: Colors.orange.shade400,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Text(
-                              "",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 16),
-                            ),
-                          ],
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    // Title and Logo Row
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.event.eventName,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "", // Placeholder for event brand
+              style: TextStyle(
+                color: Colors.orange.shade400,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: const Image(
+            image: AssetImage('lib/images/VIT_LOGO.png'),
+            width: 70,
+            height: 70,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 10),
+
+    const Text(
+                          "About",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(
-                          height: 20,
-                        ),
+                            height:
+                                10), // Adds some space between "About" and description
                         Text(
                           widget.event.description,
                           style: TextStyle(
@@ -398,123 +390,159 @@ class _AboutEventState extends State<AboutEvent> {
                             fontSize: 15,
                           ),
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          widget.event.location,
-                          style: TextStyle(
-                              color: Colors.grey.shade400, fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Fee: ${widget.event.fee}",
-                          style: TextStyle(
-                              color: Colors.grey.shade400, fontSize: 18),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            if (isOrganized) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DashboardScreen(
-                                          event: widget.event)));
-                            } else if (ifRegistered) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => const AlertDialog(
-                                  title: Text("Registration Status"),
-                                  content: Text("You Already Registered"),
-                                ),
-                              );
+    const SizedBox(height: 20),
 
-                              Future.delayed(const Duration(seconds: 2), () {
-                                Navigator.of(context).pop();
-                              });
+    // Event Location
+    Text(
+      "Location: ${widget.event.location}",
+      style: TextStyle(
+        color: Colors.grey.shade400,
+        fontSize: 18,
+      ),
+    ),
+    const SizedBox(height: 10),
 
-                            } else {
-                            openCheckout();
-                            }
-                          },
-                          height: 50,
-                          elevation: 0,
-                          splashColor: Colors.yellow[700],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.yellow[800],
-                          child: Center(
-                            child: Text(
-                              isOrganized ? "View DashBoard" : ifRegistered ? "Already Registered" : "Go to Payment",
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+    // Event Fee
+    Text(
+      "Fee: ${widget.event.fee}",
+      style: TextStyle(
+        color: Colors.grey.shade400,
+        fontSize: 18,
+      ),
+    ),
+    const SizedBox(height: 20),
 
-                        isOrganized ?  MaterialButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SEVENTAnnouncement(
-                                          event: widget.event,
-                                          userId: currentUserData['userid'],
-                                          userName: currentUserData['name'],
-                                        )));  
-                  
-                          },
-                          height: 50,
-                          elevation: 0,
-                          splashColor: Colors.yellow[700],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.yellow[800],
-                          child: const Center(
-                            child: Text(
-                              "Send Annoucnement",
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ): ifRegistered ? MaterialButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EventAnnouncement(
-                                          event: widget.event,
-                                        )));  
-                  
-                          },
-                          height: 50,
-                          elevation: 0,
-                          splashColor: Colors.yellow[700],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.yellow[800],
-                          child: const Center(
-                            child: Text(
-                              "View Annoucnements",
-                              style:
-                                  const TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ): Container(),
-                        // MaterialButton(
-                      ],
-                    ))
+    // Start Date & Time
+    Row(
+      children: [
+        const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+        const SizedBox(width: 10),
+        Text(
+          "Start: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['startTime'])}",
+          style: TextStyle(
+            color: Colors.grey.shade800,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 10),
+
+    // End Date & Time
+    Row(
+      children: [
+        const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+        const SizedBox(width: 10),
+        Text(
+          "End: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['endTime'])}",
+          style: TextStyle(
+            color: Colors.grey.shade800,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    ),
+    const SizedBox(height: 30),
+
+    // Payment or Dashboard Button
+    MaterialButton(
+      onPressed: () {
+        if (isOrganized) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DashboardScreen(event: widget.event)));
+        } else if (ifRegistered) {
+          showDialog(
+            context: context,
+            builder: (context) => const AlertDialog(
+              title: Text("Registration Status"),
+              content: Text("You Already Registered"),
+            ),
+          );
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.of(context).pop();
+          });
+        } else {
+          openCheckout();
+        }
+      },
+      height: 50,
+      elevation: 0,
+      splashColor: Colors.yellow[700],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      color: Colors.yellow[800],
+      child: Center(
+        child: Text(
+          isOrganized
+              ? "View Dashboard"
+              : ifRegistered
+                  ? "Already Registered"
+                  : "Go to Payment",
+          style: const TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
+    ),
+    const SizedBox(height: 20),
+
+    // Send/View Announcement Button
+    isOrganized
+        ? MaterialButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SEVENTAnnouncement(
+                            event: widget.event,
+                            userId: currentUserData['userid'],
+                            userName: currentUserData['name'],
+                          )));
+            },
+            height: 50,
+            elevation: 0,
+            splashColor: Colors.yellow[700],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: Colors.yellow[800],
+            child: const Center(
+              child: Text(
+                "Send Announcement",
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          )
+        : ifRegistered
+            ? MaterialButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventAnnouncement(
+                                event: widget.event,
+                              )));
+                },
+                height: 50,
+                elevation: 0,
+                splashColor: Colors.yellow[700],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.yellow[800],
+                child: const Center(
+                  child: Text(
+                    "View Announcements",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              )
+            : Container(),
+  ],
+)
+
+                    )
               ])),
             ]),
           );
