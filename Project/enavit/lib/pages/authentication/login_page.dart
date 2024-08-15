@@ -131,9 +131,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (userRole == 0){
         if (context.mounted) Navigator.pushNamed(context, '/approver_index');
-      } else if (userRole == 1){
+      } else if (userRole == 1 || userRole == 2) {
         if (context.mounted) Navigator.pushNamed(context, '/organiser_index');
-      } else if (userRole == 2) {
+      } else if (userRole == 3) {
         if (context.mounted) Navigator.pushNamed(context, '/participant_index');
       } else { 
         if (context.mounted) Navigator.pushNamed(context, '/');

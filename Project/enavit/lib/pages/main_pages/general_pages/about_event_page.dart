@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:enavit/components/send_event_announcement.dart';
+import 'package:enavit/components/view_event_announcement.dart';
 import 'package:enavit/dashboard/dashboard_screen.dart';
 import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +37,19 @@ class _AboutEventState extends State<AboutEvent> {
         content: Text(content),
       ),
     );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+    });
+
+    
   }
 
   @override
   void initState() {
     super.initState();
+
+
 
     razorpay = Razorpay();
 
@@ -55,6 +65,7 @@ class _AboutEventState extends State<AboutEvent> {
   }
 
   void openCheckout() async {
+
     SecureStorage secureStorage = SecureStorage();
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
 
@@ -65,6 +76,8 @@ class _AboutEventState extends State<AboutEvent> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
+
+
 
     var options = {
       'key': 'rzp_test_nToF04vc477NSJ',
@@ -167,6 +180,17 @@ class _AboutEventState extends State<AboutEvent> {
         }
     }
 
+    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+
+
+    if (isLoggedIn) {
+      String? currentUserDataString =
+          await secureStorage.reader(key: "currentUserData");
+      if (currentUserDataString != null) {
+        currentUserData = jsonDecode(currentUserDataString);
+      }
+    }
+
     
     // print(userEvent);
   }
@@ -235,23 +259,38 @@ class _AboutEventState extends State<AboutEvent> {
                                 value: 1,
                                 child: Text("Edit Event Profile"),
                               ),
+                              
                               const PopupMenuItem(
                                 value: 2,
-                                child: Text("View Stats"),
+                                child: Text("Delete Event"),
                               ),
+
+                             if (isOrganized)
+                                const PopupMenuItem(
+                                  value: 3,
+                                  child: Text("View Announcements"),
+                                ),
                             ],
                             onSelected: (value) {
-                              if (value == 1) {
+                              if (value == 3) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EventAnnouncement(
+                                              event: widget.event,
+                                            )));
+                                //edit event
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
                                 //         builder: (context) => EditEventDetails()));
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DashboardScreen(
-                                            event: widget.event)));
+                                //delete event
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => DashboardScreen(
+                                //             event: widget.event)));
                               }
                             },
                           ),
@@ -419,7 +458,61 @@ class _AboutEventState extends State<AboutEvent> {
                                   const TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        isOrganized ?  MaterialButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SEVENTAnnouncement(
+                                          event: widget.event,
+                                          userId: currentUserData['userid'],
+                                          userName: currentUserData['name'],
+                                        )));  
+                  
+                          },
+                          height: 50,
+                          elevation: 0,
+                          splashColor: Colors.yellow[700],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          color: Colors.yellow[800],
+                          child: const Center(
+                            child: Text(
+                              "Send Annoucnement",
+                              style:
+                                  const TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ): ifRegistered ? MaterialButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EventAnnouncement(
+                                          event: widget.event,
+                                        )));  
+                  
+                          },
+                          height: 50,
+                          elevation: 0,
+                          splashColor: Colors.yellow[700],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          color: Colors.yellow[800],
+                          child: const Center(
+                            child: Text(
+                              "View Annoucnements",
+                              style:
+                                  const TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ): Container(),
+                        // MaterialButton(
                       ],
                     ))
               ])),

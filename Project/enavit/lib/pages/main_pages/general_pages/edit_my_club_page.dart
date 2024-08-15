@@ -71,15 +71,22 @@ class _EditMyClubState extends State<EditMyClub> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: bioController,
-                decoration: const InputDecoration(labelText: 'Bio'),
+                decoration: const InputDecoration(
+                  labelText: 'Bio',
+                  border:
+                      OutlineInputBorder(), // Optional: adds a border around the TextFormField
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the bio';
                   }
                   return null;
                 },
+                keyboardType: TextInputType.multiline, // Allows multiline input
+                maxLines: null, // Allows the TextFormField to expand as needed
               ),
               TextFormField(
                 controller: emailController,

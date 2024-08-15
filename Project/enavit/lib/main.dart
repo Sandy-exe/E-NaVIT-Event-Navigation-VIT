@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:enavit/components/approver_event_search_model.dart';
 import 'package:enavit/components/approver_search_model.dart';
@@ -37,10 +36,6 @@ import 'package:provider/provider.dart';
 
 import 'pages/main_pages/Captain/organiser_approval_creation_page.dart';
 
-
-
-
-
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await AndroidAlarmManager.initialize();
@@ -68,10 +63,8 @@ Future main() async {
   }
   await NotificationService.initializeNotification();
 
-  bool role = await securestorage.reader(key: 'roleState') == "true"? true : false;
-
-  
-  
+  bool role =
+      await securestorage.reader(key: 'roleState') == "true" ? true : false;
 
 //   tz.initializeTimeZones();
 
@@ -79,9 +72,7 @@ Future main() async {
 //   NotificationService().sendNotification("vrv", "Vervr");
 //   NotificationService().scheduleNotification("test", "vody", DateTime.now());
 
-
   runApp(
-
     Enavit(isLoggedIn: isLoggedIn, userRole: userRole, role: role),
   );
 }
@@ -91,20 +82,22 @@ class Enavit extends StatefulWidget {
   final int userRole;
   final bool role;
 
-  const Enavit({super.key, required this.isLoggedIn, required this.userRole, required this.role});
+  const Enavit(
+      {super.key,
+      required this.isLoggedIn,
+      required this.userRole,
+      required this.role});
 
   @override
   EnavitState createState() => EnavitState();
 }
 
 class EnavitState extends State<Enavit> {
-
   @override
   void initState() {
     super.initState();
     checkNotificationPermission();
   }
-
 
   Future<void> checkNotificationPermission() async {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -137,7 +130,9 @@ class EnavitState extends State<Enavit> {
           initialRoute: widget.isLoggedIn
               ? (widget.userRole == 0
                   ? '/approver_index'
-                  : (widget.userRole == 1 && widget.role ? '/organiser_index' : '/participant_index'))
+                  : (widget.userRole == 1 && widget.role
+                      ? '/organiser_index'
+                      : '/participant_index'))
               : '/',
           //initialRoute: '/',
           routes: {
@@ -154,19 +149,19 @@ class EnavitState extends State<Enavit> {
             //General Pages
             '/Liked_events': (context) => const LikedEvents(),
             '/Following_clubs': (context) => const FollowedClubs(),
-            '/Notification_page' : (context) => const NotificationPage(),
-            '/Organized_events'  : (context) => const OrganizedEvents(),
-            '/My_club' : (context) => const MyClubBio(),
+            '/Notification_page': (context) => const NotificationPage(),
+            '/Organized_events': (context) => const OrganizedEvents(),
+            '/My_club': (context) => const MyClubBio(),
             '/organiser_setRole': (context) => const SetRoleOrganiser(),
 
             //Captain
             '/captain_setRole': (context) => const SetRoleCaptain(),
 
-
             //organisers
             '/organiser_index': (context) => const OIndexPage(),
             '/organiser_profile': (context) => const OProfilePage(),
-            '/organiser_update_profile': (context) => const OProfileUpdatePage(),
+            '/organiser_update_profile': (context) =>
+                const OProfileUpdatePage(),
 
             //approvers
             '/approver_index': (context) => const AIndexPage(),

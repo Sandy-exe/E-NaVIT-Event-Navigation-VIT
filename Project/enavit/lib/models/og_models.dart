@@ -133,6 +133,8 @@ class Event {
 
     // Add this line
   });
+
+  
 }
 
 class Comments {
@@ -194,5 +196,26 @@ class Users {
     required this.followingClubs,
     required this.notifications,
     required this.clubIds,
+  });
+}
+
+class EventAnnoucenments{
+  final String eventId;
+  final String announcement;
+  late String announcementId;
+  final DateTime dateTime;
+  final String userId;
+  final String userName;
+  final String eventName;
+
+  EventAnnoucenments({
+
+    required this.eventId,
+    required this.eventName,
+    required this.announcement,
+    required this.announcementId,
+    required this.dateTime,
+    required this.userId,
+    required this.userName,
   });
 }

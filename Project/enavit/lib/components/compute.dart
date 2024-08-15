@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:enavit/models/og_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:enavit/Data/secure_storage.dart';
@@ -37,6 +38,7 @@ class Compute with ChangeNotifier {
   late List<String> datePickerUpper = [];
   late List<String> datePickerLower = [];
   late List<Map<String, dynamic>> timeLineEvents = [];
+  late List<Event> eventList = [];
 
   Future<void> saveEventsWeek() async {
     events = [];
@@ -59,6 +61,8 @@ class Compute with ChangeNotifier {
     print(userEvent.length);
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "23:59",
       "endTime": "23:59",
       "isLast": "false",
@@ -66,6 +70,8 @@ class Compute with ChangeNotifier {
     });
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "00:00",
       "endTime": "00:00",
       "isLast": "false",
@@ -81,6 +87,7 @@ class Compute with ChangeNotifier {
 
       Map<String, dynamic> tempData = {
         "name": eventData["eventName"],
+        "eventId": eventData["eventId"],
         "startTime": eventData["dateTime"]["startTime"].substring(11, 16),
         "endTime": eventData["dateTime"]["endTime"].substring(11, 16),
         "isLast": "false",
@@ -100,6 +107,7 @@ class Compute with ChangeNotifier {
         int toDisplay = (int.parse(events[e]["startTime"].substring(0, 2))) - 1;
         events.add({
           "name": "",
+          "eventId": "",
           "startTime": toDisplay.toString(),
           "endTime": "",
           "isLast": "false",
@@ -110,6 +118,8 @@ class Compute with ChangeNotifier {
 
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "End of Day",
       "endTime": "",
       "isLast": "true",
@@ -117,6 +127,7 @@ class Compute with ChangeNotifier {
     });
 
     timeLineEvents = events;
+
     // print(events);
   }
 
@@ -158,6 +169,8 @@ class Compute with ChangeNotifier {
 
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "23:59",
       "endTime": "23:59",
       "isLast": "false",
@@ -166,6 +179,8 @@ class Compute with ChangeNotifier {
     });
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "00:00",
       "endTime": "00:00",
       "isLast": "true",
@@ -274,6 +289,8 @@ class Compute with ChangeNotifier {
     //events.sort((a, b) => a['mon'].compareTo(b['mon']));
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "00:00",
       "endTime": "00:00",
       "isLast": "true",
@@ -375,6 +392,8 @@ class Compute with ChangeNotifier {
 
     events.add({
       "name": "",
+      "eventId": "",
+
       "startTime": "00:00",
       "endTime": "00:00",
       "isLast": "true",

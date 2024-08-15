@@ -284,8 +284,8 @@ class Services {
   Future<void> updateEvent(String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
     await docref.update(newinfo);
-    
-     //push the object
+
+    //push the object
     List<String> events = [];
 
     //check on the below code and its usage
@@ -306,7 +306,6 @@ class Services {
         'endTime':
             (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
       };
-      
 
       Map<String, dynamic> eventObj = {
         "clubId": eventData['clubId'],
@@ -324,26 +323,21 @@ class Services {
       String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
 
-      
       String updatedUserData = jsonEncode(currentUserData);
 
-      await secureStorage.writer(key: "currentUserData", value: updatedUserData);
+      await secureStorage.writer(
+          key: "currentUserData", value: updatedUserData);
     }
-
-    
-
 
     String eventsString = events.join("JOIN");
 
     print(events.length);
-    
+
     await secureStorage.writer(key: "events", value: eventsString);
     String eventString = await secureStorage.reader(key: "events") ?? "null";
-    
+
     List<String> userEvent = eventString.split("JOIN");
   }
-
-
 
   //details of specific club
   Future<List<Event>> getClubEvents(String clubId) async {
@@ -455,7 +449,6 @@ class Services {
       orgEvents.add(event.eventId);
       await orgRef.update({"organized_events": orgEvents});
     }
-    
   }
 
   Future<void> rejectApproval(String approvalID) async {
@@ -536,6 +529,21 @@ class Services {
     } while (existingApprovalIds.contains(uniqueApprovalId));
 
     return uniqueApprovalId;
+  }
+
+  Future<String> generateUniqueannouncementId() async {
+    var uuid = Uuid();
+    String uniqueAnnoucenemtId;
+
+    // Fetch all existing approval IDs
+    final announcementRefs = await firestore.collection("EventAnnouncement").get();
+    final existingAnnouncementIds = announcementRefs.docs.map((doc) => doc.id).toList();
+
+    do {
+      uniqueAnnoucenemtId = uuid.v1();
+    } while (existingAnnouncementIds.contains(uniqueAnnoucenemtId));
+
+    return uniqueAnnoucenemtId;
   }
 
   Future<void> addApproval(Approval approval) async {
@@ -974,6 +982,47 @@ class Services {
     return clubs;
   }
 
+  Future<Event> getEventDetails(String eventId) async {
+    final event = await firestore.collection("Events").doc(eventId).get();
+    Map<String, dynamic> eventData = event.data()!;
+
+    Map<String, DateTime> dateTime = {
+      'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate(),
+      'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
+    };
+
+    Event eventObj = Event(
+      clubId: eventData['clubId'],
+      dateTime: dateTime,
+      description: eventData['description'],
+      eventId: eventData['eventId'],
+      eventName: eventData['eventName'],
+      location: eventData['location'],
+      fee: eventData['fee'],
+      organisers: List<String>.from(eventData['organisers']),
+      comments: Map<String, String>.from(eventData['comments']),
+      participants: List<String>.from(eventData['participants']),
+      likes: eventData['likes'],
+      eventImageURL: eventData['eventImageURL'] ?? "null",
+      discussionPoints: eventData['discussionPoints'] ?? "old doc",
+      eventType: eventData['eventType'] ?? "old doc",
+      eventCategory: eventData['eventCategory'] ?? "old doc",
+      fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+      schoolCentre: eventData['schoolCentre'] ?? "old doc",
+      coordinator1: eventData['coordinator1'] ?? "old doc",
+      coordinator2: eventData['coordinator2'] ?? "old doc",
+      coordinator3: eventData['coordinator3'] ?? "old doc",
+      attendancePresent: eventData['attendancePresent'] ?? "0",
+      issues: Map<String, Map<String, String>>.from(eventData['issues']),
+      expense: eventData['expense'] ?? "0",
+      revenue: eventData['revenue'] ?? "0",
+      budget: eventData['budget'] ?? "0",
+      expectedRevenue: eventData['expectedRevenue'] ?? "0",
+    );
+
+    return eventObj;
+  }
+
   Future<Club> getOrganizerClubDetails() async {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
@@ -1001,5 +1050,68 @@ class Services {
       "bio": updatedClub.bio,
       "email": updatedClub.email,
     });
+  }
+
+  Future<void> addEventannouncementDetails(
+      EventAnnoucenments announcement) async {
+        print(announcement.announcement);
+    try{
+      announcement.announcementId = await generateUniqueannouncementId();
+
+
+    final announcementRef = firestore
+        .collection("EventAnnouncement")
+        .doc(announcement.announcementId);
+      
+    Map<String, dynamic> obj = {
+      "eventId": announcement.eventId,
+      "announcement": announcement.announcement,
+      "announcementId": announcement.announcementId,
+      "dateTime": announcement.dateTime,
+      "userId": announcement.userId,
+      "userName": announcement.userName,
+      "eventName": announcement.eventName,
+    };
+
+    print(obj);
+
+    await announcementRef.set(obj);
+    }
+    catch(e){
+      print(e);
+    }
+
+  }
+
+  Future <List<EventAnnoucenments>> getEventAnnouncements(String eventId) async {
+    try {
+      final querySnapshot = await firestore.collection("EventAnnouncement").get();
+      List<EventAnnoucenments> announcements = [];
+
+      for (final docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data();
+        print(data);
+
+        if (data['eventId'] == eventId) {
+          announcements.add(
+            EventAnnoucenments(
+              announcementId: data['announcementId'],
+              eventId: data['eventId'],
+              announcement: data['announcement'],
+              dateTime: (data['dateTime'] as Timestamp).toDate(),
+              userId: data['userId'],
+              userName: data['userName'],
+              eventName: data['eventName'],
+            ),
+          );
+        }
+      }
+      print(announcements);
+      return announcements;
+    } catch (e) {
+      print("on getEventAnnouncements");
+      print(e);
+      return [];
+    }
   }
 }

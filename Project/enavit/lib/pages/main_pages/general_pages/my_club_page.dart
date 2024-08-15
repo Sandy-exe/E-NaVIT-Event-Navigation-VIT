@@ -41,7 +41,7 @@ class _MyClubBioState extends State<MyClubBio> {
     club = await service.getOrganizerClubDetails();
     eventList = await service.getClubEvents(club.clubId);
     print(eventList.length);
-    eventListLength = 600*eventList.length.toDouble();
+    eventListLength = 600 * eventList.length.toDouble();
     print(eventListLength);
     isFollow = await service.checkFollowClub(club.clubId);
   }
@@ -75,8 +75,8 @@ class _MyClubBioState extends State<MyClubBio> {
                       scrollDirection: Axis.vertical,
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(0, 150, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0, 150, 0, 0),
                           child: Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
@@ -89,7 +89,6 @@ class _MyClubBioState extends State<MyClubBio> {
                               ),
                             ),
                             child: Column(
-                              
                               //mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
@@ -160,26 +159,24 @@ class _MyClubBioState extends State<MyClubBio> {
                                                           '604',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Events',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -209,26 +206,24 @@ class _MyClubBioState extends State<MyClubBio> {
                                                           '705k',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Followers',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -258,26 +253,24 @@ class _MyClubBioState extends State<MyClubBio> {
                                                           '12',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Posts',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -300,37 +293,42 @@ class _MyClubBioState extends State<MyClubBio> {
                                                       shape:
                                                           RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                       color: Colors.white,
                                                       icon: const Icon(
                                                         Icons.more_horiz,
-                                                        color: Color(0xFF333333),
+                                                        color:
+                                                            Color(0xFF333333),
                                                         size: 20,
                                                       ),
-                                                      itemBuilder: (context) => [
+                                                      itemBuilder: (context) =>
+                                                          [
                                                         const PopupMenuItem(
                                                           value: 1,
-                                                          child: Text("Edit Profile"),
+                                                          child: Text(
+                                                              "Edit Profile"),
                                                         ),
                                                         const PopupMenuItem(
                                                           value: 2,
-                                                          child: Text("View Stats"),
+                                                          child: Text(
+                                                              "View Stats"),
                                                         ),
                                                       ],
                                                       onSelected: (value) {
-              
                                                         if (value == 1) {
                                                           Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  EditMyClub(club: club),
+                                                                  EditMyClub(
+                                                                      club:
+                                                                          club),
                                                             ),
                                                           );
                                                         }
-              
+
                                                         if (value == 2) {
                                                           print("sdf");
                                                         }
@@ -367,17 +365,17 @@ class _MyClubBioState extends State<MyClubBio> {
                                               children: [
                                                 Text(
                                                   '@${club.clubName}',
-                                                  style:
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyText1
-                                                          .override(
-                                                            fontFamily: 'Poppins',
-                                                            color: const Color(
-                                                                0xFF787878),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.normal,
-                                                          ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: const Color(
+                                                            0xFF787878),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -385,9 +383,8 @@ class _MyClubBioState extends State<MyClubBio> {
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                5, 0, 5, 15),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(5, 0, 5, 15),
                                         child: Icon(
                                           Icons.verified_rounded,
                                           color: FlutterFlowTheme.of(context)
@@ -421,42 +418,44 @@ class _MyClubBioState extends State<MyClubBio> {
                                   height: 10,
                                 ),
 
-                                 Padding(
-                                   padding: const EdgeInsets.fromLTRB(0,0,100,0),
-                                   child: TabBar(
-                                    dividerHeight: 0,
-                                               indicatorPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                               unselectedLabelColor: const Color.fromARGB(255, 0, 0, 0),
-                                               labelColor: Colors.white,
-                                               indicatorSize: TabBarIndicatorSize.tab,
-                                               indicator: BoxDecoration(
-                                                 borderRadius: BorderRadius.circular(10),
-                                                 color: Colors.black,
-                                               )
-                                               ,tabs: 
-                                                                   const [
-                                    Tab(
-                                      child: Text('Posts',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Tab(
-                                      child: Text('Events',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Tab(
-                                      child: Text('Bio',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                                                   ]),
-                                 ),
-                                
-                                          
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 100, 0),
+                                  child: TabBar(
+                                      dividerHeight: 0,
+                                      indicatorPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                      unselectedLabelColor:
+                                          const Color.fromARGB(255, 0, 0, 0),
+                                      labelColor: Colors.white,
+                                      indicatorSize: TabBarIndicatorSize.tab,
+                                      indicator: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.black,
+                                      ),
+                                      tabs: const [
+                                        Tab(
+                                          child: Text('Posts',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Tab(
+                                          child: Text('Events',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Tab(
+                                          child: Text('Bio',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                      ]),
+                                ),
+
                                 // Padding(
                                 //   padding: const EdgeInsetsDirectional.fromSTEB(
                                 //       10, 10, 140, 10),
@@ -505,67 +504,99 @@ class _MyClubBioState extends State<MyClubBio> {
                                 //   ),
                                 // ),
 
+                                SizedBox(
+                                  height: eventListLength, // or any fraction,
+                                  child: TabBarView(
+                                    children: [
+                                      // Posts Tab
+                                      Container(
+                                        padding: const EdgeInsets.all(0),
+                                        child: const Center(
+                                            child: Text("No Posts Available")),
+                                      ),
+                                      // Events Tab
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 0),
+                                        child: eventList.isNotEmpty
+                                            ? ListView.builder(
+                                                itemCount: eventList.length,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  // get an Event from eventList
+                                                  Object object =
+                                                      eventList[index];
 
+                                                  return EventTile(
+                                                    event: object as Event,
+                                                  );
+                                                },
+                                              )
+                                            : const Center(
+                                                child: Text(
+                                                    "No Events Available")),
+                                      ),
+                                      // Bio Tab
 
-                                  SizedBox(
-                                    height: eventListLength,// or any fraction,
-                                    child:  TabBarView(
-                                              children: [
-                                              // Posts Tab
-                                              Container(
-                                                padding: const EdgeInsets.all(0),
-                                                child: const Center(
-                                                    child:
-                                                        Text("No Posts Available")),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 20, 10, 40),
+                                        child: Container(
+                                          height: 100,
+                                          padding: const EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 209, 208, 208),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                                offset: Offset(0,
+                                                    3), // changes position of shadow
                                               ),
-                                              // Events Tab
-                                              Container(
-                                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                child: eventList.isNotEmpty
-                                                    ? ListView.builder(
-                                                        itemCount: eventList.length,
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          // get an Event from eventList
-                                                          Object object =
-                                                              eventList[index];
-                                              
-                                                          return EventTile(
-                                                            event: object as Event,
-                                                          );
-                                                        },
-                                                      )
-                                                    : const Center(
-                                                        child: Text(
-                                                            "No Events Available")),
-                                              ),
-                                              // Bio Tab
-                                              Container(
-                                                padding: const EdgeInsets.all(20),
-                                                child: Column(
-                                                  children: [
-                                                    Text(
-                                                      club.bio,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyLarge,
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "About Us",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          24, // Increased font size
                                                     ),
-                                                  ],
-                                                ),
                                               ),
-                                        
-                                        ],
-                                            ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                club.bio,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontSize:
+                                                          18, // Increased font size
+                                                      height: 1.5,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                              
-
-                                
-                                
-                                       
-                    
+                                ),
                               ],
                             ),
                           ),
@@ -574,11 +605,7 @@ class _MyClubBioState extends State<MyClubBio> {
                     ),
                   ),
                 ),
-                                  
-              ), 
-              
-
-
+              ),
             );
           }
         });

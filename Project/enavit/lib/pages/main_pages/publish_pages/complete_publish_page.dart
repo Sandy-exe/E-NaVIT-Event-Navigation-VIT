@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,24 @@ class PublishEventPage extends StatefulWidget {
 class _PublishEventPageState extends State<PublishEventPage> {
   final TextEditingController _startTimeTEC = TextEditingController();
   final TextEditingController _endTimeTEC = TextEditingController();
-  final TextEditingController _eventNameTEC = TextEditingController();
-  final TextEditingController _eventDescriptionTEC = TextEditingController();
-  final TextEditingController _eventLocationTEC = TextEditingController();
+  late TextEditingController _eventNameTEC = TextEditingController();
+  late TextEditingController _locationTEC = TextEditingController();
+  late TextEditingController _organisersTEC = TextEditingController();
+  late TextEditingController _approvedTEC = TextEditingController();
+  late TextEditingController _discussionPointsTEC = TextEditingController();
+  late TextEditingController _eventTypeTEC = TextEditingController();
+  late TextEditingController _eventCategoryTEC = TextEditingController();
+  late TextEditingController _fdpProposedByTEC = TextEditingController();
+  late TextEditingController _schoolCentreTEC = TextEditingController();
+  late TextEditingController _coordinator1TEC = TextEditingController();
+  late TextEditingController _coordinator2TEC = TextEditingController();
+  late TextEditingController _coordinator3TEC = TextEditingController();
+  late TextEditingController _budgetTEC = TextEditingController();
+  late TextEditingController _clubIdTEC = TextEditingController();
+  late TextEditingController _dateTimeTEC = TextEditingController();
+  late TextEditingController _descriptionTEC = TextEditingController();
+  late TextEditingController _approvalIdTEC = TextEditingController();
   final TextEditingController _eventFeeTEC = TextEditingController();
-  final TextEditingController _eventApproverTEC = TextEditingController();
-  final TextEditingController _eventClubTEC = TextEditingController();
   final TextEditingController _eventImageURL = TextEditingController();
 
   File? _image;
@@ -45,6 +58,56 @@ class _PublishEventPageState extends State<PublishEventPage> {
       }
     });
   }
+  @override
+  void initState() {
+    super.initState();
+    _clubIdTEC = TextEditingController(text: widget.approval.clubId);
+    _dateTimeTEC =
+        TextEditingController(text: widget.approval.dateTime.toString());
+    _descriptionTEC = TextEditingController(text: widget.approval.description);
+    _approvalIdTEC = TextEditingController(text: widget.approval.approvalId);
+    _eventNameTEC = TextEditingController(text: widget.approval.eventName);
+    _locationTEC = TextEditingController(text: widget.approval.location);
+    _organisersTEC =
+        TextEditingController(text: widget.approval.organisers.join(', '));
+    _approvedTEC =
+        TextEditingController(text: widget.approval.approved.toString());
+    _discussionPointsTEC =
+        TextEditingController(text: widget.approval.discussionPoints);
+    _eventTypeTEC = TextEditingController(text: widget.approval.eventType);
+    _eventCategoryTEC =
+        TextEditingController(text: widget.approval.eventCategory);
+    _fdpProposedByTEC =
+        TextEditingController(text: widget.approval.fdpProposedBy);
+    _schoolCentreTEC =
+        TextEditingController(text: widget.approval.schoolCentre);
+    _coordinator1TEC =
+        TextEditingController(text: widget.approval.coordinator1);
+    _coordinator2TEC =
+        TextEditingController(text: widget.approval.coordinator2);
+    _coordinator3TEC =
+        TextEditingController(text: widget.approval.coordinator3);
+    _budgetTEC = TextEditingController(text: widget.approval.budget);
+    
+    _startTimeTEC.text = formatDate(widget.approval.dateTime["startTime"]);
+    _endTimeTEC.text = formatDate(widget.approval.dateTime["endTime"]);
+  }
+
+  String formatDate(Timestamp timestamp) {
+    DateTime date = timestamp.toDate();
+
+    String year = date.year.toString().padLeft(4, '0');
+    String month = date.month.toString().padLeft(2, '0');
+    String day = date.day.toString().padLeft(2, '0');
+
+    String hour = date.hour.toString().padLeft(2, '0');
+    String minute = date.minute.toString().padLeft(2, '0');
+    String second = date.second.toString().padLeft(2, '0');
+
+    // Return the date and time in ISO 8601 format
+    return "$year-$month-$day $hour:$minute:$second";
+  }
+  
 
   Future uploadImage() async {
     SecureStorage secureStorage = SecureStorage();
@@ -103,275 +166,185 @@ class _PublishEventPageState extends State<PublishEventPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
+                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Club ID: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.clubId,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _clubIdTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Club ID',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Date & Time: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.dateTime.toString(),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _startTimeTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Start Time',
+                      border: OutlineInputBorder(),
+                    ),
+                    // Add any other properties as needed
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    controller: _endTimeTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'End Time',
+                      border: OutlineInputBorder(),
+                    ),
+                    // Add any other properties as needed
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextField(
+                    controller: _descriptionTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Description: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.description,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _approvalIdTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Approval ID',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Approval ID: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.approvalId,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _eventNameTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Event Name',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Event Name: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.eventName,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _locationTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Location',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Location: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.location,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _organisersTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Organisers',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Organisers: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.organisers[0],
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _approvedTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Approved',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Approved: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.approved.toString(),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _discussionPointsTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Discussion Points',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Discussion Points: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.discussionPoints,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _eventTypeTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Event Type',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Event Type: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.eventType,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _eventCategoryTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Event Category',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Event Category: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.eventCategory,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _fdpProposedByTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'FDP Proposed By',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'FDP Proposed By: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.fdpProposedBy,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _schoolCentreTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'School/Centre',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'School/Centre: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.schoolCentre,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _coordinator1TEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Coordinator 1',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Coordinator 1: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.coordinator1,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _coordinator2TEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Coordinator 2',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Coordinator 2: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.coordinator2,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _coordinator3TEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Coordinator 3',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Coordinator 3: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.coordinator3,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Budget: ',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: widget.approval.budget,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.normal)),
-                      ],
+                  child: TextField(
+                    controller: _budgetTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Budget',
+                      border: OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -466,7 +439,7 @@ class _PublishEventPageState extends State<PublishEventPage> {
     await services.closeApproval(widget.approval.approvalId);
     await services.addEvent(
       Event(
-        clubId: widget.approval.clubId,
+        clubId: _clubIdTEC.text,
         dateTime: {
           "endTime": widget.approval.dateTime['endTime'],
           "startTime": widget.approval.dateTime['startTime']

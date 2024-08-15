@@ -1,5 +1,10 @@
+import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/compute.dart';
+import 'package:enavit/models/og_models.dart';
+import 'package:enavit/pages/main_pages/general_pages/about_event_page.dart';
+import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -18,6 +23,7 @@ class _EventTimelineState extends State<EventTimeline> {
 
   
   List<Map<String, dynamic>> events = [];
+  List<Event> eventList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class _EventTimelineState extends State<EventTimeline> {
                 itemCount: value.timeLineEvents.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  return _buildEvent(value.timeLineEvents[index]);
+                  return _buildEvent(value.timeLineEvents[index],context);
                 },
               ),
             ),
@@ -48,27 +54,46 @@ class _EventTimelineState extends State<EventTimeline> {
   }
 }
 
-Widget _buildEvent(Map<String, dynamic> event) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 15),
-    child: Row(
-      children: [
-        _buildTimeline(event['isLast']),
-        SizedBox(
-          height: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(event['toDisplay']),
-              const SizedBox(
-                width: 10,
-              ),
-              _buildCard(event),
-            ],
+Widget _buildEvent(Map<String, dynamic> event, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      print(event);
+      Services  service = Services();
+
+      service.getEventDetails(event['eventId']).then((value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AboutEvent(event: value),
           ),
-        ),
-      ],
+        );
+      });
+      // Navigator.push(
+      // context,
+      // MaterialPageRoute(builder: (context) => AboutEvent(event: event)
+      // );
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        children: [
+          _buildTimeline(event['isLast']),
+          SizedBox(
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(event['toDisplay']),
+                const SizedBox(
+                  width: 10,
+                ),
+                _buildCard(event),
+              ],
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
