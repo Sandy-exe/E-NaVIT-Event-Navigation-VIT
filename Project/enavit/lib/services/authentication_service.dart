@@ -29,14 +29,15 @@ class AuthenticationService {
 
       return "success";
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        return 'Wrong password provided for that user.';
-      } else if (e.code == "invalid-email") {
+      if (e.code == "invalid-email") {
         return "Invalid email address";
+      } else if (e.code == 'wrong-password') {
+        return "Wrong password provided";
+      } else if (e.code == 'user-not-found') {
+        return "No user found for that email";
+      } else {
+        return "An unknown error occurred";
       }
-      return "Error while Performing Request";
     }
   }
 
@@ -76,12 +77,12 @@ class AuthenticationService {
     } on FirebaseAuthException catch (e) {
       if (e.code == "invalid-email") {
         return "Invalid email address";
-      }
-      if (e.code == 'weak-password') {
+      } else if (e.code == 'weak-password') {
         return "The password provided is too weak";
       } else if (e.code == 'email-already-in-use') {
-        print(e.code);
         return "The account already exists for that email";
+      } else {
+        return "An unknown error occurred";
       }
     }
   }

@@ -62,7 +62,7 @@ dependencies:
   rxdart: ^0.27.7
   android_alarm_manager_plus:
   intl:
-  omni_datetime_picker: 
+  omni_datetime_picker:
   sqflite:
   go_router:
   app_links:
@@ -70,6 +70,7 @@ dependencies:
   timeago:
   timeline_tile:
   boxy:
+  icons_plus:
 
   flutter_local_notifications:
   awesome_notifications:
@@ -119,6 +120,9 @@ flutter:
     - lib/images/SVG/robotics.png
     - lib/images/SVG/ai.png
     - lib/images/SVG/other.png
+    - lib/images/facebook.png
+    - lib/images/linkedin.png
+    - lib/images/google.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
