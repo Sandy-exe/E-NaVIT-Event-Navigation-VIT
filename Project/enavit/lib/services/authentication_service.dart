@@ -29,6 +29,7 @@ class AuthenticationService {
 
       return "success";
     } on FirebaseAuthException catch (e) {
+      debugPrint(e.code);
       if (e.code == "invalid-email") {
         return "Invalid email address";
       } else if (e.code == 'wrong-password') {
@@ -38,6 +39,9 @@ class AuthenticationService {
       } else {
         return "An unknown error occurred";
       }
+    } catch (e) {
+      debugPrint(e.toString());
+      return "An unknown error occurred";
     }
   }
 

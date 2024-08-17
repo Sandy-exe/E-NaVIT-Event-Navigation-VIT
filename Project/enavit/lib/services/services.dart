@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/components/approver_search_model.dart';
 import 'package:enavit/components/approver_event_search_model.dart';
@@ -8,6 +8,7 @@ import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 // import 'package:enavit/services/authentication_service.dart';
@@ -150,6 +151,8 @@ class Services {
 
   //details of all clubs and events
   Future<void> getEventClubData(BuildContext context) async {
+
+    
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
     for (final docSnapshot in querySnapshot.docs) {
@@ -399,7 +402,7 @@ class Services {
 
   Future<void> addEvent(Event event) async {
     final docref = firestore.collection("Events").doc(event.eventId.toString());
-
+    print(event.clubId);
     //update club events
     final clubref = firestore.collection("Clubs").doc(event.clubId);
     final club = await clubref.get();
@@ -409,6 +412,7 @@ class Services {
     await clubref.update({"events": events});
 
     List<String> organisers = List<String>.from(clubData["approvers"]);
+    print(event.organisers);
     organisers.addAll(event.organisers);
 
     //organiser is changed in the below obj
@@ -440,14 +444,22 @@ class Services {
       "budget": event.budget,
     };
     await docref.set(obj);
+    print(organisers.length);
 
     for (var orga in organisers) {
+      try{
       final orgRef = firestore.collection("app_users").doc(orga);
+      print("1");
       final org = await orgRef.get();
+
       Map<String, dynamic> orgData = org.data()!;
       List<String> orgEvents = List<String>.from(orgData["organized_events"]);
       orgEvents.add(event.eventId);
       await orgRef.update({"organized_events": orgEvents});
+      }
+      catch(e){
+        print(e);
+      }
     }
   }
 
@@ -856,6 +868,8 @@ class Services {
     List<String> favEvents = List<String>.from(currentUserData['favorites']);
     List<Event> likedEvents = [];
 
+    print(favEvents);
+
     for (final eventId in favEvents) {
       final event = await firestore.collection("Events").doc(eventId).get();
       Map<String, dynamic> eventData = event.data()!;
@@ -1114,4 +1128,48 @@ class Services {
       return [];
     }
   }
+
+  
+  
+  
+Future<void> removeAllDocsExceptOne() async {
+    try {
+      // Hardcoded collection names
+      List<String> collectionNames = [
+        'Approvals',
+        'Clubs',
+        'EventAnnouncement',
+        'Events',
+        'Notifications',
+      ];
+
+      // Step 1: Iterate through each specified collection
+      for (String collectionName in collectionNames) {
+        CollectionReference collection =
+            FirebaseFirestore.instance.collection(collectionName);
+        QuerySnapshot querySnapshot = await collection.get();
+
+        // Check if there are more than one document
+        if (querySnapshot.docs.length > 1) {
+          // Keep the first document and delete the rest
+          for (int i = 1; i < querySnapshot.docs.length; i++) {
+            await querySnapshot.docs[i].reference.delete();
+          }
+        }
+
+        print("Removed all documents except one in $collectionName");
+      }
+
+      print("Deletion completed successfully");
+    } catch (e) {
+      print(e);
+    }
+  }
+  
+  
+
+
+
+  
 }
+

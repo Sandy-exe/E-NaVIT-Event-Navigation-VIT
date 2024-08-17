@@ -20,7 +20,9 @@ class _LikedEventsState extends State<LikedEvents> {
 
   Future<void> initPrefs() async {
     Services service = Services();
+    print("oh");
     likedEvents = await service.getLikedEvents(context);
+    print("oh");
 
   }
   Widget build(BuildContext context) {

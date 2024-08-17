@@ -58,7 +58,7 @@ class Club {
   final String bio;
   final String email;
   final List<String> events;
-  final List<String> approvers;
+  late final List<String> approvers;
   final List<String> followers;
 
   Club({

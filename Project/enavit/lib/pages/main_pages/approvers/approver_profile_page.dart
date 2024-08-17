@@ -71,8 +71,8 @@ class _AProfilePageState extends State<AProfilePage> {
                                 height: 150,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: currentUserData['profileImageURL'] ==
-                                            null
+                                    child: currentUserData['profileImageURL'] == 
+                                            "null" || currentUserData['profileImageURL'] == null
                                         ? Image.asset('lib/images/VIT_LOGO.png')
                                         : Image.network(
                                             currentUserData['profileImageURL'],
@@ -149,13 +149,14 @@ class _AProfilePageState extends State<AProfilePage> {
                           const SizedBox(height: 15),
                           const Divider(),
                           const SizedBox(height: 15),
-                          ProfileMenuWidget(
+                          currentUserData['role'] == 1 || currentUserData['role'] == 0 ? ProfileMenuWidget(
                             text: 'Set Roles',
                             icon: Icons.group,
                             onTap: () {
                               Navigator.pushNamed(context, '/set_role_index');
                             },
-                          ),
+                          ) :
+                          const SizedBox(height: 0),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Liked Events',

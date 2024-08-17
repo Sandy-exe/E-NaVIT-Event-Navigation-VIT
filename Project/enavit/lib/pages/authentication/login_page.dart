@@ -352,8 +352,6 @@ class _LoginPageState extends State<LoginPage> {
     scaffold.showSnackBar(
       SnackBar(
         content: Text(message),
-        action: SnackBarAction(
-            label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
@@ -384,18 +382,43 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       if (result == "success") {
-        if (userRole == 0) {
-          if (context.mounted) Navigator.pushNamed(context, '/approver_index');
-        } else if (userRole == 1 || userRole == 2) {
-          if (context.mounted) Navigator.pushNamed(context, '/organiser_index');
-        } else if (userRole == 3) {
-          if (context.mounted) {
-            Navigator.pushNamed(context, '/participant_index');
-          }
-        } else {
-          if (context.mounted) Navigator.pushNamed(context, '/');
+      ScaffoldMessenger.of(context).clearSnackBars();
+
+      if (userRole == 0) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/approver_index',
+          (Route<dynamic> route) => false, // This predicate removes all routes
+        );
+      } else if (userRole == 1 || userRole == 2) {
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/organiser_index',
+            (Route<dynamic> route) =>
+                false, // This predicate removes all routes
+          );
+        }
+      } else if (userRole == 3) {
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/participant_index',
+            (Route<dynamic> route) =>
+                false, // This predicate removes all routes
+          );
         }
       } else {
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/',
+            (Route<dynamic> route) =>
+                false, // This predicate removes all routes
+          );
+        }
+      }
+    } else {
         if (context.mounted) _showToast(context, result);
       }
     

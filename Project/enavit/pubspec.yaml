@@ -48,11 +48,13 @@ dependencies:
   flutter_datetime_picker_plus: ^2.1.0
   firebase_storage: ^11.5.5
   path: ^1.8.3
+  path_provider:
   image_picker: ^1.0.4
   firebase_messaging: ^14.7.10
   cloud_functions: ^4.6.0
   get_storage:
   get:
+  yaml:
 
   lite_rolling_switch:
 

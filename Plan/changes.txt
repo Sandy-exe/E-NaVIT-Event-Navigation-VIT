@@ -16,12 +16,20 @@ Log of Changes:
 4) every club has multiple members (use a list) from 2nd index onwards are members list in club
 
 5) for captain and memeber roles changed...approvers in club is changed
+
+
+TODO:
+1) captain and club member
+2) captain and approvers can change his club members
+3) club members only can give approval request
+4) organiser events should be added only to the organiser who applied
+
 some aspects: 
     1) role variable:
         3 ==> participant
         2 ==> Organiser
         1 ==> Captain/Members
-        0 ==> approver
+        0 ==> approverx
     2) Approval status variable:
         0 ==> pending
         1 ==> approved

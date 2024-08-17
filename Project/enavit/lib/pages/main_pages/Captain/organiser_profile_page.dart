@@ -190,7 +190,8 @@ class _OProfilePageState extends State<OProfilePage> {
                               const SizedBox(
                                   height: 15,
                                 ),
-                            ProfileMenuWidget(
+                            
+                            currentUserData['role'] == 1 || currentUserData['role'] == 0 ?  ProfileMenuWidget(
                             text: 'Set Role',
                             icon: FontAwesomeIcons.users,
                             onTap: () {
@@ -198,6 +199,9 @@ class _OProfilePageState extends State<OProfilePage> {
                                   context, '/organiser_setRole');
                             },
                             role: role,
+                          ) :
+                          const SizedBox(
+                            height: 0,
                           ),
                         ],
                       ))),

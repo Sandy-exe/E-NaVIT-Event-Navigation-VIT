@@ -153,8 +153,13 @@ class _ViewProfileState extends State<ViewProfile> {
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
     Services service = Services();
-    ClubData = await service.getClubData(currentUserData['clubIds'][0]);
+    ClubData = await service.getClubData(currentUserData['clubIds'][0]);    
+
     events = await service.getClubEvents(ClubData.clubId);
+
+    print(ClubData.approvers);
+
+    
   }
 
   Future removefromOrganiser(String eventId) async {
@@ -183,7 +188,9 @@ class _ViewProfileState extends State<ViewProfile> {
     print("Removed as Organiser");
     
     
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/organiser_setRole');
@@ -213,7 +220,9 @@ class _ViewProfileState extends State<ViewProfile> {
 
 
     
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/organiser_setRole');
@@ -223,6 +232,8 @@ class _ViewProfileState extends State<ViewProfile> {
   Future setCaptain() async {
     Services service = Services();
 
+
+
     Map<String, dynamic> newinfoUser = {
       'clubIds': currentUserData['clubIds'],
       'clubs': currentUserData['clubIds'],
@@ -230,6 +241,7 @@ class _ViewProfileState extends State<ViewProfile> {
     };
 
     List<String> approvers = List<String>.from(ClubData.approvers);
+    print("approvers");
     if (approvers.length == 1) {
       approvers.add("null");
       approvers[1] = widget.user.userId;
@@ -244,7 +256,9 @@ class _ViewProfileState extends State<ViewProfile> {
     print("Set as Captain");
 
     
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/captain_setRole');
@@ -271,7 +285,9 @@ class _ViewProfileState extends State<ViewProfile> {
     await service.updateClub(ClubData.clubId, newinfoClub);
     print("Remove as Captain");
     
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/captain_setRole');
@@ -300,7 +316,9 @@ class _ViewProfileState extends State<ViewProfile> {
     await service.updateClub(ClubData.clubId, newinfoClub);
     print("Set as Club Member");
 
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/organiser_setRole');
@@ -331,7 +349,9 @@ class _ViewProfileState extends State<ViewProfile> {
     print("Remove as Club Member");
     
     
-    if (currentUserData['role'] == 0) {
+    if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
+  Navigator.pop(context);
+Navigator.pop(context);
       Navigator.pushNamed(context, '/set_role_index');
     } else {
       Navigator.pushNamed(context, '/organiser_setRole');
@@ -379,7 +399,7 @@ class _ViewProfileState extends State<ViewProfile> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
                             child: Image.network(
-                              widget.user.profileImageURL == "null"
+                              widget.user.profileImageURL == "null" || widget.user.profileImageURL == null
                                   ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
                                   : widget.user.profileImageURL,
                               fit: BoxFit.cover,
@@ -411,7 +431,7 @@ class _ViewProfileState extends State<ViewProfile> {
                     const Divider(),
                     const SizedBox(height: 15),
                     Text(
-                      'Role: ${widget.user.role == 1 ? 'Captain/Memeber' : widget.user.role == 2 ? 'Organised Events' : 'Participant'}',
+                      'Role: ${widget.user.role == 1 ? 'Captain/Member' : widget.user.role == 2 ? 'Organised Events' : 'Participant'}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -428,7 +448,17 @@ class _ViewProfileState extends State<ViewProfile> {
                           )
                         : const SizedBox(),
                     const SizedBox(height: 15),
-                    ClubData.approvers[1] == widget.user.userId &&
+
+                    
+                    (ClubData.approvers.length == 1)
+                        ? ElevatedButton(
+                            onPressed: () {
+                              setCaptain();
+                            },
+                            child: const Text("Set as Captain"))
+                        :
+                   
+                   ClubData.approvers[1] == widget.user.userId &&
                             widget.user.role == 1  && currentUserData['role'] == 0 &&
                             widget.setType == "Set Captain"
                         ? ElevatedButton(
@@ -437,7 +467,7 @@ class _ViewProfileState extends State<ViewProfile> {
                             },
                             child: const Text("Remove as Captain"))
                         : ((widget.user.role == 2 || widget.user.role == 3) &&
-                                ClubData.approvers[1] == "null" && currentUserData['role'] == 0 &&
+                                (ClubData.approvers[1] == "null") && currentUserData['role'] == 0 &&
                                 widget.setType == "Set Captain")
                             ? ElevatedButton(
                                 onPressed: () {
@@ -474,6 +504,9 @@ class _ViewProfileState extends State<ViewProfile> {
                             child: const Text("Remove Event from Organiser"))
                         : const SizedBox(),
 
+                      (ClubData.approvers.length == 1) ?
+                      const SizedBox()
+                        :
                         (widget.user.role == 3 || widget.user.role == 2) && !List<String>.from(ClubData.approvers.sublist(2)).contains(widget.user.userId) ? 
                         ElevatedButton(
                             onPressed: () {
@@ -487,7 +520,10 @@ class _ViewProfileState extends State<ViewProfile> {
 
                         }
                         , child: const Text("Remove as Club Member"))
-                        : const SizedBox(),
+                        : const SizedBox()
+
+                        
+                        
 
 
 

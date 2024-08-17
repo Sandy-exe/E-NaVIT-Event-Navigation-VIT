@@ -13,6 +13,7 @@ class ParticipantTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print("User: $user setType: $setType" );
         Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => ViewProfile(user: user, setType: setType,)),

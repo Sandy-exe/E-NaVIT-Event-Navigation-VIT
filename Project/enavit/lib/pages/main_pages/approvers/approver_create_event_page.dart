@@ -24,8 +24,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController _eventNameTEC = TextEditingController();
   final TextEditingController _eventDescriptionTEC = TextEditingController();
   final TextEditingController _eventLocationTEC = TextEditingController();
-  final TextEditingController _eventApproverTEC = TextEditingController();
-  final TextEditingController _eventClubTEC = TextEditingController();
+  
   final TextEditingController _eventImageURL = TextEditingController();
   final TextEditingController _discussionPointsTEC = TextEditingController();
   final TextEditingController _eventTypeTEC = TextEditingController();
@@ -37,6 +36,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController _coordinator3TEC = TextEditingController();
   final TextEditingController _budgetTEC = TextEditingController();
   final TextEditingController _eventFeeTEC = TextEditingController();
+  late String _eventClubTEC;
 
 
   File? _image;
@@ -57,7 +57,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     });
   }
 
-  Future uploadImage() async {
+  Future uploadImage_updateClub() async {
     SecureStorage secureStorage = SecureStorage();
     String userData =
         await secureStorage.reader(key: "currentUserData") ?? "null";
@@ -77,6 +77,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
       downloadUrl = await ref.getDownloadURL();
       _eventImageURL.text = downloadUrl!;
     });
+
+    _eventClubTEC = clubId;
     // var imageURL = "";
   }
 
@@ -423,7 +425,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       },
                       child: _image == null
                           ? const Text(
-                              "Choose Imagfe",
+                              "Choose Image",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -444,7 +446,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                     height: 30,
                   ),
                   SizedBox(
-                    width: 160,
+                    width: 230,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -486,15 +488,16 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
 
   Future addEvent() async {
-    // await uploadImage().whenComplete(() =>
+    // await uploadImage_updateClub().whenComplete(() =>
     //     showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
-    await uploadImage().whenComplete(() =>
+    await uploadImage_updateClub().whenComplete(() =>
         showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
     Services services = Services();
+    
     //await services.closeApproval(widget.approval.approvalId);
     await services.addEvent(
       Event(
-        clubId: _eventClubTEC.text,
+        clubId: _eventClubTEC,
         dateTime: {
           "endTime": DateTime.parse(_endTimeTEC.text),
           "startTime": DateTime.parse(_startTimeTEC.text),
@@ -503,7 +506,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
         eventId: _eventNameTEC.text,
         eventName: _eventNameTEC.text,
         location: _eventLocationTEC.text,
-        organisers: [_eventApproverTEC.text],
+        organisers: [],
         comments: {"user1": "naice"},
         participants: ["part1", "part2"],
         likes: 100,
@@ -574,7 +577,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     Services services = Services();
     await services.addApproval(
       Approval(
-        clubId: _eventClubTEC.text,
+        clubId: _eventClubTEC,
         dateTime: {
           "endTime": DateTime.parse(_endTimeTEC.text),
           "startTime": DateTime.parse(_startTimeTEC.text)
@@ -583,7 +586,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
         approvalId: _eventNameTEC.text,
         eventName: _eventNameTEC.text,
         location: _eventLocationTEC.text,
-        organisers: [_eventApproverTEC.text],
+        organisers: [],
         approved: 0,
         discussionPoints: _discussionPointsTEC.text,
         eventType: _eventTypeTEC.text,
