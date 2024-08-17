@@ -187,6 +187,7 @@ class _ViewProfileState extends State<ViewProfile> {
     await service.updateEvent(eventId, newinfoEvent);
     print("Removed as Organiser");
     
+
     
     if (currentUserData['role'] == 0) {Navigator.pop(context); // Pop the last route
   Navigator.pop(context);
@@ -204,10 +205,18 @@ Navigator.pop(context);
         List<String>.from(widget.user.organizedEvents);
     organizedEvents.add(eventId);
 
-    Map<String, dynamic> newinfoUser = {
-      'organized_events': organizedEvents,
-      'role': 2
-    };
+    Map<String, dynamic> newinfoUser;
+
+    if (widget.user.role == 3) {
+      newinfoUser = {
+        'organized_events': organizedEvents,
+        'role': 2
+      };
+    }else{
+      newinfoUser = {
+        'organized_events': organizedEvents,
+      };
+    }
 
     List<String> organisers = List<String>.from(
         events.firstWhere((element) => element.eventId == eventId).organisers);
@@ -303,7 +312,7 @@ Navigator.pop(context);
     Map<String, dynamic> newinfoUser = {
       'clubIds': currentUserData['clubIds'],
       'clubs': currentUserData['clubIds'],
-      'role': 1
+      'role': 4
     };
 
     List<String> approvers = List<String>.from(ClubData.approvers);
@@ -431,7 +440,7 @@ Navigator.pop(context);
                     const Divider(),
                     const SizedBox(height: 15),
                     Text(
-                      'Role: ${widget.user.role == 1 ? 'Captain/Member' : widget.user.role == 2 ? 'Organised Events' : 'Participant'}',
+                      'Role: ${widget.user.role == 1 ? 'Captain' : widget.user.role == 2 ? 'Organised Events' : widget.user.role == 4 ? 'Club Member' : 'Participant'}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -450,7 +459,7 @@ Navigator.pop(context);
                     const SizedBox(height: 15),
 
                     
-                    (ClubData.approvers.length == 1)
+                    (ClubData.approvers.length == 1 && widget.setType == "Set Roles")
                         ? ElevatedButton(
                             onPressed: () {
                               setCaptain();
@@ -458,9 +467,9 @@ Navigator.pop(context);
                             child: const Text("Set as Captain"))
                         :
                    
-                   ClubData.approvers[1] == widget.user.userId &&
+                   ClubData.approvers[1] == widget.user.userId && 
                             widget.user.role == 1  && currentUserData['role'] == 0 &&
-                            widget.setType == "Set Captain"
+                            widget.setType == "Set Roles" 
                         ? ElevatedButton(
                             onPressed: () {
                               removeCaptain();
@@ -468,7 +477,7 @@ Navigator.pop(context);
                             child: const Text("Remove as Captain"))
                         : ((widget.user.role == 2 || widget.user.role == 3) &&
                                 (ClubData.approvers[1] == "null") && currentUserData['role'] == 0 &&
-                                widget.setType == "Set Captain")
+                                widget.setType == "Set Roles")
                             ? ElevatedButton(
                                 onPressed: () {
                                   setCaptain();
@@ -481,7 +490,7 @@ Navigator.pop(context);
                                 .difference(Set<String>.from(
                                     widget.user.organizedEvents))
                                 .isNotEmpty &&
-                            (widget.user.role == 3 || widget.user.role == 2) &&
+                            (widget.user.role == 3 || widget.user.role == 2 || widget.user.role == 4) &&
                             widget.setType == "Set Event Organiser"
                         ? ElevatedButton(
                             onPressed: () {
@@ -507,7 +516,7 @@ Navigator.pop(context);
                       (ClubData.approvers.length == 1) ?
                       const SizedBox()
                         :
-                        (widget.user.role == 3 || widget.user.role == 2) && !List<String>.from(ClubData.approvers.sublist(2)).contains(widget.user.userId) ? 
+                        widget.setType == "Set Roles" && (widget.user.role == 3 || widget.user.role == 2) && !List<String>.from(ClubData.approvers.sublist(2)).contains(widget.user.userId) ? 
                         ElevatedButton(
                             onPressed: () {
                               addClubMember();
@@ -520,7 +529,18 @@ Navigator.pop(context);
 
                         }
                         , child: const Text("Remove as Club Member"))
-                        : const SizedBox()
+                        : const SizedBox(),
+
+                        ProfileMenuWidget(
+                                  text: 'Organized Events',
+                                  icon: FontAwesomeIcons.users,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/Organized_events');
+                                  },
+                                  
+                                ),
+                            
 
                         
                         
@@ -537,3 +557,57 @@ Navigator.pop(context);
     );
   }
 }
+
+class ProfileMenuWidget extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final Function onTap;
+
+  const ProfileMenuWidget({
+    required this.text,
+    required this.icon,
+    required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => ListTile(
+      leading: GestureDetector(
+        onTap: () => onTap(),
+        child: Container(
+          width: 30,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            icon,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      title: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      trailing: Padding(
+        padding: const EdgeInsets.only(left: 50.0),
+        child: Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Icon(
+            FontAwesomeIcons.angleRight,
+            size: 15,
+            color: Colors.black,
+          ),
+        ),
+      ));
+}
+

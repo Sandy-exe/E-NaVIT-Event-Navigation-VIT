@@ -14,7 +14,6 @@ Log of Changes:
 2) every club has only one approver for now (use a list) 0th index is approver list in club
 3) every club has only one captain (use a list) 1st index is captain list in club
 4) every club has multiple members (use a list) from 2nd index onwards are members list in club
-
 5) for captain and memeber roles changed...approvers in club is changed
 
 
@@ -23,6 +22,10 @@ TODO:
 2) captain and approvers can change his club members
 3) club members only can give approval request
 4) organiser events should be added only to the organiser who applied
+5) the heirachy between approver-->captaain-->club memeber-->organized events--> participant (the powers changes accordingly)
+6) Check notes for more details
+
+
 
 some aspects: 
     1) role variable:

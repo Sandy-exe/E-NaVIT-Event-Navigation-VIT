@@ -1,4 +1,6 @@
+import 'dart:convert';
 
+import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/pages/main_pages/Captain/organiser_approval_publish_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,6 @@ import 'package:enavit/components/organiser_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/Captain/organiser_profile_page.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/pages/main_pages/general_pages/home_page.dart';
-
 
 class OIndexPage extends StatefulWidget {
   const OIndexPage({super.key});
@@ -16,31 +17,69 @@ class OIndexPage extends StatefulWidget {
 }
 
 class _OIndexPageState extends State<OIndexPage> {
-
   final AuthenticationService _firebaseAuth = AuthenticationService();
+  late final bool isLoggedIn;
+  int selectedIndex = 0;
+  int userRole = -1;
 
-  int selectedIndex = 0 ;
+  List<Widget> pages = [];
+  List<String> pageTitles = [];
 
-  void navigateBottomBar(int index){
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  void navigateBottomBar(int index) {
     setState(() {
       selectedIndex = index;
     });
   }
 
-  //pages to display
-  final List<Widget> pages = [
-    const HomePage(),
-    const OrganiserEventCreationOptionsPage(),
-    const MyClubBio(),
-    const OProfilePage(),
-  ];
+  Future<void> initPrefs() async {
+    SecureStorage secureStorage = SecureStorage();
 
-  final List<String> pageTitles = [
-    'Home',
-    'Event Creation',
-    'My Club',
-    'Profile',
-  ];
+    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+
+    if (isLoggedIn) {
+      String? currentUserDataString =
+          await secureStorage.reader(key: "currentUserData");
+      if (currentUserDataString != null) {
+        userRole = jsonDecode(currentUserDataString)['role'];
+      }
+    }
+
+    if (userRole == 1) {
+      pages = [
+        const HomePage(),
+        const OrganiserEventCreationOptionsPage(),
+        const MyClubBio(),
+        const OProfilePage(),
+      ];
+
+      pageTitles = [
+        'Home',
+        'Event Creation',
+        'My Club',
+        'Profile',
+      ];
+    } else if (userRole == 4) {
+      pages = [
+        const HomePage(),
+        const MyClubBio(),
+        const OProfilePage(),
+      ];
+
+      pageTitles = [
+        'Home',
+        'My Club',
+        'Profile',
+      ];
+    }
+
+    setState(() {}); // Update the state after initializing preferences
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +87,26 @@ class _OIndexPageState extends State<OIndexPage> {
       backgroundColor: Colors.grey[300],
       bottomNavigationBar: NavBar(
         onTabChange: (index) => navigateBottomBar(index),
+        userRole: userRole,
       ),
       appBar: AppBar(
-        title: Text(pageTitles[selectedIndex]),
+        title: Text(pageTitles.isNotEmpty ? pageTitles[selectedIndex] : ''),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Padding(
-                padding:  EdgeInsets.only(left: 25.0),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                  ),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Padding(
+              padding: EdgeInsets.only(left: 25.0),
+              child: Icon(
+                Icons.menu,
+                color: Colors.black,
               ),
             ),
+          ),
         ),
         actions: <Widget>[
           Padding(
@@ -90,75 +130,71 @@ class _OIndexPageState extends State<OIndexPage> {
           children: [
             Column(
               children: [
-                 //logo
+                //logo
                 DrawerHeader(
                   child: Image.asset(
                     'lib/images/Denji.jpg',
                     height: 300,
-                    ),
                   ),
-
+                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Divider(
                     color: Colors.grey[400],
                     thickness: 1,
                   ),
-                  ),
-                  
-                  //other pages
-                  const Padding(
-                    padding: EdgeInsets.only(left:25.0),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        ),
-                      title: Text(
-                        'home',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      ),
-                    ),
-
-                  const Padding(
-                    padding: EdgeInsets.only(left:25.0),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.info,
-                        color: Colors.white,
-                        ),
-                      title: Text(
-                        'About',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      ),
-                    ),
-              ],
-            ), 
-              
-              Padding(
-                padding: const EdgeInsets.only(left:25.0,bottom: 25.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _firebaseAuth.signOut(context);
-                  },
-                  child:  const ListTile(
+                ),
+                //other pages
+                const Padding(
+                  padding: EdgeInsets.only(left: 25.0),
+                  child: ListTile(
                     leading: Icon(
-                      Icons.logout,
+                      Icons.home,
                       color: Colors.white,
-                      ),
+                    ),
                     title: Text(
-                      'logout',
+                      'home',
                       style: TextStyle(color: Colors.white),
                     ),
-                        ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      'About',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0, bottom: 25.0),
+              child: GestureDetector(
+                onTap: () {
+                  _firebaseAuth.signOut(context);
+                },
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'logout',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-          ]
+            ),
+          ],
         ),
       ),
-      body: pages[selectedIndex],
+      body: pages.isNotEmpty ? pages[selectedIndex] : Container(),
     );
   }
 }

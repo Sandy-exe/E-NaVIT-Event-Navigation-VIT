@@ -22,6 +22,7 @@ class _OrganizedEventsState extends State<OrganizedEvents> {
   Future<void> initPrefs() async {
     Services service = Services();
     organizedEvents = await service.getOrganizedEventsView(context);
+    print(organizedEvents);
   }
 
   Widget build(BuildContext context) {

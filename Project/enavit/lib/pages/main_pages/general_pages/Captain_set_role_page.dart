@@ -101,7 +101,7 @@ class _SetRoleCaptainState extends State<SetRoleCaptain> {
                 // get a user
                 Users user = value.userListApprover[index];
                 print(user);
-                return ParticipantTile(user: user, setType: "Set Captain");
+                return ParticipantTile(user: user, setType: "Set Roles");
               },
             ),
           ),

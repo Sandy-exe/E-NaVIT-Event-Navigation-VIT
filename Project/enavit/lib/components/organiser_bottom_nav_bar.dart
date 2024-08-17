@@ -3,7 +3,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class NavBar extends StatelessWidget {
   final void Function(int)? onTabChange;
-  const NavBar({super.key, this.onTabChange});
+  final int userRole;
+  const NavBar({super.key, this.onTabChange, required this.userRole});
 
   @override
   Widget build(BuildContext context) {
@@ -18,20 +19,25 @@ class NavBar extends StatelessWidget {
           tabBorderRadius: 16,
           onTabChange: (value) => onTabChange!(value),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          tabs: const [
-            GButton(
+          tabs: [
+            const GButton(
               icon: Icons.home,
               text: 'Home',
             ),
-            GButton(
-              icon: Icons.edit,
-              text: 'Approval',
-            ),
-            GButton(
+            userRole != 4
+                ? const GButton(
+                    icon: Icons.edit,
+                    text: 'Approval',
+                  )
+                : const GButton(
+                    icon: Icons.edit,
+                    text: 'Approve',
+                  ),
+            const GButton(
               icon: Icons.group,
               text: 'My Club',
             ),
-            GButton(
+            const GButton(
               icon: Icons.person,
               text: 'Profile',
             ),

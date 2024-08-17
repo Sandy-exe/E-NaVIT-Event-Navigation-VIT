@@ -411,9 +411,7 @@ class Services {
     events.add(event.eventId);
     await clubref.update({"events": events});
 
-    List<String> organisers = List<String>.from(clubData["approvers"]);
-    print(event.organisers);
-    organisers.addAll(event.organisers);
+    List<String> organisers = List<String>.from(clubData["approvers"]).take(2).toList();
 
     //organiser is changed in the below obj
     Map<String, dynamic> obj = {
@@ -444,10 +442,9 @@ class Services {
       "budget": event.budget,
     };
     await docref.set(obj);
-    print(organisers.length);
 
     for (var orga in organisers) {
-      try{
+      
       final orgRef = firestore.collection("app_users").doc(orga);
       print("1");
       final org = await orgRef.get();
@@ -456,10 +453,7 @@ class Services {
       List<String> orgEvents = List<String>.from(orgData["organized_events"]);
       orgEvents.add(event.eventId);
       await orgRef.update({"organized_events": orgEvents});
-      }
-      catch(e){
-        print(e);
-      }
+      
     }
   }
 
@@ -919,6 +913,7 @@ class Services {
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
 
+    print(currentUserData['organized_events']);
     for (final eventId in currentUserData['organized_events']) {
       final eventDoc = await firestore.collection("Events").doc(eventId).get();
 

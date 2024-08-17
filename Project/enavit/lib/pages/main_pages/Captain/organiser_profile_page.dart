@@ -191,7 +191,7 @@ class _OProfilePageState extends State<OProfilePage> {
                                   height: 15,
                                 ),
                             
-                            currentUserData['role'] == 1 || currentUserData['role'] == 0 ?  ProfileMenuWidget(
+                            currentUserData['role'] == 1 ?  ProfileMenuWidget(
                             text: 'Set Role',
                             icon: FontAwesomeIcons.users,
                             onTap: () {

@@ -196,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 15),
                                                     
                                                     
-                            currentUserData['role'] == 1 || currentUserData['role'] == 2 ? ProfileMenuWidget(
+                            currentUserData['role'] == 2 ? ProfileMenuWidget(
                             text: 'Organized Events',
                             icon: FontAwesomeIcons.users,
                             onTap: () {

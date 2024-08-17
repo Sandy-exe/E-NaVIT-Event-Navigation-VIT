@@ -8,16 +8,19 @@ class ParticipantTile extends StatelessWidget {
   final String setType;
   const ParticipantTile({super.key, required this.user, required this.setType});
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("User: $user setType: $setType" );
+        print("User: $user setType: $setType");
         Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => ViewProfile(user: user, setType: setType,)),
-  );
+          context,
+          MaterialPageRoute(
+              builder: (context) => ViewProfile(
+                    user: user,
+                    setType: setType,
+                  )),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
@@ -61,17 +64,28 @@ class ParticipantTile extends StatelessWidget {
                             ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(7, 0, 7, 0),
                       child: Text(
-                        user.role == 1 ? "Captain/Member of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}" : user.role == 2 ? "Organised Events" : "Participant",
+                        user.role == 1
+                            ? "Captain of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}"
+                            : user.role == 2
+                                ? "Organised Events"
+                                : user.role == 4
+                                    ? "Member of ${user.clubIds.isEmpty ? 'NOCLUB' : user.clubIds[0]}"
+                                    : "Participant",
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Poppins',
                               fontSize: 16,
                               fontWeight: FontWeight.w300,
-                              color: user.role == 1 ? Colors.green : Colors.red,
+                              color: user.role == 1
+                                  ? Colors.green
+                                  : user.role == 2
+                                      ? Colors.blue
+                                      : user.role == 3
+                                          ? Colors.orange
+                                          : Colors.purple,
                             ),
                       ),
                     ),
