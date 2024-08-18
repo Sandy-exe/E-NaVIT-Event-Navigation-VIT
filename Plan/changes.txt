@@ -28,7 +28,7 @@ TODO:
 
 todo:
 1) so int he about event page i need find a way to find the end of the column and stop it ri8 there
-2) same with the my club thingy
+2) Find better icons with similar color for approval/publish Events page icons
 
 some aspects: 
     1) role variable:

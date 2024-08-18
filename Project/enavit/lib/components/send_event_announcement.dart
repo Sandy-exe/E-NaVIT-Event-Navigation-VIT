@@ -16,12 +16,14 @@ class SEVENTAnnouncement extends StatefulWidget {
 }
 
 class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
+  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _announcementController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    print(widget.event.eventId);
   }
 
   @override
@@ -32,7 +34,6 @@ class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
 
   Future <void> sendAnnouncemnt() async {
     Services services = Services();
-
 
     await services.addEventannouncementDetails(EventAnnoucenments(eventId: widget.event.eventId, 
     announcement: _announcementController.text, announcementId: "", dateTime: DateTime.now() , userId: widget.userId, userName: widget.userName,eventName: widget.event.eventName)
@@ -83,7 +84,7 @@ class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
                       maxLines: 5,
                       decoration: InputDecoration(
                         labelText: 'Announcement',
-                        labelStyle: TextStyle(fontSize: 18),
+                        labelStyle: const TextStyle(fontSize: 18),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

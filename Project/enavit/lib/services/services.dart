@@ -1165,7 +1165,14 @@ Future<void> removeAllDocsExceptOne() async {
   
 
 
-
+  Future <void> deleteEvents(String eventId) async {
+    try {
+      final eventRef = firestore.collection("Events").doc(eventId);
+      await eventRef.delete();
+    } catch (e) {
+      print(e);
+    }
+  }
   
 }
 

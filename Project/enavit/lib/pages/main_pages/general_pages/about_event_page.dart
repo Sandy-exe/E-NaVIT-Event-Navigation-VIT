@@ -49,9 +49,7 @@ class _AboutEventState extends State<AboutEvent> {
   @override
   void initState() {
     super.initState();
-
-
-
+    initPrefs();
     razorpay = Razorpay();
 
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccess);
@@ -154,6 +152,17 @@ class _AboutEventState extends State<AboutEvent> {
   Future<void> initPrefs() async {
 
     
+    SecureStorage secureStorage = SecureStorage();
+
+    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
+
+      String? currentUserDataString =
+          await secureStorage.reader(key: "currentUserData");
+      if (currentUserDataString != null) {
+        currentUserData = jsonDecode(currentUserDataString);
+      }
+
+    
     Services service = Services();
     List<Event> events = await service.getOrganizedEventsView(context);
 
@@ -163,7 +172,6 @@ class _AboutEventState extends State<AboutEvent> {
       }
     }
 
-    SecureStorage secureStorage = SecureStorage();
 
     String eventString = await secureStorage.reader(key: "events") ?? "null"; 
 
@@ -180,19 +188,6 @@ class _AboutEventState extends State<AboutEvent> {
           ifRegistered = true;
         }
     }
-
-    isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
-
-
-    if (isLoggedIn) {
-      String? currentUserDataString =
-          await secureStorage.reader(key: "currentUserData");
-      if (currentUserDataString != null) {
-        currentUserData = jsonDecode(currentUserDataString);
-      }
-    }
-
-    
     // print(userEvent);
   }
 
@@ -285,13 +280,78 @@ class _AboutEventState extends State<AboutEvent> {
                                 //     context,
                                 //     MaterialPageRoute(
                                 //         builder: (context) => EditEventDetails()));
-                              } else {
-                                //delete event
+                              } else if (value == 2) {
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    TextEditingController _controller =
+                                        TextEditingController();
+                                    bool _isDeleteEnabled = false;
+
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return AlertDialog(
+                                          title: const Text("Delete Event"),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text(
+                                                  "Are you sure you want to delete this event?"),
+                                              const SizedBox(height: 20),
+                                              TextField(
+                                                controller: _controller,
+                                                onChanged: (text) {
+                                                  setState(() {
+                                                    _isDeleteEnabled =
+                                                        text.toLowerCase() ==
+                                                            "delete";
+                                                  });
+                                                },
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText:
+                                                      "Type 'delete' to confirm",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("Cancel"),
+                                            ),
+                                            TextButton(
+                                              onPressed: _isDeleteEnabled
+                                                  ? () {
+                                                      Services service =
+                                                          Services();
+                                                      service.deleteEvents(
+                                                          widget.event.eventId);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                  : null, // Disable the button if "delete" is not typed
+                                              child: const Text("Delete"),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+
+
+                              } else if (value == 1) {
+                                
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
-                                //         builder: (context) => DashboardScreen(
-                                //             event: widget.event)));
+                                //         builder: (context) => EditEventDetails()));
                               }
                             },
                           ),
@@ -490,6 +550,7 @@ class _AboutEventState extends State<AboutEvent> {
     isOrganized
         ? MaterialButton(
             onPressed: () {
+              print(currentUserData['userid']);
               Navigator.push(
                   context,
                   MaterialPageRoute(

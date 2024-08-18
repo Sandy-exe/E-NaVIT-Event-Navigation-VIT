@@ -10,83 +10,108 @@ class ChoiceApprovePublishCreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BoxyColumn(
-        children: [
-          Expanded(
-            child: BoxyRow(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildButton(
-                  context,
-                  "Approvals",
-                  () {
-                    debugPrint("Approvals");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CompleteEventDetailPage(),
-                      ),
-                    );
-                  },
-                ),
-                _buildButton(
-                  context,
-                  "Publish\nEvents",
-                  () {
-                    debugPrint("Publish");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ListOfApproved(),
-                      ),
-                    );
-                  },
-                ),
-              ],
+      backgroundColor: Colors.grey[300],
+      body: Center(
+        child: BoxyColumn(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [ 
+            Padding(
+              padding: const EdgeInsets.all(15.0),                                                                        
+              child: _buildCardButton(
+                context,
+                'lib/images/Approved.png', // Dummy image URL
+                "Approvals",
+                "View approval",
+                () {
+                  debugPrint("Approvals");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CompleteEventDetailPage(),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildButton(
-              context,
-              "Create Events",
-              () {
-                debugPrint("Create");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateEventPage(),
-                  ),
-                );
-              },
+
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: _buildCardButton(
+                context,
+                'lib/images/upload.png', // Dummy image URL
+                "Publish",
+                "Publish events",
+                () {
+                  debugPrint("Publish");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ListOfApproved(),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+            
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: _buildCardButton(
+                context,
+                'lib/images/create.png', // Dummy image URL
+                "Create",
+                "Create events",
+                () {
+                  debugPrint("Create");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateEventPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
+  Widget _buildCardButton(BuildContext context, String imageUrl, String title,
+      String subtitle, VoidCallback onPressed) {
     return Container(
-      margin: const EdgeInsets.all(10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.black12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
-        ),
-        onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+        ],
+      ),
+      child: Center(
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: -20),
+          leading: SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset(
+              imageUrl,
+              width: 100,
+              height: 100,
             ),
           ),
+          title: Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(subtitle),
+          onTap: onPressed,
         ),
       ),
     );

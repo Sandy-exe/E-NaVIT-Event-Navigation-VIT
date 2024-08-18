@@ -125,6 +125,13 @@ flutter:
     - lib/images/facebook.png
     - lib/images/linkedin.png
     - lib/images/google.png
+    - lib/images/Approved.png
+    - lib/images/create.png
+    - lib/images/reqst_approval.jpg
+    - lib/images/upload.png
+    - lib/images/pending.png
+    - lib/images/approval.png
+    - lib/images/approval.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -34,7 +34,10 @@ class AnnouncementTile extends StatelessWidget {
             const SizedBox(height: 8.0),
                         Text(
               announcement.announcement, // Announcement text
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 20.0), // Adjust the font size as needed
+              style: const TextStyle(
+    color: Color.fromARGB(255, 70, 70, 70), // Slightly grey color
+    fontSize: 16.0, // Smaller text size
+  ),// Adjust the font size as needed
             ),
             const SizedBox(height: 8.0),
             Row(
@@ -42,11 +45,11 @@ class AnnouncementTile extends StatelessWidget {
               children: [
                 Text(
                   announcement.userName, // User ID (name)
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 Text(
                   timeago.format(announcement.dateTime), // Date and time
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
             ),
