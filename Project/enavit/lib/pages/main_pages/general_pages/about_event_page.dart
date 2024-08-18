@@ -303,7 +303,7 @@ class _AboutEventState extends State<AboutEvent> {
                     child: Transform.translate(
                       offset: const Offset(0, 1),
                       child: Container(
-                        height: 45,
+                        height: 55,
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
@@ -326,7 +326,6 @@ class _AboutEventState extends State<AboutEvent> {
               SliverList(
                   delegate: SliverChildListDelegate([
                 Container(
-                    height: MediaQuery.of(context).size.height * 0.55,
                     color: Colors.white,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -539,6 +538,7 @@ class _AboutEventState extends State<AboutEvent> {
                 ),
               )
             : Container(),
+            const SizedBox(height: 20),
   ],
 )
 

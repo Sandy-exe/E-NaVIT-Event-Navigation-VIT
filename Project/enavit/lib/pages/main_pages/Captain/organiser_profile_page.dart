@@ -28,6 +28,8 @@ class _OProfilePageState extends State<OProfilePage> {
   }
 
   Future<void> initPrefs() async {
+    
+    print('Profile Page');
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';

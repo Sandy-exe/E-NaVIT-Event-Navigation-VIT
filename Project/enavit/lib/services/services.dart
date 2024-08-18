@@ -237,6 +237,7 @@ class Services {
       Map<String, dynamic> data = docSnapshot.data();
 
       try {
+        
         if (data['role'] == 0) {
           continue;
         }

@@ -390,7 +390,7 @@ class _LoginPageState extends State<LoginPage> {
           '/approver_index',
           (Route<dynamic> route) => false, // This predicate removes all routes
         );
-      } else if (userRole == 1 || userRole == 2) {
+      } else if (userRole == 1 || userRole == 4) {
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -399,7 +399,7 @@ class _LoginPageState extends State<LoginPage> {
                 false, // This predicate removes all routes
           );
         }
-      } else if (userRole == 3) {
+      } else if (userRole == 3 || userRole == 2 ) {
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,

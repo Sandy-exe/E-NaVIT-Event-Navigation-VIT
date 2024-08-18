@@ -8,6 +8,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(userRole);
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: GNav(
@@ -24,15 +25,11 @@ class NavBar extends StatelessWidget {
               icon: Icons.home,
               text: 'Home',
             ),
-            userRole != 4
-                ? const GButton(
-                    icon: Icons.edit,
-                    text: 'Approval',
-                  )
-                : const GButton(
-                    icon: Icons.edit,
-                    text: 'Approve',
-                  ),
+            if (userRole != 4)
+              const GButton(
+                icon: Icons.edit,
+                text: 'Approval',
+              ),
             const GButton(
               icon: Icons.group,
               text: 'My Club',

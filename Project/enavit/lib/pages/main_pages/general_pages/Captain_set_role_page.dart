@@ -100,7 +100,7 @@ class _SetRoleCaptainState extends State<SetRoleCaptain> {
               itemBuilder: (context, index) {
                 // get a user
                 Users user = value.userListApprover[index];
-                print(user);
+                
                 return ParticipantTile(user: user, setType: "Set Roles");
               },
             ),

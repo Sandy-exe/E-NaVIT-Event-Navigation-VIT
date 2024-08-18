@@ -27,6 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> initPrefs() async {
+    
+    print('participant Profile Page');
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
@@ -151,7 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const Divider(),
                           const SizedBox(height: 15),
 
-                          if (currentUserData['role'] == 1)
+                          if (currentUserData['role'] == 1 || currentUserData['role'] == 4)
                             ProfileMenuWidget(
                               text: 'Organizer Mode',
                               icon: FontAwesomeIcons.userTie,

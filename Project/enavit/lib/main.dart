@@ -130,7 +130,7 @@ class EnavitState extends State<Enavit> {
           initialRoute: widget.isLoggedIn
               ? (widget.userRole == 0
                   ? '/approver_index'
-                  : ((widget.userRole == 1 || widget.userRole == 2 || widget.userRole == 4 )&& widget.role 
+                  : ((widget.userRole == 1 || widget.userRole == 4 )&& widget.role 
                       ? '/organiser_index'
                       : '/participant_index'))
               : '/',
