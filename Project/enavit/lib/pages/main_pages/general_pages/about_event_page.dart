@@ -163,8 +163,8 @@ class _AboutEventState extends State<AboutEvent> {
       }
 
     
-    Services service = Services();
-    List<Event> events = await service.getOrganizedEventsView(context);
+    Services service = Services(); 
+    List<Event> events = await service.getOrganizedEventsView(context," ");
 
     for (Event event in events) {
       if (event.eventId == widget.event.eventId) {

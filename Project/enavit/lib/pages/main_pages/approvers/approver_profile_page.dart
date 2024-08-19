@@ -179,6 +179,7 @@ class _AProfilePageState extends State<AProfilePage> {
                             text: 'Organized Events',
                             icon: Icons.star,
                             onTap: () {
+                              
                               Navigator.pushNamed(context, '/Organized_events');
                             },
                           ),

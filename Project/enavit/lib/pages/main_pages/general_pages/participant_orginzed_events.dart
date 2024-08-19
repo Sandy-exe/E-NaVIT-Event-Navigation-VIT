@@ -3,16 +3,16 @@ import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
 
-class OrganizedEvents extends StatefulWidget {
-  
-  const OrganizedEvents({super.key});
+class organizedEventsParticipant extends StatefulWidget {
+  String userid;
+  organizedEventsParticipant({super.key, required this.userid });
 
   @override
-  State<OrganizedEvents> createState() => _OrganizedEventsState();
+  State<organizedEventsParticipant> createState() => _organizedEventsParticipantState();
 }
 
-class _OrganizedEventsState extends State<OrganizedEvents> {
-  late List<Event> organizedEvents;
+class _organizedEventsParticipantState extends State<organizedEventsParticipant> {
+  late List<Event> organizedEvents = [];
 
   @override
   void initState() {
@@ -21,7 +21,8 @@ class _OrganizedEventsState extends State<OrganizedEvents> {
 
   Future<void> initPrefs() async {
     Services service = Services();
-    organizedEvents = await service.getOrganizedEventsView(context," ");
+    
+    organizedEvents = await service.getOrganizedEventsView(context, widget.userid);
     print(organizedEvents);
   }
 

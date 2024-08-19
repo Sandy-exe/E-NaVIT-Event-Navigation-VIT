@@ -480,14 +480,17 @@ void toggleFollow() async {
                                       ]),
                                 ),
                                 SizedBox(
-                                  height: eventListLength, // or any fraction,
+                                  height: eventListLength < 10 ? 1000 : eventListLength, // or any fraction,
                                   child: TabBarView(
                                     children: [
                                       // Posts Tab
                                       Container(
+                                        width: 300,
                                         padding: const EdgeInsets.all(0),
-                                        child: const Center(
-                                            child: Text("No Posts Available")),
+                                        child: const Padding(
+                                          padding:  EdgeInsets.all(150.0),
+                                          child: Text("No Posts Available"),
+                                        ),
                                       ),
                                       // Events Tab
                                       Container(

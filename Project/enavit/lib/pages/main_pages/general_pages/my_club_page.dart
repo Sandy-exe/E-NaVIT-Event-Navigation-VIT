@@ -505,7 +505,9 @@ class _MyClubBioState extends State<MyClubBio> {
                                 // ),
 
                                 SizedBox(
-                                  height: eventListLength, // or any fraction,
+                                  height: eventListLength < 10
+                                      ? 1000
+                                      : eventListLength, // or any fraction,
                                   child: TabBarView(
                                     children: [
                                       // Posts Tab

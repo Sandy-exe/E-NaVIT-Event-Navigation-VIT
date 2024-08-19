@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/models/og_models.dart';
+import 'package:enavit/pages/main_pages/general_pages/participant_orginzed_events.dart';
+import 'package:enavit/pages/main_pages/general_pages/view_organized_events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:enavit/services/services.dart';
@@ -535,8 +537,11 @@ Navigator.pop(context);
                                   text: 'Organized Events',
                                   icon: FontAwesomeIcons.users,
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/Organized_events');
+                                    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => organizedEventsParticipant(userid: widget.user.userId,)),
+                        );
                                   },
                                   
                                 ),

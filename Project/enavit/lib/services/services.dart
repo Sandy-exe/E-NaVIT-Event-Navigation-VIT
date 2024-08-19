@@ -151,7 +151,6 @@ class Services {
 
   //details of all clubs and events
   Future<void> getEventClubData(BuildContext context) async {
-
     
     final querySnapshot = await firestore.collection("Events").get();
     List<Event> events = [];
@@ -195,7 +194,11 @@ class Services {
       );
     }
 
+    print(events.length);
+
     //Clubs list
+
+    try{
     final clubquerySnapshot = await firestore.collection("Clubs").get();
     List<Club> clubs = [];
 
@@ -208,17 +211,27 @@ class Services {
           clubName: data['clubName'],
           bio: data['bio'],
           email: data['email'],
-          events: List<String>.from(data['events']),
+          events: List<String>.from(data['events']) ,
           approvers: List<String>.from(data['approvers'] ?? []),
           followers: List<String>.from(data['followers']),
         ),
       );
     }
+        print(clubs.length);
+        
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        Provider.of<SearchModel>(context, listen: false)
+            .initEventClubList(events, clubs);
+      });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<SearchModel>(context, listen: false)
-          .initEventClubList(events, clubs);
-    });
+    } catch (e) {
+      print(e);
+    } 
+
+
+
+
+
 
     // for (final docSnapshot in querySnapshot.docs) {
     //   Map<String, dynamic> docData = docSnapshot.data();
@@ -397,6 +410,8 @@ class Services {
         );
       } catch (e) {}
     }
+
+
 
     return events;
   }
@@ -908,19 +923,103 @@ class Services {
     return likedEvents;
   }
 
-  Future<List<Event>> getOrganizedEventsView(BuildContext context) async {
+  // Future<List<Event>> getOrganizedEventsView(BuildContext context,String userid) async {
+  //   List<Event> organizedEvents = [];
+    
+  //   final userRef =
+  //       firestore.collection("app_users").doc(userid);
+
+  //   DocumentSnapshot userDoc = await userRef.get();
+
+  //      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+
+  //   if (userData != null && userData.containsKey('organized_events')) {
+  //     organizedEvents = List<Event>.from(userData['organized_events']);
+  //   }
+    
+
+
+
+  //     return organizedEvents;
+  // }
+
+  Future<List<Event>> getOrganizedEventsView(
+    BuildContext context,
+  String? userid) async {
     List<Event> organizedEvents = [];
+    
+    if (userid != " ") {
+      final userRef = firestore.collection("app_users").doc(userid);
+      
+      DocumentSnapshot userDoc = await userRef.get();
+
+
+
+      Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+
+
+        List<String> temp = List<String>.from(userData?['organized_events']);
+
+      for (final eventId in temp) {
+      final eventDoc = await firestore.collection("Events").doc(eventId).get();
+
+      Map<String, dynamic>? eventDataNullable = eventDoc.data();
+      if (eventDataNullable == null) {
+        debugPrint("Event data not found participant");
+        continue;
+      }
+      Map<String, dynamic> eventData = eventDataNullable;
+
+      Map<String, DateTime> dateTime = {
+        'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate(),
+        'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
+      };
+
+      organizedEvents.add(
+        Event(
+          clubId: eventData['clubId'],
+          dateTime: dateTime,
+          description: eventData['description'],
+          eventId: eventData['eventId'],
+          eventName: eventData['eventName'],
+          location: eventData['location'],
+          fee: eventData['fee'],
+          organisers: List<String>.from(eventData['organisers']),
+          comments: Map<String, String>.from(eventData['comments']),
+          participants: List<String>.from(eventData['participants']),
+          likes: eventData['likes'],
+          eventImageURL: eventData['eventImageURL'] ?? "null",
+          discussionPoints: eventData['discussionPoints'] ?? "old doc",
+          eventType: eventData['eventType'] ?? "old doc",
+          eventCategory: eventData['eventCategory'] ?? "old doc",
+          fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+          schoolCentre: eventData['schoolCentre'] ?? "old doc",
+          coordinator1: eventData['coordinator1'] ?? "old doc",
+          coordinator2: eventData['coordinator2'] ?? "old doc",
+          coordinator3: eventData['coordinator3'] ?? "old doc",
+          attendancePresent: eventData['attendancePresent'] ?? "0",
+          issues: Map<String, Map<String, String>>.from(eventData['issues']),
+          expense: eventData['expense'] ?? "0",
+          revenue: eventData['revenue'] ?? "0",
+          budget: eventData['budget'] ?? "0",
+          expectedRevenue: eventData['expectedRevenue'] ?? "0",
+        ),
+      );
+        return organizedEvents;
+    }
+
+    }
 
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
-
+    print("ohoho");
     print(currentUserData['organized_events']);
     for (final eventId in currentUserData['organized_events']) {
       final eventDoc = await firestore.collection("Events").doc(eventId).get();
 
       Map<String, dynamic>? eventDataNullable = eventDoc.data();
       if (eventDataNullable == null) {
-        debugPrint("Event data not found");
+        debugPrint("Event data not found user");
         continue;
       }
       Map<String, dynamic> eventData = eventDataNullable;

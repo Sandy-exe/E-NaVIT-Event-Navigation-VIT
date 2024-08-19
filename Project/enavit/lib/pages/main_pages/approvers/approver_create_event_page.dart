@@ -459,7 +459,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         addEvent();
                       },
                       child: const Text(
-                        'Send Approval Request',
+                        'Publish Event',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

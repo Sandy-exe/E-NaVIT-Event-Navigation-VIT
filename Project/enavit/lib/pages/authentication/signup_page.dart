@@ -483,10 +483,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   : const Text('Sign Up'),
                         ),
                       ),
-                      if (_isLoading)
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      
                       const SizedBox(
                         height: 30.0,
                       ),
@@ -601,6 +598,165 @@ class _SignUpPageState extends State<SignUpPage> {
         ],
       ),
     );
+  }
+
+void dummyUsers() async {
+    final List<Map<String, String>> dummyData = [
+      {
+        "firstName": "Aarav",
+        "lastName": "Patel",
+        "regNo": "21BCE1829",
+        "phoneno": "9876543210"
+      },
+      {
+        "firstName": "Vivaan",
+        "lastName": "Sharma",
+        "regNo": "22BRS1830",
+        "phoneno": "9876543211"
+      },
+      {
+        "firstName": "Aditya",
+        "lastName": "Agarwal",
+        "regNo": "23BAI1831",
+        "phoneno": "9876543212"
+      },
+      {
+        "firstName": "Vihaan",
+        "lastName": "Singh",
+        "regNo": "24BCE1832",
+        "phoneno": "9876543213"
+      },
+      {
+        "firstName": "Krishna",
+        "lastName": "Reddy",
+        "regNo": "20BRS1833",
+        "phoneno": "9876543214"
+      },
+      {
+        "firstName": "Arjun",
+        "lastName": "Kumar",
+        "regNo": "21BAI1834",
+        "phoneno": "9876543215"
+      },
+      {
+        "firstName": "Ishaan",
+        "lastName": "Mehta",
+        "regNo": "22BCE1835",
+        "phoneno": "9876543216"
+      },
+      {
+        "firstName": "Rohan",
+        "lastName": "Gupta",
+        "regNo": "23BRS1836",
+        "phoneno": "9876543217"
+      },
+      {
+        "firstName": "Kabir",
+        "lastName": "Joshi",
+        "regNo": "24BAI1837",
+        "phoneno": "9876543218"
+      },
+      {
+        "firstName": "Dev",
+        "lastName": "Nair",
+        "regNo": "20BCE1838",
+        "phoneno": "9876543219"
+      },
+      {
+        "firstName": "Aryan",
+        "lastName": "Shah",
+        "regNo": "21BRS1839",
+        "phoneno": "9876543220"
+      },
+      {
+        "firstName": "Ayaan",
+        "lastName": "Rao",
+        "regNo": "22BAI1840",
+        "phoneno": "9876543221"
+      },
+      {
+        "firstName": "Ansh",
+        "lastName": "Pillai",
+        "regNo": "23BCE1841",
+        "phoneno": "9876543222"
+      },
+      {
+        "firstName": "Siddharth",
+        "lastName": "Sinha",
+        "regNo": "24BRS1842",
+        "phoneno": "9876543223"
+      },
+      {
+        "firstName": "Rudra",
+        "lastName": "Chopra",
+        "regNo": "20BAI1843",
+        "phoneno": "9876543224"
+      },
+      {
+        "firstName": "Yash",
+        "lastName": "Verma",
+        "regNo": "21BCE1844",
+        "phoneno": "9876543225"
+      },
+      {
+        "firstName": "Parth",
+        "lastName": "Malhotra",
+        "regNo": "22BRS1845",
+        "phoneno": "9876543226"
+      },
+      {
+        "firstName": "Aarush",
+        "lastName": "Mishra",
+        "regNo": "23BAI1846",
+        "phoneno": "9876543227"
+      },
+      {
+        "firstName": "Laksh",
+        "lastName": "Roy",
+        "regNo": "24BCE1847",
+        "phoneno": "9876543228"
+      },
+      {
+        "firstName": "Arnav",
+        "lastName": "Bhatt",
+        "regNo": "20BRS1848",
+        "phoneno": "9876543229"
+      },
+    ];
+
+    for (var data in dummyData) {
+    final String email = "${data['firstName']?.toLowerCase()}.${data['lastName']?.toLowerCase()}@vitstudent.ac.in";
+    const String password = "Santhosh1@"; // Default password for dummy users
+    final String regno = data['regNo']!;
+    final String phoneno = data['phoneno']!;
+    final String name = "${data['firstName']} ${data['lastName']}";
+
+    final String result = await _firebaseAuth.signUp(
+      email: email,
+      password: password,
+      regno: regno,
+      phoneno: phoneno,
+      name: name,
+    );
+
+    if (result == "success") {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("User ${data['firstName']} ${data['lastName']} uploaded successfully"),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result)),
+        );
+      }
+    }
+
+    }
   }
 
 

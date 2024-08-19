@@ -21,8 +21,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> initPrefs() async {
+    
     Services service = Services();
     await service.getEventClubData(context);
+    print("oj please?");
+    
   }
 
   @override
@@ -88,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                 
                 // get a Event from Event list
                 Object object = value.eventClubListHome[index];
+                print(object);
 
                 if (object is Club) {
                   return ClubTile(
