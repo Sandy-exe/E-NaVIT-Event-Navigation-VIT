@@ -1,20 +1,18 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
-
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class PublishEventPage extends StatefulWidget {
   final Approval approval;
+
   const PublishEventPage({super.key, required this.approval});
 
   @override
@@ -22,25 +20,25 @@ class PublishEventPage extends StatefulWidget {
 }
 
 class _PublishEventPageState extends State<PublishEventPage> {
+  bool _isLoading = false;
   final TextEditingController _startTimeTEC = TextEditingController();
   final TextEditingController _endTimeTEC = TextEditingController();
-  late TextEditingController _eventNameTEC = TextEditingController();
-  late TextEditingController _locationTEC = TextEditingController();
-  late TextEditingController _organisersTEC = TextEditingController();
-  late TextEditingController _approvedTEC = TextEditingController();
-  late TextEditingController _discussionPointsTEC = TextEditingController();
-  late TextEditingController _eventTypeTEC = TextEditingController();
-  late TextEditingController _eventCategoryTEC = TextEditingController();
-  late TextEditingController _fdpProposedByTEC = TextEditingController();
-  late TextEditingController _schoolCentreTEC = TextEditingController();
-  late TextEditingController _coordinator1TEC = TextEditingController();
-  late TextEditingController _coordinator2TEC = TextEditingController();
-  late TextEditingController _coordinator3TEC = TextEditingController();
-  late TextEditingController _budgetTEC = TextEditingController();
-  late TextEditingController _clubIdTEC = TextEditingController();
-  late TextEditingController _dateTimeTEC = TextEditingController();
-  late TextEditingController _descriptionTEC = TextEditingController();
-  late TextEditingController _approvalIdTEC = TextEditingController();
+  final TextEditingController _eventNameTEC = TextEditingController();
+  final TextEditingController _locationTEC = TextEditingController();
+  final TextEditingController _organisersTEC = TextEditingController();
+  final TextEditingController _approvedTEC = TextEditingController();
+  final TextEditingController _discussionPointsTEC = TextEditingController();
+  final TextEditingController _eventTypeTEC = TextEditingController();
+  final TextEditingController _eventCategoryTEC = TextEditingController();
+  final TextEditingController _fdpProposedByTEC = TextEditingController();
+  final TextEditingController _schoolCentreTEC = TextEditingController();
+  final TextEditingController _coordinator1TEC = TextEditingController();
+  final TextEditingController _coordinator2TEC = TextEditingController();
+  final TextEditingController _coordinator3TEC = TextEditingController();
+  final TextEditingController _budgetTEC = TextEditingController();
+  final TextEditingController _clubIdTEC = TextEditingController();
+  final TextEditingController _descriptionTEC = TextEditingController();
+  final TextEditingController _approvalIdTEC = TextEditingController();
   final TextEditingController _eventFeeTEC = TextEditingController();
   final TextEditingController _eventImageURL = TextEditingController();
 
@@ -49,75 +47,62 @@ class _PublishEventPageState extends State<PublishEventPage> {
   String? downloadUrl;
   final imageNotifier = ValueNotifier<File?>(null);
 
-  Future ImagePickerMethod() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        imageNotifier.value = _image;
-      } else {
-        showSnackBar("No Image Selected", const Duration(milliseconds: 1000));
-      }
-    });
-  }
   @override
   void initState() {
     super.initState();
-    _clubIdTEC = TextEditingController(text: widget.approval.clubId);
-    _dateTimeTEC =
-        TextEditingController(text: widget.approval.dateTime.toString());
-    _descriptionTEC = TextEditingController(text: widget.approval.description);
-    _approvalIdTEC = TextEditingController(text: widget.approval.approvalId);
-    _eventNameTEC = TextEditingController(text: widget.approval.eventName);
-    _locationTEC = TextEditingController(text: widget.approval.location);
-    _organisersTEC =
-        TextEditingController(text: widget.approval.organisers.join(', '));
-    _approvedTEC =
-        TextEditingController(text: widget.approval.approved.toString());
-    _discussionPointsTEC =
-        TextEditingController(text: widget.approval.discussionPoints);
-    _eventTypeTEC = TextEditingController(text: widget.approval.eventType);
-    _eventCategoryTEC =
-        TextEditingController(text: widget.approval.eventCategory);
-    _fdpProposedByTEC =
-        TextEditingController(text: widget.approval.fdpProposedBy);
-    _schoolCentreTEC =
-        TextEditingController(text: widget.approval.schoolCentre);
-    _coordinator1TEC =
-        TextEditingController(text: widget.approval.coordinator1);
-    _coordinator2TEC =
-        TextEditingController(text: widget.approval.coordinator2);
-    _coordinator3TEC =
-        TextEditingController(text: widget.approval.coordinator3);
-    _budgetTEC = TextEditingController(text: widget.approval.budget);
-    
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    _clubIdTEC.text = widget.approval.clubId;
+    _descriptionTEC.text = widget.approval.description;
+    _approvalIdTEC.text = widget.approval.approvalId;
+    _eventNameTEC.text = widget.approval.eventName;
+    _locationTEC.text = widget.approval.location;
+    _organisersTEC.text = widget.approval.organisers.join(', ');
+    _approvedTEC.text = widget.approval.approved.toString();
+    _discussionPointsTEC.text = widget.approval.discussionPoints;
+    _eventTypeTEC.text = widget.approval.eventType;
+    _eventCategoryTEC.text = widget.approval.eventCategory;
+    _fdpProposedByTEC.text = widget.approval.fdpProposedBy;
+    _schoolCentreTEC.text = widget.approval.schoolCentre;
+    _coordinator1TEC.text = widget.approval.coordinator1;
+    _coordinator2TEC.text = widget.approval.coordinator2;
+    _coordinator3TEC.text = widget.approval.coordinator3;
+    _budgetTEC.text = widget.approval.budget;
     _startTimeTEC.text = formatDate(widget.approval.dateTime["startTime"]);
     _endTimeTEC.text = formatDate(widget.approval.dateTime["endTime"]);
   }
 
-  String formatDate(Timestamp timestamp) {
-    DateTime date = timestamp.toDate();
-
-    String year = date.year.toString().padLeft(4, '0');
-    String month = date.month.toString().padLeft(2, '0');
-    String day = date.day.toString().padLeft(2, '0');
-
-    String hour = date.hour.toString().padLeft(2, '0');
-    String minute = date.minute.toString().padLeft(2, '0');
-    String second = date.second.toString().padLeft(2, '0');
-
-    // Return the date and time in ISO 8601 format
-    return "$year-$month-$day $hour:$minute:$second";
+  String formatDate(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date.toDate());
+    } else if (date is DateTime) {
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+    }
+    return '';
   }
-  
 
-  Future uploadImage() async {
+  Future<void> ImagePickerMethod() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        imageNotifier.value = _image;
+      });
+    } else {
+      showSnackBar("No Image Selected", const Duration(milliseconds: 1000));
+    }
+  }
+
+  Future<void> uploadImage() async {
     SecureStorage secureStorage = SecureStorage();
     String userData =
         await secureStorage.reader(key: "currentUserData") ?? "null";
 
     if (userData == "null") return;
+
     Map<String, dynamic> currentUserData = jsonDecode(userData);
     String clubId = currentUserData["clubs"][0];
     String userId = currentUserData["userid"];
@@ -127,18 +112,18 @@ class _PublishEventPageState extends State<PublishEventPage> {
         .ref()
         .child("$clubId/images")
         .child("$uniqueFileName.userID$userId");
+
     UploadTask uploadTask = ref.putFile(_image!);
     await uploadTask.whenComplete(() async {
       downloadUrl = await ref.getDownloadURL();
       _eventImageURL.text = downloadUrl!;
     });
-    // var imageURL = "";
   }
 
-  showSnackBar(String message, Duration d) {
+  void showSnackBar(String message, Duration duration) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
-      duration: Duration(seconds: d.inSeconds),
+      duration: duration,
     ));
   }
 
@@ -151,338 +136,183 @@ class _PublishEventPageState extends State<PublishEventPage> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Create Approval",
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Create Approval",
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(
-              height: 80,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _clubIdTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Club ID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
+              const SizedBox(height: 80),
+              _buildFormFields(),
+              const SizedBox(height: 32),
+              _buildImagePicker(),
+              const SizedBox(height: 32),
+              _buildEventFeeField(),
+              
+              const SizedBox(height: 32),
+              Center(
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
-                  onPressed: () async {
-                    final List<DateTime>? dateTime =
-                        await showOmniDateTimeRangePicker(context: context);
-
-                    if (dateTime == null) return;
-
-                    String formattedTime1 =
-                        DateFormat('kk:mm').format(dateTime[0]);
-                    String formattedDate1 =
-                        DateFormat('yyyy-MM-dd').format(dateTime[0]);
-
-                    String formattedTime2 =
-                        DateFormat('kk:mm').format(dateTime[1]);
-                    String formattedDate2 =
-                        DateFormat('yyyy-MM-dd').format(dateTime[1]);
-
-                    _startTimeTEC.text = "$formattedDate1 $formattedTime1";
-                    _endTimeTEC.text = "$formattedDate2 $formattedTime2";
-                  },
-                  child: const Text(
-                    'Pick Time Range',
+                  onPressed: _isLoading ? null : addEvent,
+                  child: _isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                    "Add Event",
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
-                const SizedBox(height: 16),
-
-                // Start Date and Time
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _startTimeTEC,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Start Date and Time',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _endTimeTEC,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: 'End Date and Time',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _descriptionTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Description',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _approvalIdTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Approval ID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _eventNameTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Event Name',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _locationTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Location',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _organisersTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Organisers',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _approvedTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Approved',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _discussionPointsTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Discussion Points',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _eventTypeTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Event Type',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _eventCategoryTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Event Category',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _fdpProposedByTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'FDP Proposed By',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _schoolCentreTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'School/Centre',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _coordinator1TEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Coordinator 1',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _coordinator2TEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Coordinator 2',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _coordinator3TEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Coordinator 3',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _budgetTEC,
-                    decoration: const InputDecoration(
-                      labelText: 'Budget',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    onPressed: () async {
-                      ImagePickerMethod();
-                    },
-                    child: _image == null
-                        ? const Text(
-                            "Choose Image",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            "Change Image",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          )),
-                //view image
-                _buildImage(context, _image),
-                const SizedBox(
-                  height: 32,
-                ),
-                TextField(
-                  controller: _eventFeeTEC,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      prefixIcon: const Icon(Icons.money),
-                      labelText: 'Event fees',
-                      hintText: 'Enter event fee',
-                      isDense: true),
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                  ),
-                  onPressed: () async {
-                    addEvent();
-                  },
-                  child: const Text(
-                    "Add event",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        )),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildImage(BuildContext context, [File? image]) {
-    if (image != null) {
-      return Image.file(image);
-    } else {
-      return const Text('Take a picture');
-    }
+  Widget _buildFormFields() {
+    return Column(
+      children: [
+        _buildTextField(_clubIdTEC, 'Club ID'),
+                SizedBox(height: 16.0),
+        _buildTextField(_descriptionTEC, 'Description'),
+                SizedBox(height: 16.0),
+        _buildTextField(_approvalIdTEC, 'Approval ID'),
+                SizedBox(height: 16.0),
+        _buildTextField(_eventNameTEC, 'Event Name'),
+
+        const SizedBox(height: 16),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          onPressed: () async {
+            final List<DateTime>? dateTime =
+                await showOmniDateTimeRangePicker(context: context);
+
+            if (dateTime == null) return;
+
+            String formattedTime1 = DateFormat('kk:mm').format(dateTime[0]);
+            String formattedDate1 =
+                DateFormat('yyyy-MM-dd').format(dateTime[0]);
+
+            String formattedTime2 = DateFormat('kk:mm').format(dateTime[1]);
+            String formattedDate2 =
+                DateFormat('yyyy-MM-dd').format(dateTime[1]);
+
+            _startTimeTEC.text = "$formattedDate1 $formattedTime1";
+            _endTimeTEC.text = "$formattedDate2 $formattedTime2";
+          },
+          child: const Text(
+            'Pick Time Range',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+                _buildTextField(_startTimeTEC, "Start Time"),
+        SizedBox(height: 16.0),
+        _buildTextField(_endTimeTEC, "End Time"),
+        SizedBox(height: 16.0),
+        _buildTextField(_locationTEC, 'Location'),
+        SizedBox(height: 16.0),
+        _buildTextField(_organisersTEC, 'Organisers'),
+        SizedBox(height: 16.0),
+        _buildTextField(_approvedTEC, 'Approved'),
+        SizedBox(height: 16.0),
+        _buildTextField(_discussionPointsTEC, 'Discussion Points'),
+        SizedBox(height: 16.0),
+        _buildTextField(_eventTypeTEC, 'Event Type'),
+        SizedBox(height: 16.0),
+        _buildTextField(_eventCategoryTEC, 'Event Category'),
+        SizedBox(height: 16.0),
+        _buildTextField(_fdpProposedByTEC, 'FDP Proposed By'),
+        SizedBox(height: 16.0),
+        _buildTextField(_schoolCentreTEC, 'School/Centre'),
+        SizedBox(height: 16.0),
+        _buildTextField(_coordinator1TEC, 'Coordinator 1'),
+        SizedBox(height: 16.0),
+        _buildTextField(_coordinator2TEC, 'Coordinator 2'),
+        SizedBox(height: 16.0),
+        _buildTextField(_coordinator3TEC, 'Coordinator 3'),
+        SizedBox(height: 16.0),
+        _buildTextField(_budgetTEC, 'Budget'),
+      ],
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImagePicker() {
+    return ValueListenableBuilder<File?>(
+      valueListenable: imageNotifier,
+      builder: (context, image, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Event Image"),
+            const SizedBox(height: 10),
+            image == null
+                ? const Text("No image selected")
+                : Image.file(image, height: 150),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: ImagePickerMethod,
+              child: const Text("Select Image"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildEventFeeField() {
+    return TextField(
+      controller: _eventFeeTEC,
+      decoration: InputDecoration(
+        labelText: "Event Fee",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
   }
 
   Future addEvent() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
     // await uploadImage().whenComplete(() =>
     //     showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
+    try{
     await uploadImage().whenComplete(() =>
         showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
     Services services = Services();
@@ -520,6 +350,11 @@ class _PublishEventPageState extends State<PublishEventPage> {
         expectedRevenue: "0",
       ),
     );
+    }finally{
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
     if (mounted) {
       showDialog(
@@ -549,27 +384,5 @@ class _PublishEventPageState extends State<PublishEventPage> {
         });
       }
     }
-
-  }
-
-
-  dateTimePickerStartWidget(BuildContext context) {
-    DatePicker.showDateTimePicker(context,
-        showTitleActions: true,
-        minTime: DateTime(2018, 3, 5),
-        maxTime: DateTime(2019, 6, 7),
-        onChanged: (date) {}, onConfirm: (date) {
-      _startTimeTEC.text = "$date"; //date as String;
-    }, currentTime: DateTime.now(), locale: LocaleType.en);
-  }
-
-  dateTimePickerEndWidget(BuildContext context) {
-    DatePicker.showDateTimePicker(context,
-        showTitleActions: true,
-        minTime: DateTime(2018, 3, 5),
-        maxTime: DateTime(2019, 6, 7),
-        onChanged: (date) {}, onConfirm: (date) {
-      _endTimeTEC.text = "$date"; //date as String;
-    }, currentTime: DateTime.now(), locale: LocaleType.en);
   }
 }

@@ -61,6 +61,9 @@ Future main() async {
         jsonDecode(currentUserDataString); //null not checked properly
     userRole = currentUserData["role"];
   }
+
+  //test different Users
+  // userRole = 0;
   await NotificationService.initializeNotification();
 
   bool role =

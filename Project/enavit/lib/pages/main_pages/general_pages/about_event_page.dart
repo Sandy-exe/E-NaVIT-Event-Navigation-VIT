@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:enavit/components/send_event_announcement.dart';
 import 'package:enavit/components/view_event_announcement.dart';
 import 'package:enavit/dashboard/dashboard_screen.dart';
+import 'package:enavit/pages/main_pages/attendance/take_attendance.dart';
 import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
@@ -266,6 +267,7 @@ class _AboutEventState extends State<AboutEvent> {
                                   value: 3,
                                   child: Text("View Announcements"),
                                 ),
+                              
                             ],
                             onSelected: (value) {
                               if (value == 3) {
@@ -546,6 +548,8 @@ class _AboutEventState extends State<AboutEvent> {
     ),
     const SizedBox(height: 20),
 
+
+
     // Send/View Announcement Button
     isOrganized
         ? MaterialButton(
@@ -600,6 +604,59 @@ class _AboutEventState extends State<AboutEvent> {
               )
             : Container(),
             const SizedBox(height: 20),
+
+            // isOrganized ? MaterialButton(
+            //                     onPressed: () {
+            //                       Navigator.push(
+            //                           context,
+            //                           MaterialPageRoute(
+            //                               builder: (context) =>
+            //                                   const TakeAttendancePage()));
+            //                     },
+            //                     height: 50,
+            //                     elevation: 0,
+            //                     splashColor: Colors.yellow[700],
+            //                     shape: RoundedRectangleBorder(
+            //                       borderRadius: BorderRadius.circular(10),
+            //                     ),
+            //                     color: Colors.yellow[800],
+            //                     child: const Center(
+            //                       child: Text(
+            //                         "Take Attendance",
+            //                         style: TextStyle(
+            //                             color: Colors.white, fontSize: 18),
+            //                       ),
+            //                     ),
+            //                   )
+            //                 : ifRegistered
+            //                     ? MaterialButton(
+            //                         onPressed: () {
+            //                           Navigator.push(
+            //                               context,
+            //                               MaterialPageRoute(
+            //                                   builder: (context) =>
+            //                                       EventAnnouncement(
+            //                                         event: widget.event,
+            //                                       )));
+            //                         },
+            //                         height: 50,
+            //                         elevation: 0,
+            //                         splashColor: Colors.yellow[700],
+            //                         shape: RoundedRectangleBorder(
+            //                           borderRadius: BorderRadius.circular(10),
+            //                         ),
+            //                         color: Colors.yellow[800],
+            //                         child: const Center(
+            //                           child: Text(
+            //                             "Give Attendance",
+            //                             style: TextStyle(
+            //                                 color: Colors.white, fontSize: 18),
+            //                           ),
+            //                         ),
+            //                       )
+            //                     : Container(),
+            //             const SizedBox(height: 20),
+
   ],
 )
 

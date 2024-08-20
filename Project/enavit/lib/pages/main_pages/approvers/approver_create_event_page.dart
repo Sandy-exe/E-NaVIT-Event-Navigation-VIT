@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:enavit/models/og_models.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:enavit/Data/secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
-
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class CreateEventPage extends StatefulWidget {
@@ -24,7 +23,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController _eventNameTEC = TextEditingController();
   final TextEditingController _eventDescriptionTEC = TextEditingController();
   final TextEditingController _eventLocationTEC = TextEditingController();
-  
   final TextEditingController _eventImageURL = TextEditingController();
   final TextEditingController _discussionPointsTEC = TextEditingController();
   final TextEditingController _eventTypeTEC = TextEditingController();
@@ -38,437 +36,254 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final TextEditingController _eventFeeTEC = TextEditingController();
   late String _eventClubTEC;
 
-
   File? _image;
   final picker = ImagePicker();
   String? downloadUrl;
   final imageNotifier = ValueNotifier<File?>(null);
+  bool _isLoading = false; // Loading state variable
 
-  Future ImagePickerMethod() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        imageNotifier.value = _image;
+        setState(() {
+          _image = File(pickedFile.path);
+          imageNotifier.value = _image;
+        });
       } else {
-        showSnackBar("No Image Selected", const Duration(milliseconds: 1000));
+        _showSnackBar("No Image Selected");
       }
-    });
+    } catch (e) {
+      _showSnackBar("Error picking image");
+    }
   }
 
-  Future uploadImage_updateClub() async {
-    SecureStorage secureStorage = SecureStorage();
-    String userData =
-        await secureStorage.reader(key: "currentUserData") ?? "null";
+  Future<void> _uploadImage() async {
+    try {
+      SecureStorage secureStorage = SecureStorage();
+      String userData =
+          await secureStorage.reader(key: "currentUserData") ?? "null";
+      if (userData == "null") return;
 
-    if (userData == "null") return;
-    Map<String, dynamic> currentUserData = jsonDecode(userData);
-    String clubId = currentUserData["clubs"][0];
-    String userId = currentUserData["userid"];
-    String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Map<String, dynamic> currentUserData = jsonDecode(userData);
+      String clubId = currentUserData["clubs"][0];
+      String userId = currentUserData["userid"];
+      String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
 
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child("$clubId/images")
-        .child("$uniqueFileName.userID$userId");
-    UploadTask uploadTask = ref.putFile(_image!);
-    await uploadTask.whenComplete(() async {
-      downloadUrl = await ref.getDownloadURL();
-      _eventImageURL.text = downloadUrl!;
-    });
+      Reference ref = FirebaseStorage.instance
+          .ref()
+          .child("$clubId/images")
+          .child("$uniqueFileName.userID$userId");
+      UploadTask uploadTask = ref.putFile(_image!);
+      await uploadTask.whenComplete(() async {
+        downloadUrl = await ref.getDownloadURL();
+        _eventImageURL.text = downloadUrl!;
+      });
 
-    _eventClubTEC = clubId;
-    // var imageURL = "";
+      _eventClubTEC = clubId;
+    } catch (e) {
+      _showSnackBar("Error uploading image");
+    }
   }
 
-  showSnackBar(String message, Duration d) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: Duration(seconds: d.inSeconds),
-    ));
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), duration: const Duration(seconds: 1)));
+  }
+
+  Future<void> _createEvent() async {
+    setState(() {
+      _isLoading = true; // Set loading state to true
+    });
+
+    try {
+      await _uploadImage();
+      Services services = Services();
+
+      await services.addEvent(
+        Event(
+          clubId: _eventClubTEC,
+          dateTime: {
+            "endTime": DateTime.parse(_endTimeTEC.text),
+            "startTime": DateTime.parse(_startTimeTEC.text),
+          },
+          description: _eventDescriptionTEC.text,
+          eventId: _eventNameTEC.text,
+          eventName: _eventNameTEC.text,
+          location: _eventLocationTEC.text,
+          organisers: [],
+          comments: {},
+          participants: [],
+          likes: 0,
+          fee: _eventFeeTEC.text,
+          eventImageURL: _eventImageURL.text,
+          discussionPoints: _discussionPointsTEC.text,
+          eventType: _eventTypeTEC.text,
+          eventCategory: _eventCategoryTEC.text,
+          fdpProposedBy: _fdpProposedByTEC.text,
+          schoolCentre: _schoolCentreTEC.text,
+          coordinator1: _coordinator1TEC.text,
+          coordinator2: _coordinator2TEC.text,
+          coordinator3: _coordinator3TEC.text,
+          attendancePresent: "0",
+          issues: {},
+          expense: "0",
+          revenue: "0",
+          budget: _budgetTEC.text,
+          expectedRevenue: "0",
+        ),
+      );
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text('Upload Status'),
+              content: Text('Event published successfully'),
+            );
+          },
+        );
+
+        Future.delayed(const Duration(seconds: 2), () async {
+          SecureStorage secureStorage = SecureStorage();
+          String userData =
+              await secureStorage.reader(key: "currentUserData") ?? "null";
+          Map<String, dynamic> currentUserData = jsonDecode(userData);
+          String route = currentUserData["role"] == 1
+              ? "/organiser_index"
+              : "/approver_index";
+          Navigator.pushNamedAndRemoveUntil(context, route, (r) => false);
+        });
+      }
+    } catch (e) {
+      _showSnackBar("Error creating event");
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Event Creation'),
-      ),
+      appBar: AppBar(title: const Text('Event Creation')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Create Approval",
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 80,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextField(
-                    controller: _eventNameTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.event),
-                        labelText: 'Event name',
-                        hintText: 'Enter event name',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _eventDescriptionTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.description),
-                        labelText: 'Event description',
-                        hintText: 'Enter event description',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  // TextField(
-                  //   controller: _eventClubTEC,
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(100),
-                  //       ),
-                  //       prefixIcon: const Icon(Icons.house),
-                  //       labelText: 'Club',
-                  //       hintText: 'Enter club ID',
-                  //       isDense: true),
-                  //   style: const TextStyle(fontSize: 16),
-                  // ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _eventLocationTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.location_pin),
-                        labelText: 'Event location',
-                        hintText: 'Enter event location',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    onPressed: () async {
-                      final List<DateTime>? dateTime =
-                          await showOmniDateTimeRangePicker(context: context);
+              const Text("Create Approval",
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 80),
+              _buildTextField(
+                  _eventNameTEC, Icons.event, 'Event name', 'Enter event name'),
+              const SizedBox(height: 16),
+              _buildTextField(_eventDescriptionTEC, Icons.description,
+                  'Event description', 'Enter event description'),
+              const SizedBox(height: 16),
+              _buildTextField(_eventLocationTEC, Icons.location_pin,
+                  'Event location', 'Enter event location'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100))),
+                onPressed: () async {
+                  final List<DateTime>? dateTime =
+                      await showOmniDateTimeRangePicker(context: context);
+                  if (dateTime == null) return;
 
-                      if (dateTime == null) return;
+                  String formattedTime1 =
+                      DateFormat('kk:mm').format(dateTime[0]);
+                  String formattedDate1 =
+                      DateFormat('yyyy-MM-dd').format(dateTime[0]);
 
-                      String formattedTime1 =
-                          DateFormat('kk:mm').format(dateTime[0]);
-                      String formattedDate1 =
-                          DateFormat('yyyy-MM-dd').format(dateTime[0]);
+                  String formattedTime2 =
+                      DateFormat('kk:mm').format(dateTime[1]);
+                  String formattedDate2 =
+                      DateFormat('yyyy-MM-dd').format(dateTime[1]);
 
-                      String formattedTime2 =
-                          DateFormat('kk:mm').format(dateTime[1]);
-                      String formattedDate2 =
-                          DateFormat('yyyy-MM-dd').format(dateTime[1]);
-
-                      _startTimeTEC.text = "$formattedDate1 $formattedTime1";
-                      _endTimeTEC.text = "$formattedDate2 $formattedTime2";
-                    },
-                    child: const Text(
-                      'Pick Time Range',
-                      style: TextStyle(
+                  _startTimeTEC.text = "$formattedDate1 $formattedTime1";
+                  _endTimeTEC.text = "$formattedDate2 $formattedTime2";
+                },
+                child: const Text('Pick Time Range',
+                    style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Start Date and Time
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _startTimeTEC,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Start Date and Time',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _endTimeTEC,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            labelText: 'End Date and Time',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  // TextField(
-                  //   controller: _eventApproverTEC,
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(100),
-                  //       ),
-                  //       prefixIcon: const Icon(Icons.person),
-                  //       labelText: 'Approver',
-                  //       hintText: 'Enter approver ID',
-                  //       isDense: true),
-                  //   style: const TextStyle(fontSize: 16),
-                  // ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _discussionPointsTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.info),
-                        labelText: 'Discussion Points',
-                        hintText: 'Enter Discussion Points',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _eventTypeTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.info),
-                        labelText: 'Event Type',
-                        hintText: 'Enter Event Type',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _eventCategoryTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.info),
-                        labelText: 'Event Category',
-                        hintText: 'Enter Event Category',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _fdpProposedByTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.info),
-                        labelText: 'Proposed By',
-                        hintText: 'Enter FDP Proposer',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _schoolCentreTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.info),
-                        labelText: 'School Centre',
-                        hintText: 'Enter School Centre',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _coordinator1TEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Coordinator 1',
-                        hintText: 'Enter Coordinator',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _coordinator2TEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Coordinator 2',
-                        hintText: 'Enter Coordinator',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _coordinator3TEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Coordinator 3',
-                        hintText: 'Enter Coordinator',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _budgetTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.money),
-                        labelText: 'Budget',
-                        hintText: 'Enter Budget',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  TextField(
-                    controller: _eventFeeTEC,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        prefixIcon: const Icon(Icons.money),
-                        labelText: 'Event fees',
-                        hintText: 'Enter event fee',
-                        isDense: true),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      onPressed: () async {
-                        ImagePickerMethod();
-                      },
-                      child: _image == null
-                          ? const Text(
-                              "Choose Image",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              "Change Image",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            )),
-                  //view image
-                  _buildImage(context, _image),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  SizedBox(
-                    width: 230,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      onPressed: () {
-                        // Implement event creation logic here
-                        addEvent();
-                      },
-                      child: const Text(
-                        'Publish Event',
+                        color: Colors.white)),
+              ),
+              const SizedBox(height: 16),
+              _buildReadOnlyTextField(_startTimeTEC, 'Start Date and Time'),
+              const SizedBox(height: 16),
+              _buildReadOnlyTextField(_endTimeTEC, 'End Date and Time'),
+              const SizedBox(height: 16),
+              _buildTextField(_discussionPointsTEC, Icons.info,
+                  'Discussion Points', 'Enter Discussion Points'),
+              const SizedBox(height: 16),
+              _buildTextField(
+                  _eventTypeTEC, Icons.info, 'Event Type', 'Enter Event Type'),
+              const SizedBox(height: 16),
+              _buildTextField(_eventCategoryTEC, Icons.info, 'Event Category',
+                  'Enter Event Category'),
+              const SizedBox(height: 16),
+              _buildTextField(_fdpProposedByTEC, Icons.info, 'FDP Proposed By',
+                  'Enter FDP Proposed By'),
+              const SizedBox(height: 16),
+              _buildTextField(_schoolCentreTEC, Icons.info, 'School Centre',
+                  'Enter School Centre'),
+              const SizedBox(height: 16),
+              _buildTextField(_coordinator1TEC, Icons.info, 'Coordinator 1',
+                  'Enter Coordinator 1'),
+              const SizedBox(height: 16),
+              _buildTextField(_coordinator2TEC, Icons.info, 'Coordinator 2',
+                  'Enter Coordinator 2'),
+              const SizedBox(height: 16),
+              _buildTextField(_coordinator3TEC, Icons.info, 'Coordinator 3',
+                  'Enter Coordinator 3'),
+              const SizedBox(height: 16),
+              _buildTextField(
+                  _budgetTEC, Icons.attach_money, 'Budget', 'Enter Budget'),
+              const SizedBox(height: 16),
+              _buildTextField(
+                  _eventFeeTEC, Icons.attach_money, 'Event Fee', 'Enter Fee'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100))),
+                onPressed: _pickImage,
+                child: const Text('Upload Image',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+              ),
+              const SizedBox(height: 16),
+              _image != null
+                  ? Image.file(
+                      _image!,
+                      width: 100,
+                      height: 100,
+                    )
+                  : const SizedBox.shrink(),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100))),
+                onPressed: _isLoading ? null : _createEvent,
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : const Text('Create Event',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
               ),
             ],
           ),
@@ -477,177 +292,35 @@ class _CreateEventPageState extends State<CreateEventPage> {
     );
   }
 
-
-  Widget _buildImage(BuildContext context, [File? image]) {
-    if (image != null) {
-      return Image.file(image);
-    } else {
-      return const Text('Take a picture');
-    }
-  }
-
-
-  Future addEvent() async {
-    // await uploadImage_updateClub().whenComplete(() =>
-    //     showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
-    await uploadImage_updateClub().whenComplete(() =>
-        showSnackBar("Image Uploaded", const Duration(milliseconds: 1000)));
-    Services services = Services();
-    
-    //await services.closeApproval(widget.approval.approvalId);
-    await services.addEvent(
-      Event(
-        clubId: _eventClubTEC,
-        dateTime: {
-          "endTime": DateTime.parse(_endTimeTEC.text),
-          "startTime": DateTime.parse(_startTimeTEC.text),
-        },
-        description: _eventDescriptionTEC.text,
-        eventId: _eventNameTEC.text,
-        eventName: _eventNameTEC.text,
-        location: _eventLocationTEC.text,
-        organisers: [],
-        comments: {"user1": "naice"},
-        participants: ["part1", "part2"],
-        likes: 100,
-        fee: _eventFeeTEC.text, //widget.approval.fee,
-        eventImageURL: _eventImageURL.text, //widget.approval.eventImageURL,
-        discussionPoints: _discussionPointsTEC.text,
-        eventType: _eventTypeTEC.text,
-        eventCategory: _eventCategoryTEC.text,
-        fdpProposedBy: _fdpProposedByTEC.text,
-        schoolCentre: _schoolCentreTEC.text,
-        coordinator1: _coordinator1TEC.text,
-        coordinator2: _coordinator2TEC.text,
-        coordinator3: _coordinator3TEC.text,
-        attendancePresent: "0",
-        issues: {},
-        expense: "0",
-        revenue: "0",
-        budget: _budgetTEC.text,
-        expectedRevenue: "0",
+  Widget _buildTextField(
+    TextEditingController controller,
+    IconData icon,
+    String label,
+    String hint,
+  ) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon),
+        labelText: label,
+        hintText: hint,
+        border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
       ),
     );
-
-    if (mounted) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const AlertDialog(
-            title: Text('Upload Status'),
-            content: Text('Event published successfully'),
-          );
-        },
-      );
-
-      if (mounted) {
-        Future.delayed(const Duration(seconds: 2), () async {
-          SecureStorage secureStorage = SecureStorage();
-          String userData =
-              await secureStorage.reader(key: "currentUserData") ?? "null";
-          //if (userData == "null") return;
-          Map<String, dynamic> currentUserData = jsonDecode(userData);
-          if (currentUserData["role"] == 1) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/organiser_index", (r) => false);
-          } else {
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/approver_index", (r) => false);
-          }
-        });
-      }
-    }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future addApproval() async {
-    Services services = Services();
-    await services.addApproval(
-      Approval(
-        clubId: _eventClubTEC,
-        dateTime: {
-          "endTime": DateTime.parse(_endTimeTEC.text),
-          "startTime": DateTime.parse(_startTimeTEC.text)
-        },
-        description: _eventDescriptionTEC.text,
-        approvalId: _eventNameTEC.text,
-        eventName: _eventNameTEC.text,
-        location: _eventLocationTEC.text,
-        organisers: [],
-        approved: 0,
-        discussionPoints: _discussionPointsTEC.text,
-        eventType: _eventTypeTEC.text,
-        eventCategory: _eventCategoryTEC.text,
-        fdpProposedBy: _fdpProposedByTEC.text,
-        schoolCentre: _schoolCentreTEC.text,
-        coordinator1: _coordinator1TEC.text,
-        coordinator2: _coordinator2TEC.text,
-        coordinator3: _coordinator3TEC.text,
-        budget: _budgetTEC.text,
+  Widget _buildReadOnlyTextField(
+      TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.calendar_today),
+        labelText: label,
+        border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
       ),
-    );
-    print("inside");
-    if (mounted) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const AlertDialog(
-            title: Text('Upload Status'),
-            content: Text('Approval created successfully'),
-          );
-        },
-      );
-
-      if (mounted) {
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushNamedAndRemoveUntil(
-              context, "/organiser_index", (r) => false);
-        });
-      }
-    }
-
-  }
-
-  void dateTimePickerStartWidget(BuildContext context) {
-    DatePicker.showDateTimePicker(
-      context,
-      showTitleActions: true,
-      minTime: DateTime(2023, 1, 1),
-      maxTime: DateTime(2030, 12, 31),
-      onChanged: (date) {},
-      onConfirm: (date) {
-        _startTimeTEC.text = date.toString();
-      },
-      currentTime: DateTime.now(),
-      locale: LocaleType.en,
-    );
-  }
-
-  void dateTimePickerEndWidget(BuildContext context) {
-    DatePicker.showDateTimePicker(
-      context,
-      showTitleActions: true,
-      minTime: DateTime(2023, 1, 1),
-      maxTime: DateTime(2030, 12, 31),
-      onChanged: (date) {},
-      onConfirm: (date) {
-        _endTimeTEC.text = date.toString();
-      },
-      currentTime: DateTime.now(),
-      locale: LocaleType.en,
     );
   }
 }

@@ -73,6 +73,12 @@ dependencies:
   timeline_tile:
   boxy:
   icons_plus:
+  nearby_connections:
+  flutter_spinkit:
+  animations:
+  checkmark:
+  csv:
+  permission_handler:
 
   flutter_local_notifications:
   awesome_notifications:
