@@ -1,294 +1,177 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
-import 'package:enavit/components/checkmark.dart';
-import 'package:enavit/components/ripple_effect/ripple_animation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:nearby_connections/nearby_connections.dart';
-import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-// import 'package:flutter/animations.dart'
+import 'dart:developer';
 
-class GiveAttendancePage extends StatefulWidget {
-  const GiveAttendancePage({super.key});
+import 'package:enavit/services/services.dart';
+import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+class GiveAttendance extends StatefulWidget {
+  const GiveAttendance({super.key});
 
   @override
-  State<GiveAttendancePage> createState() => _GiveAttendancePageState();
+  _GiveAttendanceState createState() => _GiveAttendanceState();
 }
 
-class _GiveAttendancePageState extends State<GiveAttendancePage> {
-  int flag = 0;
-  User? user = FirebaseAuth.instance.currentUser;
-  late final String currEmail = user?.email.toString() ?? "null";
+class _GiveAttendanceState extends State<GiveAttendance> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+  bool isPermissionGranted = false;
 
-  final Strategy strategy = Strategy.P2P_STAR;
-  Map<String, ConnectionInfo> endpointMap = {};
+  @override
+  void initState() {
+    super.initState();
+    _checkCameraPermission();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (controller != null) {
+      controller!.pauseCamera();
+      controller!.resumeCamera();
+    }
+  }
+
+  Future<void> _checkCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (status.isDenied) {
+      status = await Permission.camera.request();
+    }
+
+    if (status.isGranted) {
+      setState(() {
+        isPermissionGranted = true;
+      });
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else {
+      setState(() {
+        isPermissionGranted = false;
+      });
+    }
+  }
+
+  Future<void> _stopCamera() async {
+    await controller?.pauseCamera();
+    controller?.dispose();
+  }
+
+  Future<void> _showCheckingAttendanceMessage(String? scannedData) async {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        title: Text('Checking Attendance'),
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 20),
+            Text('Please wait...'),
+          ],
+        ),
+      ),
+    );
+
+    // Simulate checking attendance
+    Services service = Services();
+    String response = await service.checkAttendance(scannedData!);
+
+    print('Attendance check response: $response');
+
+    // Dismiss loading dialog
+    Navigator.of(context).pop();
+
+    // Show result message
+    if (response == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Attendance checked successfully!')),
+      );
+    } else if (response == 'Not a participant') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Not a Participant of the correct Event!')),
+      );
+    } else if (response == 'Already attended') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Attendance already checked!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to check attendance!')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await Nearby().stopDiscovery();
-        setState(() {
-          flag = 0;
-        });
-        // Allow the app to be closed
-        return true;
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text("Student HomePage",
-                style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.deepPurple,
-            actions: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                child: GestureDetector(
-                  onTap: () async {
-                    await Nearby().stopDiscovery();
-                    await FirebaseAuth.instance.signOut();
-                    Get.offNamed('/login');
-                  },
-                  child:
-                      const Icon(Icons.logout_sharp, color: Colors.deepPurple),
-                ),
-              )
-            ],
+    if (!isPermissionGranted) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('QR Code Scanner'),
+        ),
+        body: const Center(
+          child:
+              Text('Camera permission denied. Please enable it in settings.'),
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('QR Code Scanner'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 4,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Colors.red,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+                cutOutSize: 300,
+              ),
+            ),
           ),
-          body: Center(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                if (flag == 0)
-                  GestureDetector(
-                    onTap: endPointFoundHandler,
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                    padding: const EdgeInsets.all(20),
-                                    margin: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.deepPurple,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.white.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        )
-                                      ],
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(72),
-                                    ),
-                                    child: const Icon(Icons.bluetooth,
-                                        size: 84, color: Colors.white)),
-                              ],
-                            ),
-                            const Text(
-                              "Tap to mark attendance",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                              ),
-                            )
-                          ],
-                        )),
-                  )
-                else if (flag == 1)
-                  RipplesAnimation(
-                    onPressed: () async {
-                      print("Ripple Animation");
-                      await Nearby().stopDiscovery();
-                      setState(() {
-                        flag = 0;
-                      });
-                    },
-                    child: const Text("data"),
-                  )
-                else if (flag == 2)
-                  Center(
-                    child: Column(
-                      children: [
-                        const CheckMarkPage(),
-                        const SizedBox(height: 10),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("Attendance recorded!",
-                                style: TextStyle(fontSize: 20)),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
-                        ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                flag = 0;
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor:
-                                  const Color.fromARGB(255, 103, 58, 183),
-                              minimumSize: const Size(100, 60),
-                              maximumSize: const Size(150, 60),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32.0),
-                              ),
-                            ),
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 8),
-                                Icon(Icons.logout,
-                                    size: 26, color: Colors.white),
-                                SizedBox(width: 10),
-                                Text("Back", style: TextStyle(fontSize: 18)),
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-              ]))),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text('QR Code Data: ${result!.code}')
+                  : const Text('Scan a QR code'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  void endPointFoundHandler() async {
-    if (!await Permission.location.isGranted ) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Location permissions not granted :(")));
-          await Permission.location.request();     
-    }
-
-    if (!await Permission.location.serviceStatus.isEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Enabling Location Service Failed :(")));
-    }
-            // Check Permission
- 
-
-    await Permission.nearbyWifiDevices.request();
-
-    while (!await Permission.bluetooth.isGranted ||
-        !await Permission.bluetoothAdvertise.isGranted ||
-        !await Permission.bluetoothConnect.isGranted ||
-        !await Permission.bluetoothScan.isGranted) {
-      [
-        Permission.bluetooth,
-        Permission.bluetoothAdvertise,
-        Permission.bluetoothConnect,
-        Permission.bluetoothScan
-      ].request();
-    }
-
-    // if (!await Nearby().checkBluetoothPermission()) {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text("Bluetooth permissions not granted :(")));
-    // }
-
-    // while (!await Permission.nearbyWifiDevices.isGranted) {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text("NearbyWifiDevices permissions not granted :(")));
-    // }
-
+  void _onQRViewCreated(QRViewController controller) {
     setState(() {
-      flag = 1;
+      this.controller = controller;
     });
 
-    try {
-      bool a = await Nearby().startDiscovery(
-        currEmail,
-        strategy,
-        onEndpointFound: (id, name, serviceId) async {
-          print("endpoint found");
-          print(name);
-          // print("Found endpoint: $id, $name, $serviceId");
-          if (name.startsWith("TCE_Faculty")) {
-            try {
-              // add if not exists, else update
-              // TCE_Facutly semester 1 oops A
-              List<String> arr = name.split(" ");
-
-              String sem = "${arr[1]} ${arr[2]}";
-              String sub = arr[3];
-              String slot = arr[4];
-
-              print("STUDENT $sem $sub $slot");
-
-              var studentDB = await FirebaseFirestore.instance
-                  .collection("Student")
-                  .doc('$sem Slot $slot');
-              var studentData = await studentDB.get();
-              // check if curr user's email is present in studentData
-              bool isStudent = false;
-              if (studentData.exists) {
-                List<dynamic> emailList = studentData['Students'];
-                print(emailList);
-                for (int i = 0; i < emailList.length; i++) {
-                  if (emailList[i]['Email'] == currEmail) {
-                    isStudent = true;
-                    break;
-                  }
-                }
-              }
-              if (isStudent) {
-                DateTime now = DateTime.now();
-                String formattedDate =
-                    '${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}';
-
-                var db = FirebaseFirestore.instance
-                    .collection(formattedDate)
-                    .doc("$sem Slot $slot");
-                var data = await db.get();
-
-                if (!data.exists) {
-                  db.set({
-                    '$sub': FieldValue.arrayUnion([currEmail]),
-                  });
-                } else {
-                  db.update({
-                    '$sub': FieldValue.arrayUnion([currEmail]),
-                  });
-                }
-                await Nearby().stopDiscovery();
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Attendance recorded!! :)")));
-                setState(() {
-                  flag = 2;
-                });
-              }
-            } on FirebaseAuthException catch (e) {
-              print("Error $e");
-            } catch (e) {
-              showSnackbar("Error: $e");
-            }
-          }
-        },
-        onEndpointLost: (id) {
-          showSnackbar(
-              "Lost discovered Endpoint: ${endpointMap[id]!.endpointName}, id $id");
-        },
-      );
-      showSnackbar("DISCOVERING: $a");
-    } catch (e) {
-      // print on console
-      print("Error: $e");
+    controller.scannedDataStream.listen((scanData) {
       setState(() {
-        flag = 0;
+        result = scanData;
       });
-      showSnackbar(e);
-    }
+      _handleScan(scanData);
+    });
   }
 
-  void showSnackbar(dynamic a) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(a.toString()),
-    ));
+  void _handleScan(Barcode scanData) {
+    print('Scanned QR Code Data: ${scanData.code}');
+    _stopCamera();
+    _showCheckingAttendanceMessage(scanData.code);
   }
 }

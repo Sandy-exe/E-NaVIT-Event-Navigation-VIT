@@ -79,9 +79,12 @@ dependencies:
   checkmark:
   csv:
   permission_handler:
+  qr_flutter: ^4.1.0
 
   flutter_local_notifications:
   awesome_notifications:
+  qr_code_scanner: ^1.0.1
+  simple_barcode_scanner: ^0.1.1
 
   #image_cropper: ^5.0.0
 

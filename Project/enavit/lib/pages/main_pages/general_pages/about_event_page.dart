@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:enavit/components/send_event_announcement.dart';
 import 'package:enavit/components/view_event_announcement.dart';
 import 'package:enavit/dashboard/dashboard_screen.dart';
+import 'package:enavit/pages/main_pages/attendance/give_attendance.dart';
 import 'package:enavit/pages/main_pages/attendance/take_attendance.dart';
 import 'package:enavit/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,6 @@ class _AboutEventState extends State<AboutEvent> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pop();
     });
-
-    
   }
 
   @override
@@ -65,7 +64,6 @@ class _AboutEventState extends State<AboutEvent> {
   }
 
   void openCheckout() async {
-
     SecureStorage secureStorage = SecureStorage();
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
 
@@ -76,8 +74,6 @@ class _AboutEventState extends State<AboutEvent> {
         currentUserData = jsonDecode(currentUserDataString);
       }
     }
-
-
 
     var options = {
       'key': 'rzp_test_nToF04vc477NSJ',
@@ -151,21 +147,18 @@ class _AboutEventState extends State<AboutEvent> {
   }
 
   Future<void> initPrefs() async {
-
-    
     SecureStorage secureStorage = SecureStorage();
 
     isLoggedIn = await secureStorage.reader(key: 'isLoggedIn') == 'true';
 
-      String? currentUserDataString =
-          await secureStorage.reader(key: "currentUserData");
-      if (currentUserDataString != null) {
-        currentUserData = jsonDecode(currentUserDataString);
-      }
+    String? currentUserDataString =
+        await secureStorage.reader(key: "currentUserData");
+    if (currentUserDataString != null) {
+      currentUserData = jsonDecode(currentUserDataString);
+    }
 
-    
-    Services service = Services(); 
-    List<Event> events = await service.getOrganizedEventsView(context," ");
+    Services service = Services();
+    List<Event> events = await service.getOrganizedEventsView(context, " ");
 
     for (Event event in events) {
       if (event.eventId == widget.event.eventId) {
@@ -173,8 +166,7 @@ class _AboutEventState extends State<AboutEvent> {
       }
     }
 
-
-    String eventString = await secureStorage.reader(key: "events") ?? "null"; 
+    String eventString = await secureStorage.reader(key: "events") ?? "null";
 
     if (eventString == '' || eventString == 'null') {
       return;
@@ -183,11 +175,10 @@ class _AboutEventState extends State<AboutEvent> {
     List<String> userEvent = eventString.split("JOIN");
 
     for (String event in userEvent) {
-        
-        Map<String,dynamic> eventDetail = jsonDecode(event);
-        if (eventDetail['eventId'] == widget.event.eventId) {
-          ifRegistered = true;
-        }
+      Map<String, dynamic> eventDetail = jsonDecode(event);
+      if (eventDetail['eventId'] == widget.event.eventId) {
+        ifRegistered = true;
+      }
     }
     // print(userEvent);
   }
@@ -236,8 +227,8 @@ class _AboutEventState extends State<AboutEvent> {
                         ),
                 ),
                 actions: <Widget>[
-                  isOrganized
-                      ? Container(
+                  if (ifRegistered)
+                      Container(
                           margin: const EdgeInsets.only(right: 10),
                           width: 40,
                           height: 50,
@@ -252,24 +243,34 @@ class _AboutEventState extends State<AboutEvent> {
                               size: 20,
                             ),
                             itemBuilder: (context) => [
+
+                              if (isOrganized)
                               const PopupMenuItem(
                                 value: 1,
                                 child: Text("Edit Event Profile"),
                               ),
-                              
+                              if (isOrganized)
                               const PopupMenuItem(
                                 value: 2,
                                 child: Text("Delete Event"),
                               ),
-
-                             if (isOrganized)
+                              if (isOrganized)
                                 const PopupMenuItem(
                                   value: 3,
                                   child: Text("View Announcements"),
                                 ),
-                              
+                                if (isOrganized)
+                              const PopupMenuItem(
+                                value: 4,
+                                child: Text("Take Attendance"),
+                              ),
+                              if (ifRegistered)
+                                const PopupMenuItem(
+                                  value: 5,
+                                  child: Text("Give Attendance"),
+                                ),
                             ],
-                            onSelected: (value) {
+                            onSelected: (value) async {
                               if (value == 3) {
                                 Navigator.push(
                                     context,
@@ -283,7 +284,6 @@ class _AboutEventState extends State<AboutEvent> {
                                 //     MaterialPageRoute(
                                 //         builder: (context) => EditEventDetails()));
                               } else if (value == 2) {
-
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -346,19 +346,30 @@ class _AboutEventState extends State<AboutEvent> {
                                     );
                                   },
                                 );
-
-
                               } else if (value == 1) {
-                                
+
                                 // Navigator.push(
                                 //     context,
                                 //     MaterialPageRoute(
                                 //         builder: (context) => EditEventDetails()));
+                              } else if (value == 4) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TakeAttendance(
+                                              qrData: widget.event.eventId,
+                                            )));
+                              } else if (value == 5) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const GiveAttendance(
+                                            )));
                               }
                             },
                           ),
                         )
-                      : Container(),
+                      
                 ],
                 bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(45),
@@ -392,47 +403,53 @@ class _AboutEventState extends State<AboutEvent> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    // Title and Logo Row
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.event.eventName,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              "", // Placeholder for event brand
-              style: TextStyle(
-                color: Colors.orange.shade400,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: const Image(
-            image: AssetImage('lib/images/VIT_LOGO.png'),
-            width: 70,
-            height: 70,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(height: 10),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title and Logo Row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.65,
+                                  child: Text(
+                                    widget.event.eventName,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "", // Placeholder for event brand
+                                  style: TextStyle(
+                                    color: Colors.orange.shade400,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: const Image(
+                                image: AssetImage('lib/images/VIT_LOGO.png'),
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
 
-    const Text(
+                        const Text(
                           "About",
                           style: TextStyle(
                             color: Colors.black,
@@ -451,216 +468,168 @@ class _AboutEventState extends State<AboutEvent> {
                             fontSize: 15,
                           ),
                         ),
-    const SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-    // Event Location
-    Text(
-      "Location: ${widget.event.location}",
-      style: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 18,
-      ),
-    ),
-    const SizedBox(height: 10),
+                        // Event Location
+                        Text(
+                          "Location: ${widget.event.location}",
+                          style: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
 
-    // Event Fee
-    Text(
-      "Fee: ${widget.event.fee}",
-      style: TextStyle(
-        color: Colors.grey.shade400,
-        fontSize: 18,
-      ),
-    ),
-    const SizedBox(height: 20),
+                        // Event Fee
+                        Text(
+                          "Fee: ${widget.event.fee}",
+                          style: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
 
-    // Start Date & Time
-    Row(
-      children: [
-        const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
-        const SizedBox(width: 10),
-        Text(
-          "Start: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['startTime'])}",
-          style: TextStyle(
-            color: Colors.grey.shade800,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(height: 10),
+                        // Start Date & Time
+                        Row(
+                          children: [
+                            const Icon(Icons.calendar_today,
+                                size: 18, color: Colors.grey),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Start: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['startTime'])}",
+                              style: TextStyle(
+                                color: Colors.grey.shade800,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
 
-    // End Date & Time
-    Row(
-      children: [
-        const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
-        const SizedBox(width: 10),
-        Text(
-          "End: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['endTime'])}",
-          style: TextStyle(
-            color: Colors.grey.shade800,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    ),
-    const SizedBox(height: 30),
+                        // End Date & Time
+                        Row(
+                          children: [
+                            const Icon(Icons.calendar_today,
+                                size: 18, color: Colors.grey),
+                            const SizedBox(width: 10),
+                            Text(
+                              "End: ${DateFormat('yyyy-MM-dd kk:mm').format(widget.event.dateTime['endTime'])}",
+                              style: TextStyle(
+                                color: Colors.grey.shade800,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
 
-    // Payment or Dashboard Button
-    MaterialButton(
-      onPressed: () {
-        if (isOrganized) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DashboardScreen(event: widget.event)));
-        } else if (ifRegistered) {
-          showDialog(
-            context: context,
-            builder: (context) => const AlertDialog(
-              title: Text("Registration Status"),
-              content: Text("You Already Registered"),
-            ),
-          );
-          Future.delayed(const Duration(seconds: 2), () {
-            Navigator.of(context).pop();
-          });
-        } else {
-          openCheckout();
-        }
-      },
-      height: 50,
-      elevation: 0,
-      splashColor: Colors.yellow[700],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      color: Colors.yellow[800],
-      child: Center(
-        child: Text(
-          isOrganized
-              ? "View Dashboard"
-              : ifRegistered
-                  ? "Already Registered"
-                  : "Go to Payment",
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-        ),
-      ),
-    ),
-    const SizedBox(height: 20),
+                        // Payment or Dashboard Button
+                        MaterialButton(
+                          onPressed: () {
+                            if (isOrganized) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DashboardScreen(
+                                          event: widget.event)));
+                            } else if (ifRegistered) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const AlertDialog(
+                                  title: Text("Registration Status"),
+                                  content: Text("You Already Registered"),
+                                ),
+                              );
+                              Future.delayed(const Duration(seconds: 2), () {
+                                Navigator.of(context).pop();
+                              });
+                            } else {
+                              openCheckout();
+                            }
+                          },
+                          height: 50,
+                          elevation: 0,
+                          splashColor: Colors.yellow[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          color: Colors.yellow[800],
+                          child: Center(
+                            child: Text(
+                              isOrganized
+                                  ? "View Dashboard"
+                                  : ifRegistered
+                                      ? "Already Registered"
+                                      : "Go to Payment",
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
 
-
-
-    // Send/View Announcement Button
-    isOrganized
-        ? MaterialButton(
-            onPressed: () {
-              print(currentUserData['userid']);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SEVENTAnnouncement(
-                            event: widget.event,
-                            userId: currentUserData['userid'],
-                            userName: currentUserData['name'],
-                          )));
-            },
-            height: 50,
-            elevation: 0,
-            splashColor: Colors.yellow[700],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            color: Colors.yellow[800],
-            child: const Center(
-              child: Text(
-                "Send Announcement",
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
-            ),
-          )
-        : ifRegistered
-            ? MaterialButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventAnnouncement(
-                                event: widget.event,
-                              )));
-                },
-                height: 50,
-                elevation: 0,
-                splashColor: Colors.yellow[700],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: Colors.yellow[800],
-                child: const Center(
-                  child: Text(
-                    "View Announcements",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              )
-            : Container(),
-            const SizedBox(height: 20),
-
-            // isOrganized ? MaterialButton(
-            //                     onPressed: () {
-            //                       Navigator.push(
-            //                           context,
-            //                           MaterialPageRoute(
-            //                               builder: (context) =>
-            //                                   const TakeAttendancePage()));
-            //                     },
-            //                     height: 50,
-            //                     elevation: 0,
-            //                     splashColor: Colors.yellow[700],
-            //                     shape: RoundedRectangleBorder(
-            //                       borderRadius: BorderRadius.circular(10),
-            //                     ),
-            //                     color: Colors.yellow[800],
-            //                     child: const Center(
-            //                       child: Text(
-            //                         "Take Attendance",
-            //                         style: TextStyle(
-            //                             color: Colors.white, fontSize: 18),
-            //                       ),
-            //                     ),
-            //                   )
-            //                 : ifRegistered
-            //                     ? MaterialButton(
-            //                         onPressed: () {
-            //                           Navigator.push(
-            //                               context,
-            //                               MaterialPageRoute(
-            //                                   builder: (context) =>
-            //                                       EventAnnouncement(
-            //                                         event: widget.event,
-            //                                       )));
-            //                         },
-            //                         height: 50,
-            //                         elevation: 0,
-            //                         splashColor: Colors.yellow[700],
-            //                         shape: RoundedRectangleBorder(
-            //                           borderRadius: BorderRadius.circular(10),
-            //                         ),
-            //                         color: Colors.yellow[800],
-            //                         child: const Center(
-            //                           child: Text(
-            //                             "Give Attendance",
-            //                             style: TextStyle(
-            //                                 color: Colors.white, fontSize: 18),
-            //                           ),
-            //                         ),
-            //                       )
-            //                     : Container(),
-            //             const SizedBox(height: 20),
-
-  ],
-)
-
-                    )
+                        // Send/View Announcement Button
+                        isOrganized
+                            ? MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SEVENTAnnouncement(
+                                                event: widget.event,
+                                                userId:
+                                                    currentUserData['userid'],
+                                                userName:
+                                                    currentUserData['name'],
+                                              )));
+                                },
+                                height: 50,
+                                elevation: 0,
+                                splashColor: Colors.yellow[700],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                color: Colors.yellow[800],
+                                child: const Center(
+                                  child: Text(
+                                    "Send Announcement",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                ),
+                              )
+                            : ifRegistered
+                                ? MaterialButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EventAnnouncement(
+                                                    event: widget.event,
+                                                  )));
+                                    },
+                                    height: 50,
+                                    elevation: 0,
+                                    splashColor: Colors.yellow[700],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    color: Colors.yellow[800],
+                                    child: const Center(
+                                      child: Text(
+                                        "View Announcements",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                        const SizedBox(height: 20),
+                      ],
+                    ))
               ])),
             ]),
           );

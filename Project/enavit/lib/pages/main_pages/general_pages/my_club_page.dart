@@ -364,10 +364,18 @@ class _MyClubBioState extends State<MyClubBio> {
                                     children: [
                                       Column(
                                         children: [
-                                          Text(
-                                            club.clubName,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            child: Text(
+                                              club.clubName,
+                                              overflow: TextOverflow.ellipsis,
+                                              softWrap: true,
+                                              style: FlutterFlowTheme.of(context)
+                                                  .bodyText1,
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsetsDirectional

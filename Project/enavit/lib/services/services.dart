@@ -8,6 +8,7 @@ import 'package:enavit/Data/secure_storage.dart';
 import 'package:enavit/components/home_search_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -55,84 +56,91 @@ class Services {
   }
 
   Future getUserData(String uid) async {
-    final currentUser = await firestore.collection("app_users").doc(uid).get();
+    try {
+      final currentUser =
+          await firestore.collection("app_users").doc(uid).get();
 
-    Map<String, dynamic> currentUserData = currentUser.data()!;
-    String currentUserDataString = jsonEncode(currentUserData);
-    await secureStorage.writer(
-        key: "currentUserData", value: currentUserDataString);
-    final userRole = currentUserData['role'];
-    await secureStorage.writer(key: "userRole", value: userRole.toString());
+      Map<String, dynamic> currentUserData = currentUser.data()!;
+      String currentUserDataString = jsonEncode(currentUserData);
+      await secureStorage.writer(
+          key: "currentUserData", value: currentUserDataString);
+      final userRole = currentUserData['role'];
+      await secureStorage.writer(key: "userRole", value: userRole.toString());
 
-    //Store Event data of the user
-    List<String> events = [];
-    List<Event> eventListObj = [];
+      //Store Event data of the user
+      List<String> events = [];
+      List<Event> eventListObj = [];
 
-    for (final eventId in currentUserData['events']) {
-      final event = await firestore.collection("Events").doc(eventId).get();
+      for (final eventId in currentUserData['events']) {
+        final event = await firestore.collection("Events").doc(eventId).get();
 
-      Map<String, dynamic> eventData = event.data()!;
+        Map<String, dynamic> eventData = event.data()!;
 
-      Map<String, String> dateTime = {
-        'startTime': (eventData['dateTime']['startTime'] as Timestamp)
-            .toDate()
-            .toString(),
-        'endTime':
-            (eventData['dateTime']['endTime'] as Timestamp).toDate().toString(),
-      };
-      Map<String, dynamic> eventObj = {
-        "clubId": eventData['clubId'],
-        "dateTime": dateTime,
-        "description": eventData['description'],
-        "eventId": eventData['eventId'],
-        "eventName": eventData['eventName'],
-        "location": eventData['location'],
-        "fee": eventData['fee'],
-        "organisers": List<String>.from(eventData['organisers']),
-        "comments": Map<String, String>.from(eventData['comments']),
-        "participants": List<String>.from(eventData['participants']),
-        "likes": eventData['likes'],
-      };
+        Map<String, String> dateTime = {
+          'startTime': (eventData['dateTime']['startTime'] as Timestamp)
+              .toDate()
+              .toString(),
+          'endTime': (eventData['dateTime']['endTime'] as Timestamp)
+              .toDate()
+              .toString(),
+        };
+        Map<String, dynamic> eventObj = {
+          "clubId": eventData['clubId'],
+          "dateTime": dateTime,
+          "description": eventData['description'],
+          "eventId": eventData['eventId'],
+          "eventName": eventData['eventName'],
+          "location": eventData['location'],
+          "fee": eventData['fee'],
+          "organisers": List<String>.from(eventData['organisers']),
+          "comments": Map<String, String>.from(eventData['comments']),
+          "participants": List<String>.from(eventData['participants']),
+          "likes": eventData['likes'],
+        };
 
-      eventListObj.add(
-        Event(
-          clubId: eventData['clubId'],
-          dateTime: eventData['dateTime'],
-          description: eventData['description'],
-          eventId: eventData['eventId'],
-          eventName: eventData['eventName'],
-          location: eventData['location'],
-          fee: eventData['fee'],
-          organisers: List<String>.from(eventData['organisers']),
-          comments: Map<String, String>.from(eventData['comments']),
-          participants: List<String>.from(eventData['participants']),
-          likes: eventData['likes'],
-          eventImageURL: eventData['eventImageURL'] ?? "null",
-          discussionPoints: eventData['discussionPoints'] ?? "old doc",
-          eventType: eventData['eventType'] ?? "old doc",
-          eventCategory: eventData['eventCategory'] ?? "old doc",
-          fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
-          schoolCentre: eventData['schoolCentre'] ?? "old doc",
-          coordinator1: eventData['coordinator1'] ?? "old doc",
-          coordinator2: eventData['coordinator2'] ?? "old doc",
-          coordinator3: eventData['coordinator3'] ?? "old doc",
-          expense: eventData['expense'] ?? "0",
-          revenue: eventData['revenue'] ?? "0",
-          budget: eventData['budget'] ?? "0",
-          attendancePresent: eventData['attendancePresent'] ?? "0",
-          issues: Map<String, Map<String, String>>.from(eventData['issues']),
-          expectedRevenue: eventData['expectedRevenue'] ?? "0",
-        ),
-      );
+        eventListObj.add(
+          Event(
+            clubId: eventData['clubId'],
+            dateTime: eventData['dateTime'],
+            description: eventData['description'],
+            eventId: eventData['eventId'],
+            eventName: eventData['eventName'],
+            location: eventData['location'],
+            fee: eventData['fee'],
+            organisers: List<String>.from(eventData['organisers']),
+            comments: Map<String, String>.from(eventData['comments']),
+            participants: List<String>.from(eventData['participants']),
+            likes: eventData['likes'],
+            eventImageURL: eventData['eventImageURL'] ?? "null",
+            discussionPoints: eventData['discussionPoints'] ?? "old doc",
+            eventType: eventData['eventType'] ?? "old doc",
+            eventCategory: eventData['eventCategory'] ?? "old doc",
+            fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+            schoolCentre: eventData['schoolCentre'] ?? "old doc",
+            coordinator1: eventData['coordinator1'] ?? "old doc",
+            coordinator2: eventData['coordinator2'] ?? "old doc",
+            coordinator3: eventData['coordinator3'] ?? "old doc",
+            expense: eventData['expense'] ?? "0",
+            revenue: eventData['revenue'] ?? "0",
+            budget: eventData['budget'] ?? "0",
+            attendancePresent: eventData['attendancePresent'] ?? [],
+            issues: Map<String, Map<String, String>>.from(eventData['issues']),
+            expectedRevenue: eventData['expectedRevenue'] ?? "0",
+          ),
+        );
 
-      String eventDataString = jsonEncode(eventObj);
-      events.add(eventDataString);
+        String eventDataString = jsonEncode(eventObj);
+        events.add(eventDataString);
+      }
+
+      print("userdata: $events");
+
+      String eventsString = events.join("JOIN");
+      await secureStorage.writer(key: "events", value: eventsString);
+      print("userdata: $eventsString");
+    } catch (e) {
+      print(e);
     }
-
-    print("userdata: $events");
-
-    String eventsString = events.join("JOIN");
-    await secureStorage.writer(key: "events", value: eventsString);
   }
 
   Future<Club> getClubData(String clubId) async {
@@ -152,9 +160,11 @@ class Services {
 
   //details of all clubs and events
   Future<void> getEventClubData(BuildContext context) async {
+    List<Event> events = [];
+    try{
     
     final querySnapshot = await firestore.collection("Events").get();
-    List<Event> events = [];
+    
     for (final docSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = docSnapshot.data();
 
@@ -185,7 +195,7 @@ class Services {
           coordinator1: data['coordinator1'] ?? "old doc" ?? "old doc",
           coordinator2: data['coordinator2'] ?? "old doc" ?? "old doc",
           coordinator3: data['coordinator3'] ?? "old doc" ?? "old doc",
-          attendancePresent: data['attendancePresent'] ?? "0",
+          attendancePresent: data['attendancePresent'] ?? [],
           issues: Map<String, Map<String, String>>.from(data['issues']),
           expense: data['expense'] ?? "0",
           revenue: data['revenue'] ?? "0",
@@ -197,43 +207,44 @@ class Services {
 
     print(events.length);
 
+    } catch (e) {
+
+      print(e);
+    }
+
+
+
     //Clubs list
 
-    try{
-    final clubquerySnapshot = await firestore.collection("Clubs").get();
-    List<Club> clubs = [];
+    try {
+      final clubquerySnapshot = await firestore.collection("Clubs").get();
+      List<Club> clubs = [];
 
-    for (final docSnapshot in clubquerySnapshot.docs) {
-      Map<String, dynamic> data = docSnapshot.data();
+      for (final docSnapshot in clubquerySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data();
 
-      clubs.add(
-        Club(
-          clubId: data['clubId'],
-          clubName: data['clubName'],
-          bio: data['bio'],
-          email: data['email'],
-          events: List<String>.from(data['events']) ,
-          approvers: List<String>.from(data['approvers'] ?? []),
-          followers: List<String>.from(data['followers']),
-          posts: List<String>.from(data['posts']),
-        ),
-      );
-    }
-        print(clubs.length);
-        
+        clubs.add(
+          Club(
+            clubId: data['clubId'],
+            clubName: data['clubName'],
+            bio: data['bio'],
+            email: data['email'],
+            events: List<String>.from(data['events']),
+            approvers: List<String>.from(data['approvers'] ?? []),
+            followers: List<String>.from(data['followers']),
+            posts: List<String>.from(data['posts']),
+          ),
+        );
+      }
+      print(clubs.length);
+
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         Provider.of<SearchModel>(context, listen: false)
             .initEventClubList(events, clubs);
       });
-
     } catch (e) {
       print(e);
-    } 
-
-
-
-
-
+    }
 
     // for (final docSnapshot in querySnapshot.docs) {
     //   Map<String, dynamic> docData = docSnapshot.data();
@@ -252,7 +263,6 @@ class Services {
       Map<String, dynamic> data = docSnapshot.data();
 
       try {
-        
         if (data['role'] == 0) {
           continue;
         }
@@ -274,6 +284,7 @@ class Services {
           followingClubs: List<String>.from(data['followingClubs']),
           notifications: List<String>.from(data['notifications']),
           clubIds: List<String>.from(data['clubIds']),
+          attendedEvents: List<String>.from(data['attendedEvents']),
         ));
       } catch (e) {
         print(e);
@@ -338,6 +349,7 @@ class Services {
         "comments": Map<String, String>.from(eventData['comments']),
         "participants": List<String>.from(eventData['participants']),
         "likes": eventData['likes'],
+        "attendancePresent": eventData['attendancePresent'],
       };
       String eventDataString = jsonEncode(eventObj);
       events.add(eventDataString);
@@ -402,7 +414,7 @@ class Services {
             coordinator1: data['coordinator1'] ?? "old doc",
             coordinator2: data['coordinator2'] ?? "old doc",
             coordinator3: data['coordinator3'] ?? "old doc",
-            attendancePresent: data['attendancePresent'] ?? "0",
+            attendancePresent: data['attendancePresent'] ?? [],
             issues: Map<String, Map<String, String>>.from(data['issues']),
             expense: data['expense'] ?? "0",
             revenue: data['revenue'] ?? "0",
@@ -412,8 +424,6 @@ class Services {
         );
       } catch (e) {}
     }
-
-
 
     return events;
   }
@@ -429,7 +439,8 @@ class Services {
     events.add(event.eventId);
     await clubref.update({"events": events});
 
-    List<String> organisers = List<String>.from(clubData["approvers"]).take(2).toList();
+    List<String> organisers =
+        List<String>.from(clubData["approvers"]).take(2).toList();
 
     //organiser is changed in the below obj
     Map<String, dynamic> obj = {
@@ -462,17 +473,26 @@ class Services {
     await docref.set(obj);
 
     for (var orga in organisers) {
-      
       final orgRef = firestore.collection("app_users").doc(orga);
-      print("1");
       final org = await orgRef.get();
 
       Map<String, dynamic> orgData = org.data()!;
       List<String> orgEvents = List<String>.from(orgData["organized_events"]);
       orgEvents.add(event.eventId);
       await orgRef.update({"organized_events": orgEvents});
-      
     }
+
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+
+    List<String> eventsList =
+        List<String>.from(currentUserData['organized_events']);
+    eventsList.add(event.eventId);
+    currentUserData['organized_events'] = eventsList;
+
+    String updatedUserData = jsonEncode(currentUserData);
+
+    await secureStorage.writer(key: "currentUserData", value: updatedUserData);
   }
 
   Future<void> rejectApproval(String approvalID) async {
@@ -560,8 +580,10 @@ class Services {
     String uniqueAnnoucenemtId;
 
     // Fetch all existing approval IDs
-    final announcementRefs = await firestore.collection("EventAnnouncement").get();
-    final existingAnnouncementIds = announcementRefs.docs.map((doc) => doc.id).toList();
+    final announcementRefs =
+        await firestore.collection("EventAnnouncement").get();
+    final existingAnnouncementIds =
+        announcementRefs.docs.map((doc) => doc.id).toList();
 
     do {
       uniqueAnnoucenemtId = uuid.v1();
@@ -765,7 +787,7 @@ class Services {
           coordinator1: data['coordinator1'] ?? "old doc",
           coordinator2: data['coordinator2'] ?? "old doc",
           coordinator3: data['coordinator3'] ?? "old doc",
-          attendancePresent: data['attendancePresent'] ?? "0",
+          attendancePresent: data['attendancePresent'] ?? [],
           issues: Map<String, Map<String, String>>.from(data['issues']),
           expense: data['expense'] ?? "0",
           revenue: data['revenue'] ?? "0",
@@ -913,7 +935,7 @@ class Services {
           coordinator1: eventData['coordinator1'] ?? "old doc",
           coordinator2: eventData['coordinator2'] ?? "old doc",
           coordinator3: eventData['coordinator3'] ?? "old doc",
-          attendancePresent: eventData['attendancePresent'] ?? "0",
+          attendancePresent: eventData['attendancePresent'] ?? [],
           issues: Map<String, Map<String, String>>.from(eventData['issues']),
           expense: eventData['expense'] ?? "0",
           revenue: eventData['revenue'] ?? "0",
@@ -927,7 +949,7 @@ class Services {
 
   // Future<List<Event>> getOrganizedEventsView(BuildContext context,String userid) async {
   //   List<Event> organizedEvents = [];
-    
+
   //   final userRef =
   //       firestore.collection("app_users").doc(userid);
 
@@ -938,84 +960,77 @@ class Services {
   //   if (userData != null && userData.containsKey('organized_events')) {
   //     organizedEvents = List<Event>.from(userData['organized_events']);
   //   }
-    
-
-
 
   //     return organizedEvents;
   // }
 
   Future<List<Event>> getOrganizedEventsView(
-    BuildContext context,
-  String? userid) async {
+      BuildContext context, String? userid) async {
     List<Event> organizedEvents = [];
-    
+
     if (userid != " ") {
       final userRef = firestore.collection("app_users").doc(userid);
-      
+
       DocumentSnapshot userDoc = await userRef.get();
-
-
 
       Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
 
-
-        List<String> temp = List<String>.from(userData?['organized_events']);
+      List<String> temp = List<String>.from(userData?['organized_events']);
 
       for (final eventId in temp) {
-      final eventDoc = await firestore.collection("Events").doc(eventId).get();
+        final eventDoc =
+            await firestore.collection("Events").doc(eventId).get();
 
-      Map<String, dynamic>? eventDataNullable = eventDoc.data();
-      if (eventDataNullable == null) {
-        debugPrint("Event data not found participant");
-        continue;
+        Map<String, dynamic>? eventDataNullable = eventDoc.data();
+        if (eventDataNullable == null) {
+          debugPrint("Event data not found participant");
+          continue;
+        }
+        Map<String, dynamic> eventData = eventDataNullable;
+
+        Map<String, DateTime> dateTime = {
+          'startTime':
+              (eventData['dateTime']['startTime'] as Timestamp).toDate(),
+          'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
+        };
+
+        organizedEvents.add(
+          Event(
+            clubId: eventData['clubId'],
+            dateTime: dateTime,
+            description: eventData['description'],
+            eventId: eventData['eventId'],
+            eventName: eventData['eventName'],
+            location: eventData['location'],
+            fee: eventData['fee'],
+            organisers: List<String>.from(eventData['organisers']),
+            comments: Map<String, String>.from(eventData['comments']),
+            participants: List<String>.from(eventData['participants']),
+            likes: eventData['likes'],
+            eventImageURL: eventData['eventImageURL'] ?? "null",
+            discussionPoints: eventData['discussionPoints'] ?? "old doc",
+            eventType: eventData['eventType'] ?? "old doc",
+            eventCategory: eventData['eventCategory'] ?? "old doc",
+            fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
+            schoolCentre: eventData['schoolCentre'] ?? "old doc",
+            coordinator1: eventData['coordinator1'] ?? "old doc",
+            coordinator2: eventData['coordinator2'] ?? "old doc",
+            coordinator3: eventData['coordinator3'] ?? "old doc",
+            attendancePresent: eventData['attendancePresent'] ?? [],
+            issues: Map<String, Map<String, String>>.from(eventData['issues']),
+            expense: eventData['expense'] ?? "0",
+            revenue: eventData['revenue'] ?? "0",
+            budget: eventData['budget'] ?? "0",
+            expectedRevenue: eventData['expectedRevenue'] ?? "0",
+          ),
+        );
       }
-      Map<String, dynamic> eventData = eventDataNullable;
 
-      Map<String, DateTime> dateTime = {
-        'startTime': (eventData['dateTime']['startTime'] as Timestamp).toDate(),
-        'endTime': (eventData['dateTime']['endTime'] as Timestamp).toDate(),
-      };
-
-      organizedEvents.add(
-        Event(
-          clubId: eventData['clubId'],
-          dateTime: dateTime,
-          description: eventData['description'],
-          eventId: eventData['eventId'],
-          eventName: eventData['eventName'],
-          location: eventData['location'],
-          fee: eventData['fee'],
-          organisers: List<String>.from(eventData['organisers']),
-          comments: Map<String, String>.from(eventData['comments']),
-          participants: List<String>.from(eventData['participants']),
-          likes: eventData['likes'],
-          eventImageURL: eventData['eventImageURL'] ?? "null",
-          discussionPoints: eventData['discussionPoints'] ?? "old doc",
-          eventType: eventData['eventType'] ?? "old doc",
-          eventCategory: eventData['eventCategory'] ?? "old doc",
-          fdpProposedBy: eventData['fdpProposedBy'] ?? "old doc",
-          schoolCentre: eventData['schoolCentre'] ?? "old doc",
-          coordinator1: eventData['coordinator1'] ?? "old doc",
-          coordinator2: eventData['coordinator2'] ?? "old doc",
-          coordinator3: eventData['coordinator3'] ?? "old doc",
-          attendancePresent: eventData['attendancePresent'] ?? "0",
-          issues: Map<String, Map<String, String>>.from(eventData['issues']),
-          expense: eventData['expense'] ?? "0",
-          revenue: eventData['revenue'] ?? "0",
-          budget: eventData['budget'] ?? "0",
-          expectedRevenue: eventData['expectedRevenue'] ?? "0",
-        ),
-      );
-        return organizedEvents;
-    }
-
+      return organizedEvents;
     }
 
     Map<String, dynamic> currentUserData = jsonDecode(
         await secureStorage.reader(key: "currentUserData") ?? "null");
-    print("ohoho");
-    print(currentUserData['organized_events']);
     for (final eventId in currentUserData['organized_events']) {
       final eventDoc = await firestore.collection("Events").doc(eventId).get();
 
@@ -1053,7 +1068,7 @@ class Services {
           coordinator1: eventData['coordinator1'] ?? "old doc",
           coordinator2: eventData['coordinator2'] ?? "old doc",
           coordinator3: eventData['coordinator3'] ?? "old doc",
-          attendancePresent: eventData['attendancePresent'] ?? "0",
+          attendancePresent: eventData['attendancePresent'] ?? [],
           issues: Map<String, Map<String, String>>.from(eventData['issues']),
           expense: eventData['expense'] ?? "0",
           revenue: eventData['revenue'] ?? "0",
@@ -1124,7 +1139,7 @@ class Services {
       coordinator1: eventData['coordinator1'] ?? "old doc",
       coordinator2: eventData['coordinator2'] ?? "old doc",
       coordinator3: eventData['coordinator3'] ?? "old doc",
-      attendancePresent: eventData['attendancePresent'] ?? "0",
+      attendancePresent: eventData['attendancePresent'] ?? [],
       issues: Map<String, Map<String, String>>.from(eventData['issues']),
       expense: eventData['expense'] ?? "0",
       revenue: eventData['revenue'] ?? "0",
@@ -1167,49 +1182,42 @@ class Services {
 
   Future<void> addEventannouncementDetails(
       EventAnnoucenments announcement) async {
-        print(announcement.announcement);
-    try{
+    print(announcement.announcement);
+    try {
       announcement.announcementId = await generateUniqueannouncementId();
-    final announcementRef = firestore
-        .collection("EventAnnouncement")
-        .doc(announcement.announcementId);
-      
-    Map<String, dynamic> obj = {
-      "eventId": announcement.eventId,
-      "announcement": announcement.announcement,
-      "announcementId": announcement.announcementId,
-      "dateTime": announcement.dateTime,
-      "userId": announcement.userId,
-      "userName": announcement.userName,
-      "eventName": announcement.eventName,
-      "clubId": announcement.clubId,
-    };
+      final announcementRef = firestore
+          .collection("EventAnnouncement")
+          .doc(announcement.announcementId);
 
-    print(obj);
-    print("clubId: ${announcement.clubId}");
+      Map<String, dynamic> obj = {
+        "eventId": announcement.eventId,
+        "announcement": announcement.announcement,
+        "announcementId": announcement.announcementId,
+        "dateTime": announcement.dateTime,
+        "userId": announcement.userId,
+        "userName": announcement.userName,
+        "eventName": announcement.eventName,
+        "clubId": announcement.clubId,
+      };
 
-    final clubRef = firestore
-          .collection("Clubs")
-          .doc(announcement.clubId);
+      print(obj);
+      print("clubId: ${announcement.clubId}");
 
-    final club = await clubRef.get();
-    Map<String, dynamic> clubData = club.data()!;
-    List<String> posts = List<String>.from(clubData["posts"]);
-    posts.add(announcement.announcementId);
-    await clubRef.update({"posts": posts});
-    print("Updated club posts");
-    await announcementRef.set(obj);
-    }
-    catch(e){
+      final clubRef = firestore.collection("Clubs").doc(announcement.clubId);
+
+      final club = await clubRef.get();
+      Map<String, dynamic> clubData = club.data()!;
+      List<String> posts = List<String>.from(clubData["posts"]);
+      posts.add(announcement.announcementId);
+      await clubRef.update({"posts": posts});
+      print("Updated club posts");
+      await announcementRef.set(obj);
+    } catch (e) {
       print(e);
     }
-
   }
 
-
-  Future <List<EventAnnoucenments>> getClubPosts(String clubId) async {
-
-
+  Future<List<EventAnnoucenments>> getClubPosts(String clubId) async {
     final querySnapshot = await firestore.collection("EventAnnouncement").get();
     List<EventAnnoucenments> announcements = [];
 
@@ -1231,16 +1239,16 @@ class Services {
           ),
         );
       }
-    }    
+    }
 
-    
     print(announcements);
     return announcements;
   }
 
-  Future <List<EventAnnoucenments>> getEventAnnouncements(String eventId) async {
+  Future<List<EventAnnoucenments>> getEventAnnouncements(String eventId) async {
     try {
-      final querySnapshot = await firestore.collection("EventAnnouncement").get();
+      final querySnapshot =
+          await firestore.collection("EventAnnouncement").get();
       List<EventAnnoucenments> announcements = [];
 
       for (final docSnapshot in querySnapshot.docs) {
@@ -1271,10 +1279,7 @@ class Services {
     }
   }
 
-  
-  
-  
-Future<void> removeAllDocsExceptOne() async {
+  Future<void> removeAllDocsExceptOne() async {
     try {
       // Hardcoded collection names
       List<String> collectionNames = [
@@ -1307,11 +1312,8 @@ Future<void> removeAllDocsExceptOne() async {
       print(e);
     }
   }
-  
-  
 
-
-  Future <void> deleteEvents(String eventId) async {
+  Future<void> deleteEvents(String eventId) async {
     try {
       final eventRef = firestore.collection("Events").doc(eventId);
       await eventRef.delete();
@@ -1319,6 +1321,70 @@ Future<void> removeAllDocsExceptOne() async {
       print(e);
     }
   }
-  
-}
 
+  Future<String> checkAttendance(String eventId) async {
+    final eventRef = firestore.collection("Events").doc(eventId);
+    final event = await eventRef.get();
+    Map<String, dynamic> eventData = event.data()!;
+
+    SecureStorage secureStorage = SecureStorage();
+    Map<String, dynamic> currentUserData = jsonDecode(
+        await secureStorage.reader(key: "currentUserData") ?? "null");
+
+    final userRef =
+        firestore.collection("app_users").doc(currentUserData['userid']);
+    final userSnapshot = await userRef.get();
+    Map<String, dynamic> userData = userSnapshot.data()!;
+    print(userData);
+
+
+    List<String> EventParticipants =
+        List<String>.from(eventData['participants']);
+
+    if (EventParticipants.contains(currentUserData['userid'])) {
+
+      if (eventData['attendancePresent'].contains(currentUserData['userid'])) {
+        return "Already attended";
+      }
+
+
+      List<String> attendedEvents =
+          List<String>.from(userData['attendedEvents']);
+      attendedEvents.add(eventId);
+      await userRef.update({"attendedEvents": attendedEvents});
+
+      //offline data is not updated
+
+
+      List<String> attendancePresent =
+          List<String>.from(eventData['attendancePresent']);
+      attendancePresent.add(userData['userid']);
+      await eventRef.update({"attendancePresent": attendancePresent});
+      return "success";
+    } else {
+      return "Not a participant";
+    }
+  }
+
+  Future<void> updateUserRecords() async {
+    try {
+      // Get all documents in the 'app_users' collection
+      QuerySnapshot snapshot = await firestore.collection('app_users').get();
+
+      // Iterate through all documents
+      for (DocumentSnapshot doc in snapshot.docs) {
+        // Update each document with the new field
+        await firestore.collection('app_users').doc(doc.id).update({
+          'attendedEvents': [],
+        });
+        print('Updated user record for ${doc.id}');
+      }
+
+      // Log success message
+      print('User records updated successfully!');
+    } catch (e) {
+      // Log error message
+      print('Failed to update user records: $e');
+    }
+  }
+}

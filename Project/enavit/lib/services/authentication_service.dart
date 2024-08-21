@@ -73,7 +73,8 @@ class AuthenticationService {
           fcmToken: "",
           followingClubs: [],
           notifications: [],
-          clubIds: []);
+          clubIds: [],
+          attendedEvents: []);
 
       print(newUser);
       await service.addUser(newUser);

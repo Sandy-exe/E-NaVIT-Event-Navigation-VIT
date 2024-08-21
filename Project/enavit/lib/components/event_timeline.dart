@@ -103,8 +103,8 @@ Widget _buildCard(Map<String, dynamic> event) {
       return Container();
   }
   return Container(
-    width: 250,
-    height: 80,
+    width: 260,
+    height: 120,
     decoration: const BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.only(

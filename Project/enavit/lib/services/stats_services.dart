@@ -15,7 +15,7 @@ class Stats {
     if (currentUserData['role'] == 0 || currentUserData['role'] == 1) {
       Map<String, dynamic> statdata = {};
       statdata['totalParticipants'] = event.participants.length;
-      statdata['attendancePresent'] = event.attendancePresent;
+      statdata['attendancePresent'] = event.attendancePresent.length;
       statdata['totalIssues'] = event.issues.length;
 
       int issuesSolved = 0;
@@ -40,12 +40,10 @@ class Stats {
       final allusers = await firestore.collection("app_users").get();
 
       List<String> allparticipants = event.participants;
-      
+    
       print(allparticipants);
       for (var element in allusers.docs) {
         print(element.data()['userid']);
-          
-            
             if (allparticipants.contains(element.data()['userid'] ) && element.data()['reg_no']!=null ) {
               print(
               element.data()['reg_no'].substring(2, 5).toUpperCase());
@@ -63,7 +61,6 @@ class Stats {
         return statdata;
         }
 
-      
       return {};
       }
     }

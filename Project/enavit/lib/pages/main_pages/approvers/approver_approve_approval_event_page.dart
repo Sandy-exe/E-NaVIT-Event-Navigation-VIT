@@ -520,7 +520,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
         coordinator1: _coordinator1TEC.text,
         coordinator2: _coordinator2TEC.text,
         coordinator3: _coordinator3TEC.text,
-        attendancePresent: "0",
+        attendancePresent: [],
         issues: {},
         expense: "0",
         revenue: "0",

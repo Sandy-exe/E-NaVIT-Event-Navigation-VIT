@@ -342,7 +342,7 @@ class _PublishEventPageState extends State<PublishEventPage> {
         coordinator1: widget.approval.coordinator1,
         coordinator2: widget.approval.coordinator2,
         coordinator3: widget.approval.coordinator3,
-        attendancePresent: "0",
+        attendancePresent: [],
         issues: {},
         expense: "0",
         revenue: "0",

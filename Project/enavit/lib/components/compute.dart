@@ -47,10 +47,7 @@ class Compute with ChangeNotifier {
 
     if (eventsString == "") {
       eventsString = (await secureStorage.reader(key: "events")) ?? "null";
-      print(eventsString);
     }
-
-
 
     if (eventsString == "null" || eventsString.isEmpty) return;
 
@@ -414,6 +411,7 @@ class Compute with ChangeNotifier {
   }
 
   void datePickerHistory(int selectedIndex) {
+    
     Future.delayed(Duration.zero, () async {
       var history = ["Completed", "On Going", "Scheduled"];
       //importing values to datepicker widget
@@ -421,6 +419,7 @@ class Compute with ChangeNotifier {
       datePickerUpper = history;
       selected = selectedIndex;
       updateFilter = "History";
+      print(eventsString.length);
 
       await saveEventsHistory();
 

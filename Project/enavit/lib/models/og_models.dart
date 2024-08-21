@@ -95,7 +95,7 @@ class Event {
   final String coordinator1;
   final String coordinator2;
   final String coordinator3;
-  final String attendancePresent;
+  final List<dynamic> attendancePresent;
   final Map<String,Map<String,String>> issues;
   final String expense;
   final String expectedRevenue;
@@ -178,6 +178,7 @@ class Users {
   final List<String> followingClubs;
   final List<String> notifications;
   final List<String> clubIds;
+  final List<String> attendedEvents;
 
 
   Users({
@@ -197,6 +198,7 @@ class Users {
     required this.followingClubs,
     required this.notifications,
     required this.clubIds,
+    required this.attendedEvents,
   });
 }
 
