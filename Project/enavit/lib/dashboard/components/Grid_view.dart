@@ -37,11 +37,11 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
     attendanceIssue = [
       SquareCardInfo(
         title: "Attendance",
-        stat: statData['attendancePresent'],
+        stat: statData['attendancePresent'].toString(),
         pngSrc: "lib/images/SVG/attendance.png",
         totalstat: statData['totalParticipants'].toString(),
         color: primaryColor,
-        percentage: ((double.parse(statData['attendancePresent']) /
+        percentage: ((double.parse(statData['attendancePresent'].toString()) /
                 (statData['totalParticipants'] as int).toDouble() )*
                 100),
       ),
@@ -55,6 +55,9 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
       ),
     ];
 
+    print("ok");
+    print(((double.parse(statData['totalexpense'])/ double.parse(statData['totalbudget'])) *
+        100));
     financeCard = [
       FinanceCardInfo(
         title: "Total Revenue",
@@ -63,12 +66,11 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
         budget: statData['totalbudget'].toString(),
         expectedRevenue: statData['expectedrevenue'].toString(),
         expense: double.parse(statData['totalexpense']),
-        revenue: double.parse(statData['totalrevenue']),
-        repercentage: ((double.parse(statData['totalrevenue']) == 0.0 ? 1: 0.0 /
-            double.parse(statData['expectedrevenue'])) *
+        revenue: statData['totalrevenue'],
+        repercentage: ((statData['totalrevenue'] == 0.0 ? 1: statData['totalrevenue'] /
+            double.parse(statData['expectedrevenue']==0.0 ? 1 : statData['expectedrevenue'] )) *
           100),
-        expercentage: ((double.parse(statData['totalexpense']) == 0.0 ? 1 : 0.0 /
-            double.parse(statData['totalbudget'])) *
+        expercentage: ((double.parse(statData['totalexpense'])/double.parse(statData['totalbudget'])) *
           100),
       ),
     ];

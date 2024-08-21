@@ -317,12 +317,13 @@ class _ClubBioState extends State<ClubBio> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.6,
+                                                0.5,
                                             child: Text(
                                               widget.club.clubName,
                                               softWrap: true,
@@ -357,16 +358,7 @@ class _ClubBioState extends State<ClubBio> {
                                           ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(5, 0, 5, 15),
-                                        child: Icon(
-                                          Icons.verified_rounded,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryColor,
-                                          size: 16,
-                                        ),
-                                      ),
+                                      
                                       const Spacer(),
                                       GestureDetector(
                                         onTap: toggleFollow,

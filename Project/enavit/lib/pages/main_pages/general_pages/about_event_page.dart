@@ -180,6 +180,9 @@ class _AboutEventState extends State<AboutEvent> {
         ifRegistered = true;
       }
     }
+
+    print(isOrganized);
+    print(ifRegistered);
     // print(userEvent);
   }
 
@@ -227,7 +230,7 @@ class _AboutEventState extends State<AboutEvent> {
                         ),
                 ),
                 actions: <Widget>[
-                  if (ifRegistered)
+                  if (ifRegistered || isOrganized)
                       Container(
                           margin: const EdgeInsets.only(right: 10),
                           width: 40,
@@ -262,12 +265,12 @@ class _AboutEventState extends State<AboutEvent> {
                                 if (isOrganized)
                               const PopupMenuItem(
                                 value: 4,
-                                child: Text("Take Attendance"),
+                                child: Text("Mark Attendance"),
                               ),
                               if (ifRegistered)
                                 const PopupMenuItem(
                                   value: 5,
-                                  child: Text("Give Attendance"),
+                                  child: Text("Submit Attendance"),
                                 ),
                             ],
                             onSelected: (value) async {

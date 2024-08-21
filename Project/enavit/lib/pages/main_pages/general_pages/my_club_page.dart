@@ -361,22 +361,30 @@ class _MyClubBioState extends State<MyClubBio> {
                                       20, 20, 20, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
+                  
                                     children: [
                                       Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.6,
-                                            child: Text(
-                                              club.clubName,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText1,
+                                                0.5,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  club.clubName,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  softWrap: true,
+                                                  style: FlutterFlowTheme.of(context)
+                                                      .bodyText1,
+                                                ),
+                                                
+                                              ],
                                             ),
                                           ),
+                                          
                                           Padding(
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(0, 0, 0, 0),
@@ -402,16 +410,7 @@ class _MyClubBioState extends State<MyClubBio> {
                                           ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(5, 0, 5, 15),
-                                        child: Icon(
-                                          Icons.verified_rounded,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryColor,
-                                          size: 16,
-                                        ),
-                                      ),
+                                      
                                       const Spacer(),
                                       GestureDetector(
                                         onTap: toggleFollow,

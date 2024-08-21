@@ -21,11 +21,15 @@ class _EventTileState extends State<EventTile> {
 
   void checkFavoriteStatus() async {
     Services services = Services();
+
     bool favoriteStatus = await services.checkFavEvents(widget.event.eventId);
     setState(() {
       isFavorited = favoriteStatus;
+      likecounts = widget.event.likes;
     });
   }
+
+  int likecounts = 0;//random
 
   bool isFavorited = false;//random
 
@@ -34,6 +38,7 @@ class _EventTileState extends State<EventTile> {
     bool newFavoriteStatus = await services.toggleFavEvents(widget.event.eventId);
     setState(() {
       isFavorited = newFavoriteStatus;
+      likecounts = isFavorited ? likecounts + 1 : likecounts - 1;
     });
   }
 
@@ -94,14 +99,33 @@ class _EventTileState extends State<EventTile> {
                               onTap: toggleFavorite,
                               child: Container(
                                 padding: const EdgeInsets.all(1),
-                                child: Icon(
-                                  isFavorited
-                                      ? Icons.favorite
-                                      : Icons.favorite_border_outlined,
-                                  color: const Color.fromARGB(255, 90, 88, 88),
-                                  size: 30.0,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      isFavorited
+                                          ? Icons.favorite
+                                          : Icons.favorite_border_outlined,
+                                      color:
+                                          const Color.fromARGB(255, 90, 88, 88),
+                                      size: 30.0,
+                                    ),
+                                    const SizedBox(
+                                        width:
+                                            4.0), // Add some space between the icon and the count
+                                    Text(
+                                      likecounts
+                                          .toString(), // Display the like count
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 90, 88, 88),
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                            ),
+                            const SizedBox(
+                              width: 20,
                             ),
                             GestureDetector(
                               onTap: () => share(widget.event),
@@ -115,7 +139,8 @@ class _EventTileState extends State<EventTile> {
                               ),
                             ),
                           ],
-                        ),
+                        )
+
                       ],
                     ),
                   ),

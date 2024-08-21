@@ -27,8 +27,13 @@ class Stats {
       statdata['issuesSolved'] = issuesSolved;
       statdata['totalexpense'] = event.expense;
       statdata['totalbudget'] = event.budget;
-      statdata['totalrevenue'] = event.revenue;
-      statdata['expectedrevenue'] = event.expectedRevenue;
+
+      print(event.expense);
+      print(event.revenue);
+
+      statdata['totalrevenue'] = double.parse(event.fee)* event.participants.length;
+      print(statdata);
+      statdata['expectedrevenue'] = event.revenue;
 
       //BRS,BCE,AIML,Others
       statdata['BRS'] = 0;
@@ -41,12 +46,9 @@ class Stats {
 
       List<String> allparticipants = event.participants;
     
-      print(allparticipants);
       for (var element in allusers.docs) {
-        print(element.data()['userid']);
             if (allparticipants.contains(element.data()['userid'] ) && element.data()['reg_no']!=null ) {
-              print(
-              element.data()['reg_no'].substring(2, 5).toUpperCase());
+             
               if (element.data()['reg_no'].substring(2,5).toUpperCase() == "BRS" ) {
                 statdata['BRS']++;
               } else if (element.data()['reg_no'].substring(2,5).toUpperCase() == "BCE") {
@@ -58,6 +60,7 @@ class Stats {
               }
             }
           }
+        print(statdata);
         return statdata;
         }
 

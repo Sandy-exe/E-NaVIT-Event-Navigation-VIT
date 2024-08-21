@@ -1379,7 +1379,7 @@ class Services {
         });
         print('Updated user record for ${doc.id}');
       }
-
+      
       // Log success message
       print('User records updated successfully!');
     } catch (e) {
@@ -1387,4 +1387,50 @@ class Services {
       print('Failed to update user records: $e');
     }
   }
+
+  Future<String> updateExpense(String expense,Event event)async {
+
+
+    final querySnapshot = await firestore.collection("Events").doc(event.eventId).get();
+    Map<String, dynamic> eventData = querySnapshot.data()!;
+
+    try{
+    await firestore.collection("Events").doc(event.eventId).update({
+      "expense": expense,
+    });
+    
+      return "success";
+    } catch (e) {
+      print(e);
+      return "error";
+    }
+
+  }
+
+  
+  Future<String> updateExpectedRevenue(String expectedRevenue,Event event) async {
+
+
+        final querySnapshot =
+        await firestore.collection("Events").doc(event.eventId).get();
+    Map<String, dynamic> eventData = querySnapshot.data()!;
+
+
+    //revenue in event collections in expected revenue
+
+
+    try {
+      await firestore.collection("Events").doc(event.eventId).update({
+        "revenue": expectedRevenue,
+      });
+
+      return "success";
+    } catch (e) {
+      print(e);
+      return "error";
+    }
+
+
+  }
+
 }

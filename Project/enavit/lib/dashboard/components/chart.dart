@@ -21,12 +21,6 @@ class ChartState extends State<Chart> {
   @override
   void initState() {
     super.initState();
-    
-    print("shit");
-    for (int i=0;i<4;i++){
-          print(double.parse(widget.participantData[i].totalparticipants));
-
-    }
 
     paiChartSelectionData = [
       PieChartSectionData(

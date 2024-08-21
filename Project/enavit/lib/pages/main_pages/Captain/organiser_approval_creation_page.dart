@@ -184,7 +184,7 @@ class _EventCreationPageState extends State<EventCreationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Creation'),
+        title: const Text('Approval Creation'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
