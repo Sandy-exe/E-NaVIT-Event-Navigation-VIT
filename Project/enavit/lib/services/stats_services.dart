@@ -66,5 +66,9 @@ class Stats {
 
       return {};
       }
-    }
 
+  Future<Map<String, dynamic>> statforClub(Club event) async {
+
+      return {};
+    }
+}
