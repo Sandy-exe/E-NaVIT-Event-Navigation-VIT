@@ -197,7 +197,7 @@ class _FloatingSearchBarWidgetState extends State<FloatingSearchBarWidget> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "Random",
+                        object is Club ? 'Total Events: ${object.events.length.toString()}' : (object as Event).clubId,
                         style: textTheme.bodyMedium
                             ?.copyWith(color: Colors.grey.shade600),
                       ),

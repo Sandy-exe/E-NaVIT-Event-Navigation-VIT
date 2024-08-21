@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:enavit/Data/secure_storage.dart';
+import 'package:enavit/components/Event_announcement_tile.dart';
 import 'package:enavit/components/event_tile.dart';
 import 'package:enavit/pages/main_pages/general_pages/edit_my_club_page.dart';
 import 'package:enavit/services/services.dart';
@@ -16,7 +19,10 @@ class MyClubBio extends StatefulWidget {
 
 class _MyClubBioState extends State<MyClubBio> {
   late List<dynamic> eventList = [];
+  late List<dynamic> postList = [];
   late double eventListLength;
+  late double postListLength;
+  late double tablength;
   late Club club = Club(
       approvers: List.empty(),
       clubName: "VIT",
@@ -24,7 +30,8 @@ class _MyClubBioState extends State<MyClubBio> {
       bio: "VIT is a club",
       email: "sfd@sdf.com",
       events: List.empty(),
-      followers: List.empty());
+      followers: List.empty(),
+      posts: List.empty());
 
   bool isFollow = false; //random
 
@@ -40,9 +47,11 @@ class _MyClubBioState extends State<MyClubBio> {
     Services service = Services();
     club = await service.getOrganizerClubDetails();
     eventList = await service.getClubEvents(club.clubId);
-    print(eventList.length);
+    postList = await service.getClubPosts(club.clubId);
+    print(postList);
     eventListLength = 600 * eventList.length.toDouble();
-    print(eventListLength);
+    postListLength = 300* postList.length.toDouble();
+    tablength =  max(eventListLength, postListLength);
     isFollow = await service.checkFollowClub(club.clubId);
   }
 
@@ -156,7 +165,8 @@ class _MyClubBioState extends State<MyClubBio> {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '604',
+                                                          club.events.length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: FlutterFlowTheme
@@ -203,7 +213,8 @@ class _MyClubBioState extends State<MyClubBio> {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '705k',
+                                                          club.followers.length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: FlutterFlowTheme
@@ -250,7 +261,8 @@ class _MyClubBioState extends State<MyClubBio> {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '12',
+                                                          club.posts.length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: FlutterFlowTheme
@@ -455,66 +467,37 @@ class _MyClubBioState extends State<MyClubBio> {
                                         ),
                                       ]),
                                 ),
-
-                                // Padding(
-                                //   padding: const EdgeInsetsDirectional.fromSTEB(
-                                //       10, 10, 140, 10),
-                                //   child: Row(
-                                //     children: [
-                                //       Expanded(
-                                //         child: Padding(
-                                //           padding: const EdgeInsetsDirectional
-                                //               .fromSTEB(0, 8, 0, 8),
-                                //           child: Row(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.spaceEvenly,
-                                //             children: [
-                                //               TextButton(
-                                //                 onPressed: () {},
-                                //                 style: TextButton.styleFrom(
-                                //                     backgroundColor:
-                                //                         Colors.black),
-                                //                 child: const Text('Posts',
-                                //                     style: TextStyle(
-                                //                         color: Colors.white)),
-                                //               ),
-                                //               TextButton(
-                                //                 onPressed: () {},
-                                //                 style: TextButton.styleFrom(
-                                //                     backgroundColor:
-                                //                         Colors.black),
-                                //                 child: const Text('Events',
-                                //                     style: TextStyle(
-                                //                         color: Colors.white)),
-                                //               ),
-                                //               TextButton(
-                                //                 onPressed: () {},
-                                //                 style: TextButton.styleFrom(
-                                //                     backgroundColor:
-                                //                         Colors.black),
-                                //                 child: const Text('Bio',
-                                //                     style: TextStyle(
-                                //                         color: Colors.white)),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-
                                 SizedBox(
-                                  height: eventListLength < 10
+                                  height: tablength < 10
                                       ? 1000
-                                      : eventListLength, // or any fraction,
+                                      : tablength, // or any fraction,
                                   child: TabBarView(
                                     children: [
                                       // Posts Tab
                                       Container(
-                                        padding: const EdgeInsets.all(0),
-                                        child: const Center(
-                                            child: Text("No Posts Available")),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 0),
+                                        child: postList.isNotEmpty
+
+                                            ?
+                                            ListView.builder(
+              itemCount: postList.length,
+              shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final announcement = postList[index];
+                return AnnouncementTile(
+                  announcement: announcement,
+                );
+              },
+            )
+                                            
+                                            : const Center(
+                                                child: Text(
+                                                    "No Posts Available",
+                                       )),
+                                                    
                                       ),
                                       // Events Tab
                                       Container(

@@ -10,15 +10,20 @@ class SEVENTAnnouncement extends StatefulWidget {
   final String userId;
   final String userName;
 
-  const SEVENTAnnouncement({super.key, required this.event, required this.userId, required this.userName});
+  const SEVENTAnnouncement(
+      {super.key,
+      required this.event,
+      required this.userId,
+      required this.userName});
+
   @override
   State<SEVENTAnnouncement> createState() => _SEVENTAnnouncementState();
 }
 
 class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
-  
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _announcementController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -32,17 +37,21 @@ class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
     super.dispose();
   }
 
-  Future <void> sendAnnouncemnt() async {
+  Future<void> sendAnnouncement() async {
     Services services = Services();
 
-    await services.addEventannouncementDetails(EventAnnoucenments(eventId: widget.event.eventId, 
-    announcement: _announcementController.text, announcementId: "", dateTime: DateTime.now() , userId: widget.userId, userName: widget.userName,eventName: widget.event.eventName)
-    
+    await services.addEventannouncementDetails(
+      EventAnnoucenments(
+        eventId: widget.event.eventId,
+        announcement: _announcementController.text,
+        announcementId: "",
+        dateTime: DateTime.now(),
+        userId: widget.userId,
+        userName: widget.userName,
+        eventName: widget.event.eventName,
+        clubId: widget.event.clubId,
+      ),
     );
-
-    
-
-    // Add any asynchronous operations you need to perform here
   }
 
   Future<void> initPrefs() async {
@@ -65,8 +74,8 @@ class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
           );
         } else if (snapshot.error != null) {
           return const Center(
-              child: Text(
-                  'An error occurred!')); // Show error message if any error occurs
+            child: Text('An error occurred!'),
+          ); // Show error message if any error occurs
         } else {
           return Scaffold(
             appBar: AppBar(
@@ -98,15 +107,33 @@ class _SEVENTAnnouncementState extends State<SEVENTAnnouncement> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          // Perform save operation
-                          await sendAnnouncemnt();
-                          Navigator.pop(context);
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
 
-                        }
-                      },
-                      child: const Text('Post Announcement'),
+                                // Perform save operation
+                                await sendAnnouncement();
+                                Navigator.pop(context);
+
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
+                            },
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Post Announcement'),
                     ),
                   ],
                 ),

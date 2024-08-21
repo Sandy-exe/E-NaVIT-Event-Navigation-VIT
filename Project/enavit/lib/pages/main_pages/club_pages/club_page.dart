@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:enavit/components/Event_announcement_tile.dart';
 import 'package:enavit/components/event_tile.dart';
 import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +9,6 @@ import 'package:enavit/components/flutter_flow_theme.dart';
 import 'package:enavit/models/og_models.dart';
 
 class ClubBio extends StatefulWidget {
-  
   final Club club;
   ClubBio({super.key, required this.club});
 
@@ -17,27 +19,30 @@ class ClubBio extends StatefulWidget {
 class _ClubBioState extends State<ClubBio> {
   late List<dynamic> eventList = [];
   late double eventListLength;
-  
+  late List<dynamic> postList = [];
+  late double postListLength;
+  late double tabLength;
+
   bool isFollow = false; //random
 
-
-void toggleFollow() async {
-  Services services = Services();
-  bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
-  setState(() {
-    isFollow = newFollowStatus;
-  });
-}
-
-
+  void toggleFollow() async {
+    Services services = Services();
+    bool newFollowStatus = await services.toggleFollowClubs(widget.club.clubId);
+    setState(() {
+      isFollow = newFollowStatus;
+    });
+  }
 
   Future<void> initPrefs(String clubId) async {
     Services service = Services();
     eventList = await service.getClubEvents(clubId);
     isFollow = await service.checkFollowClub(clubId);
     print(eventList.length);
+    postList = await service.getClubPosts(clubId);
     eventListLength = (600 * eventList.length.toDouble());
-    print(eventListLength);
+    postListLength = (300 * postList.length.toDouble());
+    tabLength = max(eventListLength, postListLength);
+
     isFollow = await service.checkFollowClub(widget.club.clubId);
   }
 
@@ -69,8 +74,8 @@ void toggleFollow() async {
                       scrollDirection: Axis.vertical,
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(0, 150, 0, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0, 150, 0, 0),
                           child: Container(
                             width: double.infinity,
                             decoration: const BoxDecoration(
@@ -150,29 +155,29 @@ void toggleFollow() async {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '604',
+                                                          widget.club.events
+                                                              .length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Events',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -199,29 +204,29 @@ void toggleFollow() async {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '705k',
+                                                          widget.club.followers
+                                                              .length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Followers',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -248,29 +253,29 @@ void toggleFollow() async {
                                                               .center,
                                                       children: [
                                                         Text(
-                                                          '12',
+                                                          widget
+                                                              .club.posts.length
+                                                              .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
                                                         ),
                                                         Text(
                                                           'Posts',
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: const Color(
-                                                                        0xFFB3B3B3),
-                                                                    fontSize: 8,
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: const Color(
+                                                                    0xFFB3B3B3),
+                                                                fontSize: 8,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -326,17 +331,17 @@ void toggleFollow() async {
                                               children: [
                                                 Text(
                                                   '@${widget.club.clubName}',
-                                                  style:
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyText1
-                                                          .override(
-                                                            fontFamily: 'Poppins',
-                                                            color: const Color(
-                                                                0xFF787878),
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.normal,
-                                                          ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: const Color(
+                                                            0xFF787878),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -344,9 +349,8 @@ void toggleFollow() async {
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                5, 0, 5, 15),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(5, 0, 5, 15),
                                         child: Icon(
                                           Icons.verified_rounded,
                                           color: FlutterFlowTheme.of(context)
@@ -363,10 +367,12 @@ void toggleFollow() async {
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
-                                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16.0),
                                           child: Text(
                                             isFollow ? 'Unfollow' : 'Follow',
-                                            style: const TextStyle(color: Colors.white),
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
                                         ),
                                       )
@@ -413,7 +419,7 @@ void toggleFollow() async {
                                 //                     style: TextStyle(
                                 //                         color: Colors.white)),
                                 //               ),
-              
+
                                 //             ],
                                 //           ),
                                 //         ),
@@ -432,7 +438,7 @@ void toggleFollow() async {
                                 //       itemBuilder: (context, index) {
                                 //         // get a Event from Event list
                                 //         Object object = eventList[index];
-              
+
                                 //         return EventTile(
                                 //           event: object as Event,
                                 //         );
@@ -441,7 +447,7 @@ void toggleFollow() async {
                                 const SizedBox(
                                   height: 10,
                                 ),
-              
+
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 100, 0),
@@ -480,17 +486,32 @@ void toggleFollow() async {
                                       ]),
                                 ),
                                 SizedBox(
-                                  height: eventListLength < 10 ? 1000 : eventListLength, // or any fraction,
+                                  height: tabLength < 10
+                                      ? 1000
+                                      : tabLength, // or any fraction,
                                   child: TabBarView(
                                     children: [
                                       // Posts Tab
                                       Container(
-                                        width: 300,
-                                        padding: const EdgeInsets.all(0),
-                                        child: const Padding(
-                                          padding:  EdgeInsets.all(150.0),
-                                          child: Text("No Posts Available"),
-                                        ),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 0),
+                                        child: postList.isNotEmpty
+                                            ? ListView.builder(
+                                                itemCount: postList.length,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  final announcement =
+                                                      postList[index];
+                                                  return AnnouncementTile(
+                                                    announcement: announcement,
+                                                  );
+                                                },
+                                              )
+                                            : const Center(
+                                                child:
+                                                    Text("No Posts Available")),
                                       ),
                                       // Events Tab
                                       Container(

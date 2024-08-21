@@ -35,6 +35,7 @@ class _EditMyClubState extends State<EditMyClub> {
         email: emailController.text,
         events: widget.club.events,
         followers: widget.club.followers,
+        posts: widget.club.posts,
       );
       await service.updateClubDetails(updatedClub);
       Navigator.pop(context);

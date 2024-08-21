@@ -146,6 +146,7 @@ class Services {
       events: List<String>.from(clubData['events']),
       approvers: List<String>.from(clubData['approvers']),
       followers: List<String>.from(clubData['followers']),
+      posts: List<String>.from(clubData['posts']),
     );
   }
 
@@ -214,6 +215,7 @@ class Services {
           events: List<String>.from(data['events']) ,
           approvers: List<String>.from(data['approvers'] ?? []),
           followers: List<String>.from(data['followers']),
+          posts: List<String>.from(data['posts']),
         ),
       );
     }
@@ -1084,6 +1086,7 @@ class Services {
           events: List<String>.from(clubData['events']),
           approvers: List<String>.from(clubData['approvers']),
           followers: List<String>.from(clubData['followers']),
+          posts: List<String>.from(clubData['posts']),
         ),
       );
     }
@@ -1149,6 +1152,7 @@ class Services {
       events: List<String>.from(club['events']),
       approvers: List<String>.from(club['approvers']),
       followers: List<String>.from(club['followers']),
+      posts: List<String>.from(club['posts']),
     );
   }
 
@@ -1166,8 +1170,6 @@ class Services {
         print(announcement.announcement);
     try{
       announcement.announcementId = await generateUniqueannouncementId();
-
-
     final announcementRef = firestore
         .collection("EventAnnouncement")
         .doc(announcement.announcementId);
@@ -1180,16 +1182,60 @@ class Services {
       "userId": announcement.userId,
       "userName": announcement.userName,
       "eventName": announcement.eventName,
+      "clubId": announcement.clubId,
     };
 
     print(obj);
+    print("clubId: ${announcement.clubId}");
 
+    final clubRef = firestore
+          .collection("Clubs")
+          .doc(announcement.clubId);
+
+    final club = await clubRef.get();
+    Map<String, dynamic> clubData = club.data()!;
+    List<String> posts = List<String>.from(clubData["posts"]);
+    posts.add(announcement.announcementId);
+    await clubRef.update({"posts": posts});
+    print("Updated club posts");
     await announcementRef.set(obj);
     }
     catch(e){
       print(e);
     }
 
+  }
+
+
+  Future <List<EventAnnoucenments>> getClubPosts(String clubId) async {
+
+
+    final querySnapshot = await firestore.collection("EventAnnouncement").get();
+    List<EventAnnoucenments> announcements = [];
+
+    for (final docSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = docSnapshot.data();
+      print(data);
+
+      if (data['clubId'] == clubId) {
+        announcements.add(
+          EventAnnoucenments(
+            announcementId: data['announcementId'],
+            eventId: data['eventId'],
+            announcement: data['announcement'],
+            dateTime: (data['dateTime'] as Timestamp).toDate(),
+            userId: data['userId'],
+            userName: data['userName'],
+            eventName: data['eventName'],
+            clubId: data['clubId'],
+          ),
+        );
+      }
+    }    
+
+    
+    print(announcements);
+    return announcements;
   }
 
   Future <List<EventAnnoucenments>> getEventAnnouncements(String eventId) async {
@@ -1211,6 +1257,7 @@ class Services {
               userId: data['userId'],
               userName: data['userName'],
               eventName: data['eventName'],
+              clubId: data['clubId'],
             ),
           );
         }

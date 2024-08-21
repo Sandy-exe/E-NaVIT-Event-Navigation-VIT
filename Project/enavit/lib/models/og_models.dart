@@ -60,6 +60,7 @@ class Club {
   final List<String> events;
   late final List<String> approvers;
   final List<String> followers;
+  final List<String> posts;
 
   Club({
     required this.clubId,
@@ -68,8 +69,8 @@ class Club {
     required this.email,
     required this.events,
     required this.approvers,
-
     required this.followers,
+    required this.posts,
   });
 }
 
@@ -207,6 +208,7 @@ class EventAnnoucenments{
   final String userId;
   final String userName;
   final String eventName;
+  final String clubId;
 
   EventAnnoucenments({
 
@@ -217,5 +219,6 @@ class EventAnnoucenments{
     required this.dateTime,
     required this.userId,
     required this.userName,
+    required this.clubId,
   });
 }
