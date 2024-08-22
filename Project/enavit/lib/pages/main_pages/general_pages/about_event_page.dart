@@ -645,14 +645,10 @@ class _AboutEventState extends State<AboutEvent> {
 void updateUserAndEventDetails(String userId, String eventId) {
   Services service = Services();
 
-  Map<String, dynamic> eventDetails = {
-    "participants": FieldValue.arrayUnion([userId]),
-  };
-
   Map<String, dynamic> userDetails = {
     "events": FieldValue.arrayUnion([eventId]),
   };
 
-  service.updateEvent(eventId, eventDetails);
+  service.updateEvent(eventId, {"userId":userId} );
   service.updateUser(userId, userDetails);
 }

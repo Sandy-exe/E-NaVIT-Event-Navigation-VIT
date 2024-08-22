@@ -36,6 +36,8 @@ class _EditMyClubState extends State<EditMyClub> {
         events: widget.club.events,
         followers: widget.club.followers,
         posts: widget.club.posts,
+        revenue: widget.club.revenue,
+        expense: widget.club.expense,
       );
       await service.updateClubDetails(updatedClub);
       Navigator.pop(context);

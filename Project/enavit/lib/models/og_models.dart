@@ -61,6 +61,8 @@ class Club {
   late final List<String> approvers;
   final List<String> followers;
   final List<String> posts;
+  final String revenue;
+  final String expense;
 
   Club({
     required this.clubId,
@@ -71,6 +73,8 @@ class Club {
     required this.approvers,
     required this.followers,
     required this.posts,
+    required this.revenue,
+    required this.expense,
   });
 }
 

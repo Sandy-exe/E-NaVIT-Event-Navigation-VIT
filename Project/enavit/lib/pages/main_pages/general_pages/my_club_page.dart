@@ -23,6 +23,7 @@ class _MyClubBioState extends State<MyClubBio> {
   late double eventListLength;
   late double postListLength;
   late double tablength;
+  
   late Club club = Club(
       approvers: List.empty(),
       clubName: "VIT",
@@ -31,7 +32,9 @@ class _MyClubBioState extends State<MyClubBio> {
       email: "sfd@sdf.com",
       events: List.empty(),
       followers: List.empty(),
-      posts: List.empty());
+      posts: List.empty(),
+      expense: "0",
+      revenue: "0");
 
   bool isFollow = false; //random
 

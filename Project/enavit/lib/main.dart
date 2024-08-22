@@ -14,6 +14,7 @@ import 'package:enavit/pages/main_pages/general_pages/view_following_club_page.d
 import 'package:enavit/pages/main_pages/general_pages/view_liked_events_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/view_organized_events_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
+import 'package:enavit/pages/main_pages/participants/leader_board_page.dart';
 import 'package:enavit/services/notification_service.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -156,6 +157,7 @@ class EnavitState extends State<Enavit> {
             '/Organized_events': (context) => const OrganizedEvents(),
             '/My_club': (context) => const MyClubBio(),
             '/organiser_setRole': (context) => const SetRoleOrganiser(),
+            '/LeaderBoard': (context) => const LeaderBoardPage(title: 'Leader Board',),
 
             //Captain
             '/captain_setRole': (context) => const SetRoleCaptain(),

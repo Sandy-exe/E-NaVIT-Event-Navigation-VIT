@@ -136,6 +136,24 @@ class _AIndexPageState extends State<AIndexPage> {
                       ),
                       ),
                     ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/LeaderBoard');
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.emoji_events,
+                          color: Colors.white,
+                        ),
+                        title: Text(
+                          'Leaderboard',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ), 
               

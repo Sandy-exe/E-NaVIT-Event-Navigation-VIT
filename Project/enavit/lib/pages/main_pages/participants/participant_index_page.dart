@@ -31,7 +31,7 @@ class _IndexPageState extends State<IndexPage> {
   final List<Widget> pages = [
     const HomePage(),
     const MyEvents(),
-    const LeaderBoardPage(),
+    const LeaderBoardPage(title: '',),
     const ProfilePage(),
   ];
 

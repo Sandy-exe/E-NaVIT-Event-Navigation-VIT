@@ -155,6 +155,8 @@ class Services {
       approvers: List<String>.from(clubData['approvers']),
       followers: List<String>.from(clubData['followers']),
       posts: List<String>.from(clubData['posts']),
+      revenue: clubData['revenue'],
+      expense: clubData['expense'],
     );
   }
 
@@ -233,6 +235,8 @@ class Services {
             approvers: List<String>.from(data['approvers'] ?? []),
             followers: List<String>.from(data['followers']),
             posts: List<String>.from(data['posts']),
+            revenue: data['revenue'],
+            expense: data['expense'],
           ),
         );
       }
@@ -313,7 +317,37 @@ class Services {
 
   Future<void> updateEvent(String eventId, Map<String, dynamic> newinfo) async {
     final docref = firestore.collection("Events").doc(eventId);
+    final docSnapshot = await docref.get();
+    Map<String, dynamic> eventData = docSnapshot.data()!;
+
+    //for updating revenue in club if the updateEvent invoked in userPage
+    if (newinfo.containsKey('userId')) {
+      final clubref = firestore.collection("Clubs").doc(eventData['clubId']);
+      await clubref.update({
+        "revenue":
+            (double.parse(eventData['revenue']) + double.parse(eventData['fee'])).toString()
+                
+      });
+
+    
+    List<String> participantsList = List<String>.from(eventData['participants']);
+    participantsList.add(newinfo['userId']);
+    newinfo = {};
+    newinfo['participants'] = participantsList;
+    print("newinfo: $newinfo");
+    newinfo['revenue'] = (participantsList.length * (double.parse(eventData['fee']))).toString();
+  
+    print("newinfo_changed: $newinfo");
+
     await docref.update(newinfo);
+
+
+   
+
+
+
+    }
+
 
     //push the object
     List<String> events = [];
@@ -1102,6 +1136,8 @@ class Services {
           approvers: List<String>.from(clubData['approvers']),
           followers: List<String>.from(clubData['followers']),
           posts: List<String>.from(clubData['posts']),
+          revenue: clubData['revenue'],
+          expense: clubData['expense'],
         ),
       );
     }
@@ -1168,6 +1204,8 @@ class Services {
       approvers: List<String>.from(club['approvers']),
       followers: List<String>.from(club['followers']),
       posts: List<String>.from(club['posts']),
+      revenue: club['revenue'],
+      expense: club['expense'],
     );
   }
 
@@ -1392,11 +1430,19 @@ class Services {
 
 
     final querySnapshot = await firestore.collection("Events").doc(event.eventId).get();
+    final ClubSnapshot =
+        await firestore.collection("Events").doc(event.clubId).get();
+    
+    Map<String, dynamic> clubData = ClubSnapshot.data()!;
     Map<String, dynamic> eventData = querySnapshot.data()!;
 
     try{
     await firestore.collection("Events").doc(event.eventId).update({
       "expense": expense,
+    });
+
+    await firestore.collection("Clubs").doc(event.clubId).update({
+      "expense": (int.parse(clubData['expense']) + int.parse(expense)).toString(),
     });
     
       return "success";
