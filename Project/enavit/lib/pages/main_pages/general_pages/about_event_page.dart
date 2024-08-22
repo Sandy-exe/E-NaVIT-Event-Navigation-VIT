@@ -247,11 +247,11 @@ class _AboutEventState extends State<AboutEvent> {
                             ),
                             itemBuilder: (context) => [
 
-                              if (isOrganized)
-                              const PopupMenuItem(
-                                value: 1,
-                                child: Text("Edit Event Profile"),
-                              ),
+                              // if (isOrganized)
+                              // const PopupMenuItem(
+                              //   value: 1,
+                              //   child: Text("Edit Event Profile"),
+                              // ),
                               if (isOrganized)
                               const PopupMenuItem(
                                 value: 2,

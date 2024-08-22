@@ -325,11 +325,11 @@ class _MyClubBioState extends State<MyClubBio> {
                                                           child: Text(
                                                               "Edit Profile"),
                                                         ),
-                                                        const PopupMenuItem(
-                                                          value: 2,
-                                                          child: Text(
-                                                              "View Stats"),
-                                                        ),
+                                                        // const PopupMenuItem(
+                                                        //   value: 2,
+                                                        //   child: Text(
+                                                        //       "View Stats"),
+                                                        // ),
                                                       ],
                                                       onSelected: (value) {
                                                         if (value == 1) {

@@ -56,7 +56,7 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
     ];
 
     print("ok");
-    print(((double.parse(statData['totalexpense'])/ double.parse(statData['totalbudget'])) *
+    print(((statData['totalexpense']/ double.parse(statData['totalbudget'])) *
         100));
     financeCard = [
       FinanceCardInfo(
@@ -65,12 +65,12 @@ class StatInfoCardListViewState extends State<StatInfoCardListView> {
         pngSrc: "lib/images/SVG/money-bag.png",
         budget: statData['totalbudget'].toString(),
         expectedRevenue: statData['expectedrevenue'].toString(),
-        expense: double.parse(statData['totalexpense']),
+        expense: statData['totalexpense'],
         revenue: statData['totalrevenue'],
         repercentage: ((statData['totalrevenue'] == 0.0 ? 1: statData['totalrevenue'] /
             double.parse(statData['expectedrevenue']==0.0 ? 1 : statData['expectedrevenue'] )) *
           100),
-        expercentage: ((double.parse(statData['totalexpense'])/double.parse(statData['totalbudget'])) *
+        expercentage: ((statData['totalexpense']/double.parse(statData['totalbudget'])) *
           100),
       ),
     ];

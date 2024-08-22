@@ -13,6 +13,9 @@ class LeaderBoardPage extends StatefulWidget {
 
 class _LeaderBoardPageState extends State<LeaderBoardPage>
     with SingleTickerProviderStateMixin {
+  var dropdown = ["Revenue", "Follower Count", "Events Count"];
+  var dropdownValue = "Revenue";
+  late double tabViewLength = 0;
   late TabController _tabController;
   LeaderBoard leaderBoard = LeaderBoard();
   List<Event> events = [];
@@ -31,7 +34,25 @@ class _LeaderBoardPageState extends State<LeaderBoardPage>
     events = await leaderBoard.getRankingEvents();
     clubs = await leaderBoard.getRankingClubs();
     print('Data fetched');
-  
+    tabViewLength = events.length.toDouble() * 100;
+    print(tabViewLength);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void updateFilter() {
+    setState(() {
+      isLoading = true;
+    });
+    if (dropdownValue == "Revenue") {
+      clubs.sort((a, b) => b.revenue.compareTo(a.revenue));
+    } else if (dropdownValue == "Follower Count") {
+      clubs.sort((a, b) => b.followers.length.compareTo(a.followers.length));
+    } else if (dropdownValue == "Events Count") {
+      clubs.sort((a, b) => b.events.length.compareTo(a.events.length));
+    }
     setState(() {
       isLoading = false;
     });
@@ -43,7 +64,7 @@ class _LeaderBoardPageState extends State<LeaderBoardPage>
     super.dispose();
   }
 
-    Widget buildLeaderBoard(List<Event> data) {
+  Widget buildLeaderBoard(List<Event> data) {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, index) {
@@ -91,51 +112,106 @@ class _LeaderBoardPageState extends State<LeaderBoardPage>
     );
   }
 
-    Widget buildLeaderBoardClub(List<Club> data) {
-    return ListView.builder(
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        Club item = data[index];
-        return GestureDetector(
-          onTap: () {
-            print('Pressed: ${item.clubName}');
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8.0,
-                  offset: Offset(0, 4),
+  Widget buildLeaderBoardClub(List<Club> data) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(40, 20, 20, 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Categorized by:',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  item.clubName,
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    dropdownColor: Colors.black,
+                    value: dropdownValue,
+                    iconEnabledColor: Colors.white,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconSize: 30,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    items: dropdown.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Center(child: Text(items)),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue!;
+                        updateFilter();
+                      });
+                    },
                   ),
                 ),
-                Text(
-                  '${index + 1}',
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              Club item = data[index];
+              return GestureDetector(
+                onTap: () {
+                  print('Pressed: ${item.clubName}');
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8.0,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        item.clubName,
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '${index + 1}',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -175,7 +251,6 @@ class _LeaderBoardPageState extends State<LeaderBoardPage>
               children: [
                 buildLeaderBoard(events),
                 buildLeaderBoardClub(clubs),
-                const Text('Clubs'),
               ],
             ),
       backgroundColor: Colors.grey[300],

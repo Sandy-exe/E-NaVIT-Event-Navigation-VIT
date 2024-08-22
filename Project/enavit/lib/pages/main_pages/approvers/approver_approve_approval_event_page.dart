@@ -522,7 +522,7 @@ class _ApprovalPageState extends State<ApprovalPage> {
         coordinator3: _coordinator3TEC.text,
         attendancePresent: [],
         issues: {},
-        expense: "0",
+        expense: [],
         revenue: "0",
         budget: _budgetTEC.text,
         expectedRevenue: "0",

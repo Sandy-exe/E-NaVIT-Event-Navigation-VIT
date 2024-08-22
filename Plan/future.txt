@@ -1,0 +1,4 @@
+Logics to be implemented in the future:
+
+1) Add Text Field Input Validation
+2) Event Time Conflicts with Existing Events

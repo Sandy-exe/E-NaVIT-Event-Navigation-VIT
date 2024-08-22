@@ -101,7 +101,7 @@ class Event {
   final String coordinator3;
   final List<dynamic> attendancePresent;
   final Map<String,Map<String,String>> issues;
-  final String expense;
+  final List<dynamic> expense;
   final String expectedRevenue;
   final String budget;
   final String revenue;

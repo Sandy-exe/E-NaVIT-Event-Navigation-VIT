@@ -12,11 +12,14 @@ class Stats {
         await secureStorage.reader(key: "currentUserData") ?? "null");
     //List<Event> eventListObj = jsonDecode(await secureStorage.reader(key: "events")?? "null");
 
+    try{
     if (currentUserData['role'] == 0 || currentUserData['role'] == 1) {
       Map<String, dynamic> statdata = {};
+      print(event);
       statdata['totalParticipants'] = event.participants.length;
       statdata['attendancePresent'] = event.attendancePresent.length;
       statdata['totalIssues'] = event.issues.length;
+
 
       int issuesSolved = 0;
       event.issues.forEach((key, value) {
@@ -24,16 +27,22 @@ class Stats {
           issuesSolved++;
         }
       });
+
+      statdata['totalexpense'] = 0.0;
+
+      for (var element in event.expense) {
+        statdata['totalexpense'] += double.parse(element['expense']);
+      }
+
       statdata['issuesSolved'] = issuesSolved;
-      statdata['totalexpense'] = event.expense;
       statdata['totalbudget'] = event.budget;
 
-      print(event.expense);
-      print(event.revenue);
-
       statdata['totalrevenue'] = double.parse(event.fee)* event.participants.length;
-      print(statdata);
+      
+
+      //event.revenue is actually the expected Revenue change later
       statdata['expectedrevenue'] = event.revenue;
+      
 
       //BRS,BCE,AIML,Others
       statdata['BRS'] = 0;
@@ -63,6 +72,9 @@ class Stats {
         print(statdata);
         return statdata;
         }
+    } catch (e) {
+      print(e);
+    }
 
       return {};
       }

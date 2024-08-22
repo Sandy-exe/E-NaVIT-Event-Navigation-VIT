@@ -70,18 +70,18 @@ class _IndexPageState extends State<IndexPage> {
             ),
         ),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/Notification_page');
-              },
-              icon: const Icon(
-                Icons.notifications,
-                color: Colors.black,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 10.0),
+          //   child: IconButton(
+          //     onPressed: () {
+          //       Navigator.pushNamed(context, '/Notification_page');
+          //     },
+          //     icon: const Icon(
+          //       Icons.notifications,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       drawer: Drawer(

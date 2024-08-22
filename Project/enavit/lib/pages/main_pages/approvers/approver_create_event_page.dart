@@ -127,7 +127,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
           coordinator3: _coordinator3TEC.text,
           attendancePresent: [],
           issues: {},
-          expense: "0",
+          expense: [],
           revenue: "0",
           budget: _budgetTEC.text,
           expectedRevenue: "0",
