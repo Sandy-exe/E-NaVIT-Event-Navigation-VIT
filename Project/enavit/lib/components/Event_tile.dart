@@ -2,6 +2,7 @@ import 'package:enavit/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit/models/og_models.dart';
 import '../pages/main_pages/general_pages/about_event_page.dart';
+import 'package:intl/intl.dart';
 
 class EventTile extends StatefulWidget {
   final Event event;
@@ -12,7 +13,6 @@ class EventTile extends StatefulWidget {
 }
 
 class _EventTileState extends State<EventTile> {
-  
   @override
   void initState() {
     super.initState();
@@ -29,13 +29,14 @@ class _EventTileState extends State<EventTile> {
     });
   }
 
-  int likecounts = 0;//random
+  int likecounts = 0; //random
 
-  bool isFavorited = false;//random
+  bool isFavorited = false; //random
 
   void toggleFavorite() async {
     Services services = Services();
-    bool newFavoriteStatus = await services.toggleFavEvents(widget.event.eventId);
+    bool newFavoriteStatus =
+        await services.toggleFavEvents(widget.event.eventId);
     setState(() {
       isFavorited = newFavoriteStatus;
       likecounts = isFavorited ? likecounts + 1 : likecounts - 1;
@@ -65,105 +66,134 @@ class _EventTileState extends State<EventTile> {
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(12.0),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
           children: [
-            //Event Image
-            Padding(
-              padding: const EdgeInsets.only(left: 4.0, top: 5, bottom: 5),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 300, // Adjust as needed for desired image height
+                    child: widget.event.eventImageURL == "null"
+                        ? Image.asset(
+                            'lib/images/Vit_poster.jpg',
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            widget.event.eventImageURL,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.event.eventName,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on, size: 16),
+                          const SizedBox(width: 4),
+                          Text(widget.event.location),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_today, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat('yyyy-MM-dd').format(DateTime.parse(
+                                widget.event.dateTime['startTime'].toString())),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 10, // Position it just above the event details
+              right: 20,
               child: Column(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: SizedBox(
-                      width: 250.0, // desired width
-                      child: widget.event.eventImageURL == "null"
-                          ? Image.asset('lib/images/Vit_poster.jpg')
-                          : Image.network(
-                              widget.event.eventImageURL,
-                              fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: toggleFavorite,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 5.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            isFavorited
+                                ? Icons.favorite
+                                : Icons.favorite_border_outlined,
+                            color: const Color.fromARGB(255, 90, 88, 88),
+                            size: 30.0,
+                          ),
+                          const SizedBox(width: 5.0),
+                          Text(
+                            likecounts.toString(),
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 90, 88, 88),
+                              fontSize: 16.0,
                             ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    width: 250,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: toggleFavorite,
-                              child: Container(
-                                padding: const EdgeInsets.all(1),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      isFavorited
-                                          ? Icons.favorite
-                                          : Icons.favorite_border_outlined,
-                                      color:
-                                          const Color.fromARGB(255, 90, 88, 88),
-                                      size: 30.0,
-                                    ),
-                                    const SizedBox(
-                                        width:
-                                            4.0), // Add some space between the icon and the count
-                                    Text(
-                                      likecounts
-                                          .toString(), // Display the like count
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 90, 88, 88),
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () => share(widget.event),
-                              child: Container(
-                                padding: const EdgeInsets.all(1),
-                                child: const Icon(
-                                  Icons.send_outlined,
-                                  color: Color.fromARGB(255, 90, 88, 88),
-                                  size: 30.0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-
-            SizedBox(
-              // color: Colors.red,
-              height: 400,
-              width: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 70,
-                    child: ClipRRect(
+            Positioned(
+              right: 16,
+              top:
+                  270, // Adjust this to place it between the image and event details
+              child: SizedBox(
+                width: 70,
+                height: 70,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: const Color.fromARGB(
+                            255, 0, 0, 0), // Set the border color here
+                        width: 2.0, // Set the border width here
+                      ),
                       borderRadius: BorderRadius.circular(100),
-                      child: const Image(
-                          image: AssetImage('lib/images/VIT_LOGO.png')),
+                    ),
+                    child: const Image(
+                      image: AssetImage('lib/images/VIT_LOGO.png'),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ],
