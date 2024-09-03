@@ -124,7 +124,7 @@ class _OIndexPageState extends State<OIndexPage> {
         ],
       ),
       drawer: Drawer(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -132,29 +132,39 @@ class _OIndexPageState extends State<OIndexPage> {
               children: [
                 //logo
                 DrawerHeader(
-                  child: Image.asset(
-                    'lib/images/Denji.jpg',
-                    height: 300,
+                    child: SizedBox(
+                  height: 700,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                       // Add some spacing between the text and the image
+                      Flexible(
+                        child: Image.asset(
+                          'lib/images/Enavit_logo1.png',
+                          height: 150,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Divider(
-                    color: Colors.grey[400],
-                    thickness: 1,
-                  ),
-                ),
+                )),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: Divider(
+                //     color: Colors.grey[400],
+                //     thickness: 1,
+                //   ),
+                // ),
                 //other pages
                 const Padding(
                   padding: EdgeInsets.only(left: 25.0),
                   child: ListTile(
                     leading: Icon(
                       Icons.home,
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                     title: Text(
-                      'home',
-                      style: TextStyle(color: Colors.white),
+                      'Home',
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                     ),
                   ),
                 ),
@@ -163,11 +173,24 @@ class _OIndexPageState extends State<OIndexPage> {
                   child: ListTile(
                     leading: Icon(
                       Icons.info,
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                     title: Text(
                       'About',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.feedback,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                    title: Text(
+                      'FeedBack',
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                     ),
                   ),
                 ),
@@ -182,11 +205,11 @@ class _OIndexPageState extends State<OIndexPage> {
                 child: const ListTile(
                   leading: Icon(
                     Icons.logout,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 0, 0, 0),
                   ),
                   title: Text(
-                    'logout',
-                    style: TextStyle(color: Colors.white),
+                    'Log Out',
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                 ),
               ),

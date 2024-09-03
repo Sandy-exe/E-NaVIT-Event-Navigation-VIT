@@ -1494,4 +1494,26 @@ class Services {
       return "error";
     }
   }
+
+  Future<List<Map<dynamic,dynamic>>> getExpenses(Event event) async {
+    final querySnapshot =
+        await firestore.collection("Events").doc(event.eventId).get();
+    Map<String, dynamic> eventData = querySnapshot.data()!;
+
+    double total_expense = 0.0;
+
+    for (var element in event.expense) {
+      print(element);
+      total_expense += double.parse(element['expense']);
+    }
+
+    List<Map<dynamic,dynamic>> expenses = [];
+    for (var element in event.expense) {
+      expenses.add(element);
+    }
+
+    expenses.add({"Total_Expense": total_expense.toString()});
+    print(expenses);
+    return expenses;
+  }
 }

@@ -31,8 +31,11 @@ class Stats {
       statdata['totalexpense'] = 0.0;
 
       for (var element in event.expense) {
+        print(element);
         statdata['totalexpense'] += double.parse(element['expense']);
       }
+
+      print(statdata['totalexpense']);
 
       statdata['issuesSolved'] = issuesSolved;
       statdata['totalbudget'] = event.budget;

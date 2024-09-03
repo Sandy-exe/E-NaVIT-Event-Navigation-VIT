@@ -1,7 +1,6 @@
 import 'package:boxy/flex.dart';
 import 'package:flutter/material.dart';
 
-
 class SetRoleButtonIndexPage extends StatefulWidget {
   const SetRoleButtonIndexPage({super.key});
 
@@ -16,59 +15,77 @@ class _SetRoleButtonIndexPageState extends State<SetRoleButtonIndexPage> {
       appBar: AppBar(
         title: const Text("Choose Operation"),
       ),
-      body: BoxyColumn(
-        mainAxisAlignment: MainAxisAlignment.center, // Add this line
-        children: [
-          Expanded(
-            child: _buildButton(
-              context,
-              "Set Captain Roles",
-              () {
-                
-                Navigator.pushNamed(context, '/captain_setRole');
-              },
+      body: Center(
+        child: BoxyColumn(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: _buildCardButton(
+                context,
+                'lib/images/Captain.png', // Example image URL
+                "Set Captain Roles",
+                "Assign roles to participants",
+                () {
+                  Navigator.pushNamed(context, '/captain_setRole');
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: _buildButton(
-              context,
-              "Set Organiser Roles",
-              () {
-                Navigator.pushNamed(context, '/organiser_setRole');
-              },
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: _buildCardButton(
+                context,
+                'lib/images/Organiser.png', // Example image URL
+                "Set Organiser Roles",
+                "Assign Organiser Roles to participants",
+                () {
+                  Navigator.pushNamed(context, '/organiser_setRole');
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String text, VoidCallback onPressed) {
+  Widget _buildCardButton(BuildContext context, String imageUrl, String title,
+      String subtitle, VoidCallback onPressed) {
     return Container(
-      margin: const EdgeInsets.all(10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+      height: 150,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.black12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
-        ),
-        onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+        ],
+      ),
+      child: Center(
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: -20),
+          leading: SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset(
+              imageUrl,
+              width: 100,
+              height: 100,
             ),
           ),
+          title: Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(subtitle),
+          onTap: onPressed,
         ),
       ),
     );
   }
 }
-
-

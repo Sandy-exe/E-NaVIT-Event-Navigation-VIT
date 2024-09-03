@@ -34,8 +34,10 @@ class _HomePageState extends State<HomePage> {
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-                body: Center(
+            return Scaffold(
+              
+                backgroundColor: Colors.grey[300],
+                body: const Center(
               child: CircularProgressIndicator(),
             ));
           } else {
@@ -62,16 +64,19 @@ class _HomePageState extends State<HomePage> {
           ),
           //HOT Picks
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25.0),
+            padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Available Events',
+                  'Upcoming Events',
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 56, 86, 158), // Adjust color if needed
+                    letterSpacing:
+                        1.2, // Add letter spacing for better readability
                   ),
                 ),
               ],

@@ -57,8 +57,10 @@ class _ListOfApprovedState extends State<ListOfApproved> {
       future: initPrefs(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-              body: Center(
+          return Scaffold(
+            
+              backgroundColor: Colors.grey[300],
+              body: const Center(
             child: CircularProgressIndicator(),
           ));
         } else {

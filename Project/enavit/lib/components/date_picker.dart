@@ -42,8 +42,9 @@ class _DatePickerState extends State<DatePicker> {
         future: ontimelinechange(3),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-                body: Center( 
+            return Scaffold(
+                backgroundColor: Colors.grey[300] ,
+                body: const Center( 
               child: CircularProgressIndicator(),
             ));
           } else {

@@ -56,7 +56,9 @@ class _OrganiserApprovalPendingRequestState extends State<OrganiserApprovalPendi
       future: initPrefs(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
+          return Scaffold(
+            
+              backgroundColor: Colors.grey[300],
               body: Center(
             child: CircularProgressIndicator(),
           ));

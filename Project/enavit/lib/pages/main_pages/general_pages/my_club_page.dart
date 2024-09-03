@@ -64,8 +64,10 @@ class _MyClubBioState extends State<MyClubBio> {
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-                body: Center(
+            return Scaffold(
+              
+                backgroundColor: Colors.grey[300],
+                body:const Center(
               child: CircularProgressIndicator(),
             ));
           } else {
@@ -373,7 +375,7 @@ class _MyClubBioState extends State<MyClubBio> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.5,
+                                                0.6,
                                             child: Row(
                                               children: [
                                                 Text(

@@ -141,6 +141,9 @@ flutter:
     - lib/images/pending.png
     - lib/images/approval.png
     - lib/images/approval.jpg
+    - lib/images/Enavit_logo1.png
+    - lib/images/Organiser.png
+    - lib/images/Captain.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

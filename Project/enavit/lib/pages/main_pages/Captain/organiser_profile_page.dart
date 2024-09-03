@@ -54,7 +54,9 @@ class _OProfilePageState extends State<OProfilePage> {
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
+            return Scaffold(
+              
+                backgroundColor: Colors.grey[300],
                 body: Center(
               child: CircularProgressIndicator(),
             ));
@@ -162,13 +164,13 @@ class _OProfilePageState extends State<OProfilePage> {
                             },
                             role: role,
                           ),
-                          ProfileMenuWidget(
-                            text: 'Settings',
-                            icon: FontAwesomeIcons.gear,
-                            onTap: () {
-                            },
-                            role: role,
-                          ),
+                          // ProfileMenuWidget(
+                          //   text: 'Settings',
+                          //   icon: FontAwesomeIcons.gear,
+                          //   onTap: () {
+                          //   },
+                          //   role: role,
+                          // ),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Log Out',

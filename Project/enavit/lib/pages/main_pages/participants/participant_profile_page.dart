@@ -161,13 +161,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                               role: role,
                             ),
-                          ProfileMenuWidget(
-                            text: 'Settings',
-                            icon: FontAwesomeIcons.gear,
-                            onTap: () {
-                            },
-                            role: role,
-                          ),
+                          // ProfileMenuWidget(
+                          //   text: 'Settings',
+                          //   icon: FontAwesomeIcons.gear,
+                          //   onTap: () {
+                          //   },
+                          //   role: role,
+                          // ),
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Log Out',

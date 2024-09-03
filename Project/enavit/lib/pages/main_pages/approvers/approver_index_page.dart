@@ -1,4 +1,3 @@
-
 import 'package:enavit/pages/main_pages/approvers/approver_approve_publish_create_page.dart';
 import 'package:enavit/pages/main_pages/general_pages/my_club_page.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import '../../../components/approver_bottom_nav_bar.dart';
 import 'package:enavit/pages/main_pages/approvers/approver_profile_page.dart';
 import 'package:enavit/services/authentication_service.dart';
 import 'package:enavit/pages/main_pages/general_pages/home_page.dart';
-
 
 class AIndexPage extends StatefulWidget {
   const AIndexPage({super.key});
@@ -16,12 +14,11 @@ class AIndexPage extends StatefulWidget {
 }
 
 class _AIndexPageState extends State<AIndexPage> {
-
   final AuthenticationService _firebaseAuth = AuthenticationService();
 
-  int selectedIndex = 0 ;
+  int selectedIndex = 0;
 
-  void navigateBottomBar(int index){
+  void navigateBottomBar(int index) {
     setState(() {
       selectedIndex = index;
     });
@@ -32,7 +29,6 @@ class _AIndexPageState extends State<AIndexPage> {
     const HomePage(),
     const ChoiceApprovePublishCreatePage(),
     const MyClubBio(),
-
     const AProfilePage(),
   ];
 
@@ -57,17 +53,17 @@ class _AIndexPageState extends State<AIndexPage> {
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Padding(
-                padding:  EdgeInsets.only(left: 25.0),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                  ),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Padding(
+              padding: EdgeInsets.only(left: 25.0),
+              child: Icon(
+                Icons.menu,
+                color: Colors.black,
               ),
             ),
+          ),
         ),
         actions: <Widget>[
           // Padding(
@@ -85,57 +81,66 @@ class _AIndexPageState extends State<AIndexPage> {
         ],
       ),
       drawer: Drawer(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                
-                 //logo
-                DrawerHeader(
-                  child: Image.asset(
-                    'lib/images/Denji.jpg',
-                    height: 300,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  //logo
+                  DrawerHeader(
+                      child: SizedBox(
+                    height: 700,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                         // Add some spacing between the text and the image
+                        Flexible(
+                          child: Image.asset(
+                            'lib/images/VIT_LOGO.png',
+                            height: 150,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  )),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:25.0),
-                  child: Divider(
-                    color: Colors.grey[400],
-                    thickness: 1,
-                  ),
-                  ),
-                  
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Divider(
+                  //     color: Colors.grey[400],
+                  //     thickness: 1,
+                  //   ),
+                  // ),
+
                   //other pages
                   const Padding(
-                    padding: EdgeInsets.only(left:25.0),
+                    padding: EdgeInsets.only(left: 25.0),
                     child: ListTile(
                       leading: Icon(
                         Icons.home,
-                        color: Colors.white,
-                        ),
-                      title: Text(
-                        'home',
-                        style: TextStyle(color: Colors.white),
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
+                      title: Text(
+                        'Home',
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                     ),
+                  ),
 
                   const Padding(
-                    padding: EdgeInsets.only(left:25.0),
+                    padding: EdgeInsets.only(left: 25.0),
                     child: ListTile(
                       leading: Icon(
                         Icons.info,
-                        color: Colors.white,
-                        ),
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
                       title: Text(
                         'About',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                     ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/LeaderBoard');
@@ -145,38 +150,49 @@ class _AIndexPageState extends State<AIndexPage> {
                       child: ListTile(
                         leading: Icon(
                           Icons.emoji_events,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                         title: Text(
                           'Leaderboard',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                         ),
                       ),
                     ),
                   ),
-              ],
-            ), 
-              
+                  const Padding(
+                    padding: EdgeInsets.only(left: 25.0),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.feedback,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                      title: Text(
+                        'FeedBack',
+                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(left:25.0,bottom: 25.0),
+                padding: const EdgeInsets.only(left: 25.0, bottom: 25.0),
                 child: GestureDetector(
                   onTap: () {
                     _firebaseAuth.signOut(context);
                   },
-                  child:  const ListTile(
+                  child: const ListTile(
                     leading: Icon(
                       Icons.logout,
-                      color: Colors.white,
-                      ),
-                    title: Text(
-                      'logout',
-                      style: TextStyle(color: Colors.white),
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
-                        ),
+                    title: Text(
+                      'Log Out',
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ),
                 ),
               ),
-          ]
-        ),
+            ]),
       ),
       body: pages[selectedIndex],
     );

@@ -168,7 +168,7 @@ class _AProfilePageState extends State<AProfilePage> {
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Following Clubs',
-                            icon: Icons.star,
+                            icon: Icons.group,
                             onTap: () {
                               Navigator.pushNamed(context, '/Following_clubs');
                             },
@@ -177,7 +177,7 @@ class _AProfilePageState extends State<AProfilePage> {
                           const SizedBox(height: 15),
                           ProfileMenuWidget(
                             text: 'Organized Events',
-                            icon: Icons.star,
+                            icon: Icons.event,
                             onTap: () {
                               
                               Navigator.pushNamed(context, '/Organized_events');

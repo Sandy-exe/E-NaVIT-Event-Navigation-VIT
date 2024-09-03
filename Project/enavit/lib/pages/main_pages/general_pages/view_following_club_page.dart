@@ -29,7 +29,9 @@ class _FollowedClubsState extends State<FollowedClubs> {
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
+            return Scaffold(
+              
+                backgroundColor: Colors.grey[300],
                 body: Center(
               child: CircularProgressIndicator(),
             ));
@@ -44,23 +46,39 @@ class _FollowedClubsState extends State<FollowedClubs> {
                       Navigator.pop(context);
                     },
                   ),
-                  title: const Text("Send Request")),
-              body: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Expanded(
-                    child: ListView.builder(
+                  title: const Text("Following Clubs")),
+              body:              Expanded(
+                child: followedClubs.isEmpty
+                  ? const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.group_off,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "You are not following any clubs",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
                       itemCount: followedClubs.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        // get an event
+                        // get a club
                         Club club = followedClubs[index];
                         return ClubTile(club: club);
                       },
                     ),
-                  ),
-                ],
-              ),
+              )
             );
           }
         });

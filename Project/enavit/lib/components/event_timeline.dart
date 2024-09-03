@@ -29,7 +29,28 @@ class _EventTimelineState extends State<EventTimeline> {
   Widget build(BuildContext context) {
     return Consumer<Compute>(builder: (context, value, child) {
       if (value.eventExist == 0) {
-        return const Expanded(child:Center(child:Text("No Events Found")));
+        return         const Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.event_busy,
+                  size: 50,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "No Events",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       }
       return Expanded(
         child: Column(

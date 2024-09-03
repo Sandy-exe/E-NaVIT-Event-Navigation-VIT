@@ -10,9 +10,11 @@ class TopScreenImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300, // Adjust the width as needed
-      height: 300, // Adjust the height as needed
+      width: 225, // Adjust the width as needed
+      height: 225, // Adjust the height as needed
       child: Container(
+        width: 200,
+        height: 200,
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,
@@ -58,10 +60,11 @@ class LoginSignupPage extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding:
-                      const EdgeInsets.only(right: 15.0, left: 15, bottom: 15),
+                      const EdgeInsets.only(right: 15.0, left: 15, bottom: 15,top: 100),
                   child: Column(
                     children: [
                       const ScreenTitle(title: 'Hello'),
+
                       const Text(
                         'Welcome to Enavit, where you can Navigate your way to Events',
                         textAlign: TextAlign.center,

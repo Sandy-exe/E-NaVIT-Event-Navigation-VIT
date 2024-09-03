@@ -116,6 +116,92 @@ class DashboardScreen extends StatelessWidget {
                     ),
                   );
                 }
+              } else if (result == 'View Expense') {
+                List<Map<dynamic,dynamic>> expenses = await Services().getExpenses(event);
+                                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Expenses'),
+                      content: FutureBuilder<List<Map<dynamic, dynamic>>>(
+                        future: Services().getExpenses(event),
+                        builder: (BuildContext context, AsyncSnapshot<List<Map<dynamic, dynamic>>> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const SizedBox(
+                              width: double.maxFinite,
+                              height: 200,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return const SizedBox(
+                              width: double.maxFinite,
+                              height: 200,
+                              child: Center(
+                                child: Text('Error retrieving expenses'),
+                              ),
+                            );
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const SizedBox(
+                              width: double.maxFinite,
+                              height: 200,
+                              child: Center(
+                                child: Text('No expenses found'),
+                              ),
+                            );
+                          } else {
+                            List<Map<dynamic, dynamic>> expenses = snapshot.data!;
+                            Map<dynamic, dynamic> totalExpense = expenses.last;
+                            expenses.removeLast();
+                
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: expenses.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return Card(
+                                          margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                                          child: ListTile(
+                                            title: Text(expenses[index]['description']),
+                                            subtitle: Text('Amount: ${expenses[index]['expense']}'),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Total Expense: ${totalExpense['Total_Expense']}',
+                                      style: const TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -126,6 +212,10 @@ class DashboardScreen extends StatelessWidget {
               const PopupMenuItem<String>(
                 value: 'Update Expected Revenue',
                 child: Text('Update Expected Revenue'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'View Expense',
+                child: Text('View Expense'),
               ),
             ],
             icon: const Icon(Icons.more_vert),

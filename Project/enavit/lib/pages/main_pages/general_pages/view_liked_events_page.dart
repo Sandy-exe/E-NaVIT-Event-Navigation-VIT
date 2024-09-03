@@ -30,7 +30,9 @@ class _LikedEventsState extends State<LikedEvents> {
         future: initPrefs(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
+            return Scaffold(
+              
+                backgroundColor: Colors.grey[300],
                 body: Center(
               child: CircularProgressIndicator(),
             ));
@@ -46,7 +48,29 @@ class _LikedEventsState extends State<LikedEvents> {
                     },
                   ),
                   title: const Text("Liked Events")),
-              body: likedEvents.isEmpty ? const Text("NO Events") :  ListView.builder(
+              body:               likedEvents.isEmpty 
+                ?                 const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.event_busy,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "No Events",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                : // Your code for displaying events :  
+                ListView.builder(
                       itemCount: likedEvents.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
