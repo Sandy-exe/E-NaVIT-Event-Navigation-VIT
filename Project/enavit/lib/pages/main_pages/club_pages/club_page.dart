@@ -325,14 +325,16 @@ class _ClubBioState extends State<ClubBio> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.5,
-                                            child: Text(
-                                              widget.club.clubName,
-                                              softWrap: true,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText1,
+                                                0.6,
+                                            child: Flexible(
+                                              child: Text(
+                                                widget.club.clubName,
+                                                softWrap: true,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: FlutterFlowTheme.of(context)
+                                                    .bodyText1,
+                                              ),
                                             ),
                                           ),
                                           Padding(

@@ -20,9 +20,10 @@ class _organizedEventsParticipantState extends State<organizedEventsParticipant>
   }
 
   Future<void> initPrefs() async {
+    print("oho");
     Services service = Services();
-    
     organizedEvents = await service.getOrganizedEventsView(context, widget.userid);
+    print("done");
     print(organizedEvents);
   }
 
@@ -52,16 +53,14 @@ class _organizedEventsParticipantState extends State<organizedEventsParticipant>
               body: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: organizedEvents.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        // get an event
-                        Event event = organizedEvents[index];
-                        return EventTile(event: event);
-                      },
-                    ),
+                  ListView.builder(
+                    itemCount: organizedEvents.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      // get an event
+                      Event event = organizedEvents[index];
+                      return EventTile(event: event);
+                    },
                   ),
                 ],
               ),

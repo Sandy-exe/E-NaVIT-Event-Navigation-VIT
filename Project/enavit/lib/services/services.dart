@@ -994,8 +994,10 @@ class Services {
 
   Future<List<Event>> getOrganizedEventsView(
       BuildContext context, String? userid) async {
+
     List<Event> organizedEvents = [];
 
+    try {
     if (userid != " ") {
       final userRef = firestore.collection("app_users").doc(userid);
 
@@ -1106,6 +1108,10 @@ class Services {
       );
     }
     return organizedEvents;
+    } catch (e) {
+      print(e);
+      return organizedEvents;
+    }
   }
 
   Future<List<Club>> getFollowedClubs(BuildContext context) async {

@@ -378,12 +378,15 @@ class _MyClubBioState extends State<MyClubBio> {
                                                 0.6,
                                             child: Row(
                                               children: [
-                                                Text(
-                                                  club.clubName,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  softWrap: true,
-                                                  style: FlutterFlowTheme.of(context)
-                                                      .bodyText1,
+                                                Flexible(
+                                                  child: Text(
+                                                    club.clubName,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    softWrap: true,
+                                                    style: FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                                    maxLines: 2,
+                                                  ),
                                                 ),
                                                 
                                               ],
