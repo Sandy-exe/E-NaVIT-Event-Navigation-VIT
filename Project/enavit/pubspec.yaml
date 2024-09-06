@@ -59,9 +59,9 @@ dependencies:
   lite_rolling_switch:
 
   flutter_svg: ^2.0.5
-  fl_chart: ^0.68.0
-  flutter_timezone: ^1.0.8
-  rxdart: ^0.27.7
+  fl_chart: ^0.69.0
+  flutter_timezone: ^3.0.1
+  rxdart: ^0.28.0
   android_alarm_manager_plus:
   intl:
   omni_datetime_picker:
@@ -79,12 +79,11 @@ dependencies:
   checkmark:
   csv:
   permission_handler:
-  qr_flutter: ^4.1.0
+  # qr_flutter: ^4.1.0
 
-  flutter_local_notifications:
-  awesome_notifications:
-  qr_code_scanner: ^1.0.1
-  simple_barcode_scanner: ^0.1.1
+  # awesome_notifications:
+  # qr_code_scanner: ^1.0.1
+  # simple_barcode_scanner: ^0.1.1
 
   #image_cropper: ^5.0.0
 

@@ -55,7 +55,7 @@ class _ClubBioState extends State<ClubBio> {
             return Scaffold(
               
                 backgroundColor: Colors.grey[300],
-                body: Center(
+                body:Center(
               child: CircularProgressIndicator(),
             ));
           } else {
@@ -326,17 +326,40 @@ class _ClubBioState extends State<ClubBio> {
                                                     .size
                                                     .width *
                                                 0.6,
-                                            child: Flexible(
-                                              child: Text(
-                                                widget.club.clubName,
-                                                softWrap: true,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: FlutterFlowTheme.of(context)
-                                                    .bodyText1,
-                                              ),
+                                            child: Row(
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    widget.club.clubName,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: true,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1,
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
+                                          
+                                          // SizedBox(
+                                          //   width: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width *
+                                          //       0.6,
+                                          //   child: Flexible(
+                                          //     child: Text(
+                                          //       widget.club.clubName,
+                                          //       softWrap: true,
+                                          //       maxLines: 2,
+                                          //       overflow: TextOverflow.ellipsis,
+                                          //       style: FlutterFlowTheme.of(context)
+                                          //           .bodyText1,
+                                          //     ),
+                                          //   ),
+                                          // ),
                                           Padding(
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(0, 0, 0, 0),
