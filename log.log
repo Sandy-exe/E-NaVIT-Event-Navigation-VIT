@@ -1,0 +1,247 @@
+           " (Raw: "com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver")
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+[  +73 ms] Stopping app 'app-debug.apk' on CPH2381.
+[   +2 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell am force-stop com.example.enavit_main
+[ +237 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell pm list packages
+com.example.enavit_main
+[ +183 ms] package:com.example.enavit_main
+[   +4 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell cat
+/data/local/tmp/sky.com.example.enavit_main.sha1
+[ +141 ms] ccce1ad6eb806a498ab5d806bffd7eccc2367519
+[   +2 ms] Installing APK.
+[   +2 ms] Installing build\app\outputs\flutter-apk\app-debug.apk...
+[        ] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded install -t -r C:\Users\santosh
+kumar\Documents\Works\Flutter\E-NaVIT\Project\enavit_main\build\app\outputs\flutter-apk\app-debug.apk
+[+5244 ms] Performing Streamed Install
+                    Success
+[   +1 ms] Installing build\app\outputs\flutter-apk\app-debug.apk... (completed in 5.2s)
+[   +2 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell echo -n
+db8c683f64c54e0c8fb18e516a9cb4526032c08f > /data/local/tmp/sky.com.example.enavit_main.sha1
+[ +128 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell -x logcat -v time -t 1
+[ +173 ms] --------- beginning of main
+                    09-07 09:43:51.455 W/OplusAppStartupConfigExt( 1923):  Switch result = false
+[  +20 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded shell am start -a
+android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x20000000 --ez enable-dart-profiling true --ez enable-checked-mode true --ez      
+verify-entry-points true com.example.enavit_main/com.example.enavit_main.MainActivity
+[ +252 ms] Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x20000000
+cmp=com.example.enavit_main/.MainActivity (has extras) }
+[   +1 ms] Waiting for VM Service port to be available...
+[+3225 ms] I/flutter ( 1246): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(67)] Using the Impeller rendering backend
+(Vulkan).
+[ +407 ms] VM Service URL on device: http://127.0.0.1:38173/udls_7BER0Q=/
+[   +1 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s ab71eded forward tcp:0 tcp:38173
+[ +129 ms] 59742
+[        ] Forwarded host port 59742 to device port 38173 for VM Service
+[  +13 ms] Caching compiled dill
+[ +134 ms] Connecting to service protocol: http://127.0.0.1:59742/udls_7BER0Q=/
+[ +415 ms] Launching a Dart Developer Service (DDS) instance at http://127.0.0.1:0, connecting to VM service at http://127.0.0.1:59742/udls_7BER0Q=/.
+[+1211 ms] Successfully connected to service protocol: http://127.0.0.1:59742/udls_7BER0Q=/
+[ +136 ms] DevFS: Creating new filesystem on the device (null)
+[  +43 ms] DevFS: Created new filesystem on the device (file:///data/user/0/com.example.enavit_main/code_cache/enavit_mainKVWRSD/enavit_main/)
+[   +5 ms] Updating assets
+[+6906 ms] Manifest contained wildcard assets. Inserting missing file into build graph to force rerun. for more information see #56466.
+[   +9 ms] Syncing files to device CPH2381...
+[   +5 ms] Compiling dart to kernel with 0 updated files
+[   +1 ms] Processing bundle.
+[   +1 ms] <- recompile package:enavit_main/main.dart f1a6ab85-12c8-4ebb-be6e-ffa8b96ed38d
+[        ] <- f1a6ab85-12c8-4ebb-be6e-ffa8b96ed38d
+[ +223 ms] Bundle processing done.
+[  +20 ms] W/System  ( 1246): Ignoring header X-Firebase-Locale because its value was null.
+[   +3 ms] W/DynamiteModule( 1246): Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+[   +1 ms] W/LocalRequestInterceptor( 1246): Error getting App Check token; using placeholder token instead. Error:
+com.google.firebase.FirebaseException: No AppCheckProvider installed.
+[        ] I/DynamiteModule( 1246): Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module
+com.google.android.gms.providerinstaller.dynamite:0
+[        ] W/ProviderInstaller( 1246): Failed to load providerinstaller module: No acceptable module
+com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+[   +1 ms] D/TrafficStats( 1246): tagSocket(157) with statsTag=0xffffffff, statsUid=-1
+[        ] D/nativeloader( 1246): Configuring clns-8 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=34,     
+uses_libraries=ALL,
+library_path=/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/lib/arm64:/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.
+google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+[   +1 ms] D/nativeloader( 1246): Extending system_exposed_libraries:
+libbinauralrenderer_wrapper.qti.so:libhoaeffects.qti.so:libSloganJni.oplus.so:libsuperNight.oplus.so:libAPSClient-cmd-jni-extension.oplus.so:libupdat
+eprof.qti.so:libQOC.qti.so:libthermalclient.qti.so:libqape.qti.so:libqesdk_ndk_platform.qti.so:liblistenjni.qti.so
+[   +2 ms] D/nativeloader( 1246): Configuring clns-9 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=34,       
+uses_libraries=ALL,
+library_path=/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/lib/arm64:/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.
+google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+[   +1 ms] D/nativeloader( 1246): Extending system_exposed_libraries:
+libbinauralrenderer_wrapper.qti.so:libhoaeffects.qti.so:libSloganJni.oplus.so:libsuperNight.oplus.so:libAPSClient-cmd-jni-extension.oplus.so:libupdat
+eprof.qti.so:libQOC.qti.so:libthermalclient.qti.so:libqape.qti.so:libqesdk_ndk_platform.qti.so:liblistenjni.qti.so
+[   +3 ms] D/nativeloader( 1246): Configuring clns-10 for other apk
+/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/base.apk. target_sdk_version=34, uses_libraries=,
+library_path=/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/lib/arm64:/data/app/~~FMsvFTNnTibu5ya3hFmKzA==/com.
+google.android.gms-WjNMo7QONZeI5dHwG4CjLg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+[   +2 ms] W/ProviderInstaller( 1246): Failed to report request stats:
+com.google.android.gms.common.security.ProviderInstallerImpl.reportRequestStats [class android.content.Context, long, long]
+[   +1 ms] V/NativeCrypto( 1246): Registering com/google/android/gms/org/conscrypt/NativeCrypto's 305 native methods...
+[        ] W/WindowOnBackDispatcher( 1246): OnBackInvokedCallback is not enabled for the application.
+[        ] W/WindowOnBackDispatcher( 1246): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+[        ] D/FirebaseAuth( 1246): Notifying id token listeners about user ( A9ggpxxS8EdL6BcBDfqEpx8E7OF3 ).
+[        ] D/ViewRootImplExtImpl( 1246): wrapConfigInfoIntoFlags rotation=0, smallestScreenWidthDp=360, relayoutAsync=false, newFlags=23592960,      
+title=com.example.enavit_main/com.example.enavit_main.MainActivity
+[   +1 ms] W/VRI[MainActivity]( 1246): updateBlastSurfaceIfNeeded, surfaceSize:Point(1080, 2412), lastSurfaceSize:Point(1080, 2412), format:-3,      
+blastBufferQueue:android.graphics.BLASTBufferQueue@4025686
+[        ] D/SurfaceView( 1246): 218136505 handleSyncNoBuffer
+[        ] D/SurfaceView( 1246): 218136505 finishedDrawing
+[        ] D/SurfaceView( 1246): 218136505 performDrawFinished mAttachedToWindow true
+[        ] D/VRI[MainActivity]( 1246):  debugCancelDraw  cancelDraw=false,count = 424,android.view.ViewRootImpl@f167195
+[        ] I/SurfaceControl( 1246):  setExtendedRangeBrightness
+sc=Surface(name=com.example.enavit_main/com.example.enavit_main.MainActivity)/@0x6d4e4e3,currentBufferRatio=1.0,desiredRatio=1.0
+[   +1 ms] D/SurfaceView( 1246): 218136505 dispatchDraw mDrawFinished true isAboveParent false (mPrivateFlags & PFLAG_SKIP_DRAW) 128
+[        ] D/SurfaceView( 1246): 218136505 clearSurfaceViewPort mCornerRadius 0.0
+[        ] D/BLASTBufferQueue( 1246): [VRI[MainActivity]#0](f:0,a:1) acquireNextBufferLocked size=1080x2412 mFrameNumber=1 applyTransaction=true     
+mTimestamp=1520570950203693(auto) mPendingTransactions.size=0 graphicBufferId=5351529250825 transform=0
+[   +1 ms] D/VRI[MainActivity]( 1246): Received frameCommittedCallback lastAttemptedDrawFrameNum=1 didProduceBuffer=true syncBuffer=false
+[        ] D/VRI[MainActivity]( 1246): draw finished.
+[        ] D/VRI[MainActivity]( 1246): reportDrawFinished
+[        ] D/VRI[MainActivity]( 1246): onFocusEvent true
+[   +4 ms] W/ple.enavit_main( 1246): Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (unsupported, reflection,
+allowed)
+[   +1 ms] W/ple.enavit_main( 1246): Accessing hidden method Ljava/security/spec/ECParameterSpec;->getCurveName()Ljava/lang/String; (unsupported,    
+reflection, allowed)
+[   +2 ms] I/ProviderInstaller( 1246): Installed default security provider GmsCore_OpenSSL
+[        ] D/TrafficStats( 1246): tagSocket(178) with statsTag=0xffffffff, statsUid=-1
+[        ] W/ple.enavit_main( 1246): Accessing hidden field Ljava/net/Socket;->impl:Ljava/net/SocketImpl; (unsupported, reflection, allowed)
+[        ] W/ple.enavit_main( 1246): Accessing hidden method Ljava/security/spec/ECParameterSpec;->setCurveName(Ljava/lang/String;)V (unsupported,   
+reflection, allowed)
+[   +1 ms] D/OplusScrollToTopManager( 1246): com.example.enavit_main/com.example.enavit_main.MainActivity,This DecorView@fbda3dd[MainActivity] change
+focus to true
+[   +1 ms] I/flutter ( 1246): 7
+[        ] D/ProfileInstaller( 1246): Installing profile for com.example.enavit_main
+[        ] I/flutter ( 1246): 5
+[        ] I/flutter ( 1246): oj please?
+[        ] I/flutter ( 1246): Instance of 'Event'
+[        ] I/flutter ( 1246): Instance of 'Event'
+[+5284 ms] Updating files.
+[        ] Pending asset builds completed. Writing dirty entries.
+[        ] DevFS: Sync finished
+[        ] Syncing files to device CPH2381... (completed in 5.6s)
+[   +1 ms] Synced 0.0MB.
+[   +4 ms] <- accept
+[  +27 ms] Connected to _flutterView/0xb4000070299eb420.
+[  +17 ms] Flutter run key commands.
+[   +3 ms] r Hot reload. 
+[   +1 ms] R Hot restart.
+[   +1 ms] h List all available interactive commands.
+[   +1 ms] d Detach (terminate "flutter run" but leave application running).
+[   +2 ms] c Clear the screen
+[        ] q Quit (terminate the application on the device).
+[   +1 ms] A Dart VM Service on CPH2381 is available at: http://127.0.0.1:59745/jAEXCVrYy0g=/
+[   +4 ms] The Flutter DevTools debugger and profiler on CPH2381 is available at: http://127.0.0.1:9101?uri=http://127.0.0.1:59745/jAEXCVrYy0g=/     
+[+3064 ms] I/ple.enavit_main( 1246): Background concurrent copying GC freed 491766(23MB) AllocSpace objects, 47(4656KB) LOS objects, 49% free,
+7101KB/13MB, paused 117us,33us total 105.058ms
+
+
+
+EMUlator:
+
+             A:
+                   android:name(0x01010003)="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedule
+                   rBroadcastReceiver" (Raw:
+                   "com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver")     
+                   A: android:exported(0x01010010)=(type 0x12)0x0
+[  +56 ms] Stopping app 'app-debug.apk' on sdk gphone64 x86 64.
+[   +1 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell am force-stop 
+com.example.enavit_main
+[ +537 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell pm list
+packages com.example.enavit_main
+[ +163 ms] Installing APK.
+[   +2 ms] Installing build\app\outputs\flutter-apk\app-debug.apk...
+[   +1 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 install -t -r       
+C:\Users\santosh kumar\Documents\Works\Flutter\E-NaVIT\Project\enavit_main\build\app\outputs\flutter-apk\app-debug.apk
+[+8935 ms] Performing Streamed Install
+                    Success
+[        ] Installing build\app\outputs\flutter-apk\app-debug.apk... (completed in 8.9s)
+[   +2 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell echo -n       
+0ed02d41996c65b6703aaebbdba8b0769b536924 > /data/local/tmp/sky.com.example.enavit_main.sha1
+[ +115 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell -x logcat -v
+time -t 1
+[+1237 ms] --------- beginning of kernel
+                    09-07 10:19:32.657 I/logd    (    0): logdr: UID=2000 GID=2000 PID=4980 n tail=1 logMask=99 pid=0 start=0ns    
+                    deadline=0ns
+[  +14 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 shell am start -a
+android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x20000000 --ez enable-dart-profiling true --ez
+enable-checked-mode true --ez verify-entry-points true com.example.enavit_main/com.example.enavit_main.MainActivity
+[+1729 ms] Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x20000000
+cmp=com.example.enavit_main/.MainActivity (has extras) }
+[   +1 ms] Waiting for VM Service port to be available...
+[+14573 ms] I/flutter ( 5058): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(67)] Using the Impeller
+rendering backend (Vulkan).
+[+1665 ms] VM Service URL on device: http://127.0.0.1:38631/Heg1xULtHfo=/
+[   +2 ms] executing: C:\Users\santosh kumar\AppData\Local\Android\sdk\platform-tools\adb.exe -s emulator-5554 forward tcp:0       
+tcp:38631
+[ +103 ms] 61692
+[   +1 ms] Forwarded host port 61692 to device port 38631 for VM Service
+[  +18 ms] Caching compiled dill
+[ +168 ms] Connecting to service protocol: http://127.0.0.1:61692/Heg1xULtHfo=/
+[+1206 ms] Launching a Dart Developer Service (DDS) instance at http://127.0.0.1:0, connecting to VM service at
+http://127.0.0.1:61692/Heg1xULtHfo=/.
+[+1021 ms] Successfully connected to service protocol: http://127.0.0.1:61692/Heg1xULtHfo=/
+[+6327 ms] DevFS: Creating new filesystem on the device (null)
+[  +67 ms] DevFS: Created new filesystem on the device
+(file:///data/user/0/com.example.enavit_main/code_cache/enavit_mainGPBFMI/enavit_main/)
+[   +5 ms] Updating assets
+[+2653 ms] Manifest contained wildcard assets. Inserting missing file into build graph to force rerun. for more information see
+#56466.
+[  +10 ms] Syncing files to device sdk gphone64 x86 64...
+[   +3 ms] Compiling dart to kernel with 0 updated files
+[   +2 ms] Processing bundle.
+[   +4 ms] <- recompile package:enavit_main/main.dart c8d84745-8277-4574-a955-e2e3669f0eea
+[   +2 ms] <- c8d84745-8277-4574-a955-e2e3669f0eea
+[ +309 ms] Bundle processing done.
+[   +9 ms] D/CompatibilityChangeReporter( 5058): Compat change id reported: 183155436; UID 10176; state: ENABLED
+[   +8 ms] I/FirebaseApp( 5058): Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+[   +1 ms] D/TrafficStats( 5058): tagSocket(131) with statsTag=0x8001, statsUid=-1
+[   +1 ms] I/ple.enavit_main( 5058): Background concurrent copying GC freed 50321(3289KB) AllocSpace objects, 21(1136KB) LOS       
+objects, 49% free, 7312KB/14MB, paused 229us,15us total 268.140ms
+[ +585 ms] Updating files.
+[        ] Pending asset builds completed. Writing dirty entries.
+[        ] DevFS: Sync finished
+[   +2 ms] Syncing files to device sdk gphone64 x86 64... (completed in 931ms)
+[   +1 ms] Synced 0.0MB.
+[   +7 ms] <- accept
+[  +17 ms] Connected to _flutterView/0x7f3c7123e360.
+[   +5 ms] Flutter run key commands.
+[   +2 ms] r Hot reload. 
+[   +1 ms] R Hot restart.
+[        ] h List all available interactive commands.
+[   +1 ms] d Detach (terminate "flutter run" but leave application running).
+[   +2 ms] c Clear the screen
+[   +1 ms] q Quit (terminate the application on the device).
+[   +2 ms] A Dart VM Service on sdk gphone64 x86 64 is available at: http://127.0.0.1:61695/Ja-2wsnq8Nw=/
+[+1238 ms] D/goldfish_vulkan( 5058): ensureSyncDeviceFd: created sync device for current Vulkan process: 105
+[ +335 ms] The Flutter DevTools debugger and profiler on sdk gphone64 x86 64 is available at:
+                    http://127.0.0.1:9101?uri=http://127.0.0.1:61695/Ja-2wsnq8Nw=/
+[   +1 ms] I/ple.enavit_main( 5058): Background young concurrent copying GC freed 105729(5151KB) AllocSpace objects, 15(2900KB) LOS
+objects, 58% free, 6122KB/14MB, paused 80us,16us total 319.526ms
+[ +118 ms] D/HostConnection( 5058): HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2
+ANDROID_EMU_native_sync_v3 ANDROID_EMU_native_sync_v4 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1    
+ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings   
+ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles
+ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8      
+ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_vulkan_queue_submit_with_commands ANDROID_EMU_sync_buffer_data
+ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs GL_OES_vertex_array_object
+GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_2 
+[ +185 ms] D/HostConnection( 5058): HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2
+ANDROID_EMU_native_sync_v3 ANDROID_EMU_native_sync_v4 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1    
+ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings   
+ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles
+ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8      
+ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_vulkan_queue_submit_with_commands ANDROID_EMU_sync_buffer_data
+ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs GL_OES_vertex_array_object
+GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_2 
+[+2896 ms] D/CompatibilityChangeReporter( 5058): Compat change id reported: 78294732; UID 10176; state: ENABLED
+[  +28 ms] D/Android: [Awesome Notifications]( 5058): New permissions request found waiting for user response
+(PermissionManager:749)
+[+2419 ms] W/OnBackInvokedCallback( 5058): OnBackInvokedCallback is not enabled for the application.
+[   +1 ms] W/OnBackInvokedCallback( 5058): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+[  +88 ms] D/HostConnection( 5058): HostComposition ext ANDROID_EMU_CHECKSUM_HELPER_v1 ANDROID_EMU_native_sync_v2
+ANDROID_EMU_native_sync_v3 ANDROID_EMU_native_sync_v4 ANDROID_EMU_dma_v1 ANDROID_EMU_direct_mem ANDROID_EMU_host_composition_v1    
+ANDROID_EMU_host_composition_v2 ANDROID_EMU_vulkan ANDROID_EMU_deferred_vulkan_commands ANDROID_EMU_vulkan_null_optional_strings   
+ANDROID_EMU_vulkan_create_resources_with_requirements ANDROID_EMU_YUV_Cache ANDROID_EMU_vulkan_ignored_handles
+ANDROID_EMU_has_shared_slots_host_memory_allocator ANDROID_EMU_vulkan_free_memory_sync ANDROID_EMU_vulkan_shader_float16_int8      
+ANDROID_EMU_vulkan_async_queue_submit ANDROID_EMU_vulkan_queue_submit_with_commands ANDROID_EMU_sync_buffer_data
+ANDROID_EMU_vulkan_async_qsri ANDROID_EMU_read_color_buffer_dma ANDROID_EMU_hwc_multi_configs GL_OES_vertex_array_object
+GL_KHR_texture_compression_astc_ldr ANDROID_EMU_host_side_tracing ANDROID_EMU_gles_max_version_2 

@@ -51,7 +51,7 @@ Future main() async {
           storageBucket: "e-navit.appspot.com",
           projectId: "e-navit"));
 
-  // await FirebaseApi().initNotifications();
+  // await FirebaseApi().initNotifications();  
 
   String currentUserDataString =
       await securestorage.reader(key: "currentUserData") ?? "null";
