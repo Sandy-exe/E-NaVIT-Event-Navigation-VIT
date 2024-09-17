@@ -6,6 +6,9 @@ import 'package:enavit_main/components/approver_search_model.dart';
 import 'package:enavit_main/components/compute.dart';
 import 'package:enavit_main/components/home_search_model.dart';
 import 'package:enavit_main/pages/main_pages/approvers/approver_SetRole_Button_Index.dart';
+import 'package:enavit_main/pages/main_pages/deans/dean_index_page.dart';
+import 'package:enavit_main/pages/main_pages/deans/dean_profile_page.dart';
+import 'package:enavit_main/pages/main_pages/deans/dean_update_profile_page.dart';
 import 'package:enavit_main/pages/main_pages/general_pages/approver_set_role_event_organiser_page.dart';
 import 'package:enavit_main/pages/main_pages/general_pages/edit_my_club_page.dart';
 import 'package:enavit_main/pages/main_pages/general_pages/notification_page.dart';
@@ -137,7 +140,9 @@ class EnavitState extends State<Enavit> {
                   : ((widget.userRole == 1 || widget.userRole == 4) &&
                           widget.role
                       ? '/organiser_index'
-                      : '/participant_index'))
+                      : (widget.userRole == 5
+                          ? '/dean_index'
+                          : '/participant_index')))
               : '/',
           //initialRoute: '/',
           routes: {
@@ -177,6 +182,13 @@ class EnavitState extends State<Enavit> {
             '/approver_update_profile': (context) => const AProfileUpdatePage(),
             '/set_role_index': (context) => const SetRoleButtonIndexPage(),
             '/event_creation': (context) => const EventCreationPage(),
+
+
+            //dean
+            '/dean_index': (context) => const DIndexPage(),
+            // '/dean_create_club': (context) => const DCreateClubPage(),
+            '/dean_profile': (context) => const DProfilePage(),
+            '/dean_update_profile': (context) => const DProfileUpdatePage(),
           }),
     );
   }

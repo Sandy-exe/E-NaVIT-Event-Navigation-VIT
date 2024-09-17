@@ -254,6 +254,141 @@ class Services {
     // }
   }
 
+  Future<void> getClubListData(BuildContext context) async {
+    List<Event> events = [];
+    try {
+      final querySnapshot = await firestore.collection("Events").get();
+
+      for (final docSnapshot in querySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data();
+
+        Map<String, DateTime> dateTime = {
+          'startTime': (data['dateTime']['startTime'] as Timestamp).toDate(),
+          'endTime': (data['dateTime']['endTime'] as Timestamp).toDate(),
+        };
+
+        events.add(
+          Event(
+            clubId: data['clubId'],
+            dateTime: dateTime,
+            description: data['description'],
+            eventId: data['eventId'],
+            eventName: data['eventName'],
+            location: data['location'],
+            fee: data['fee'],
+            organisers: List<String>.from(data['organisers']),
+            comments: Map<String, String>.from(data['comments']),
+            participants: List<String>.from(data['participants']),
+            likes: data['likes'],
+            eventImageURL: data['eventImageURL'] ?? "null",
+            discussionPoints:
+                data['discussionPoints'] ?? "old doc" ?? "old doc",
+            eventType: data['eventType'] ?? "old doc" ?? "old doc",
+            eventCategory: data['eventCategory'] ?? "old doc" ?? "old doc",
+            fdpProposedBy: data['fdpProposedBy'] ?? "old doc" ?? "old doc",
+            schoolCentre: data['schoolCentre'] ?? "old doc" ?? "old doc",
+            coordinator1: data['coordinator1'] ?? "old doc" ?? "old doc",
+            coordinator2: data['coordinator2'] ?? "old doc" ?? "old doc",
+            coordinator3: data['coordinator3'] ?? "old doc" ?? "old doc",
+            attendancePresent: data['attendancePresent'] ?? [],
+            issues: Map<String, Map<String, String>>.from(data['issues']),
+            expense: data['expense'] ?? [],
+            revenue: data['revenue'] ?? "0",
+            budget: data['budget'] ?? "0",
+            expectedRevenue: data['expectedRevenue'] ?? "0",
+          ),
+        );
+      }
+
+      print(events.length);
+    } catch (e) {
+      print(e);
+    }
+
+    events = [];
+    //Clubs list
+
+    try {
+      final clubquerySnapshot = await firestore.collection("Clubs").get();
+      List<Club> clubs = [];
+
+      for (final docSnapshot in clubquerySnapshot.docs) {
+        Map<String, dynamic> data = docSnapshot.data();
+
+        clubs.add(
+          Club(
+            clubId: data['clubId'],
+            clubName: data['clubName'],
+            bio: data['bio'],
+            email: data['email'],
+            events: List<String>.from(data['events']),
+            approvers: List<String>.from(data['approvers'] ?? []),
+            followers: List<String>.from(data['followers']),
+            posts: List<String>.from(data['posts']),
+            revenue: data['revenue'],
+            expense: data['expense'],
+          ),
+        );
+      }
+      print(clubs.length);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        Provider.of<SearchModel>(context, listen: false)
+            .initEventClubList(events, clubs);
+      });
+    } catch (e) {
+      print(e);
+    }
+
+    // for (final docSnapshot in querySnapshot.docs) {
+    //   Map<String, dynamic> docData = docSnapshot.data();
+    //   String docDataString = jsonEncode(docData);
+    //   await secureStorage.writer(key: "eventData", value: docDataString);
+    // }
+  }
+
+// // Get clubs
+//   Future<void> getClubListData(BuildContext context) async {
+//     //Clubs list
+//     try {
+//       final clubquerySnapshot = await firestore.collection("Clubs").get();
+//       List<Club> clubs = [];
+
+//       for (final docSnapshot in clubquerySnapshot.docs) {
+//         Map<String, dynamic> data = docSnapshot.data();
+
+//         clubs.add(
+//           Club(
+//             clubId: data['clubId'],
+//             clubName: data['clubName'],
+//             bio: data['bio'],
+//             email: data['email'],
+//             events: List<String>.from(data['events']),
+//             approvers: List<String>.from(data['approvers'] ?? []),
+//             followers: List<String>.from(data['followers']),
+//             posts: List<String>.from(data['posts']),
+//             revenue: data['revenue'],
+//             expense: data['expense'],
+//           ),
+//         );
+//       }
+//       print(clubs.length);
+
+//       WidgetsBinding.instance.addPostFrameCallback((_) async {
+//         Provider.of<SearchModel>(context, listen: false)
+//             .initEventClubList(clubs);
+//       });
+//     } catch (e) {
+//       print(e);
+//     }
+
+//     // for (final docSnapshot in querySnapshot.docs) {
+//     //   Map<String, dynamic> docData = docSnapshot.data();
+//     //   String docDataString = jsonEncode(docData);
+//     //   await secureStorage.writer(key: "eventData", value: docDataString);
+//     // }
+//   }
+
   //get all participants
   Future<void> getParticipantData(BuildContext context) async {
     final querySnapshotusers = await firestore.collection("app_users").get();
@@ -619,6 +754,50 @@ class Services {
 
     return uniqueAnnoucenemtId;
   }
+
+
+  Future<void> addClub(Club club) async {
+    print(club);
+    // String approverID = await generateUniqueApprovalId();
+
+    // print(approverID);
+    Map<String, dynamic> obj = {
+      "approvers": club.approvers,
+      "bio": club.bio,
+      "clubId": club.clubId,
+      "clubName": club.clubName,
+      "email": club.email,
+      "events": club.events,
+      "expense": club.expense,
+      "followers": club.followers,
+      "posts": club.posts,
+      "revenue": club.revenue,
+    };
+
+    // for (var organiser in approval.organisers) {
+    //   print(organiser);
+    //   final orgRef = firestore.collection("app_users").doc(organiser);
+    //   final org = await orgRef.get();
+    //   Map<String, dynamic> orgData = org.data()!;
+    //   List<String> approvalEvents =
+    //       List<String>.from(orgData["approval_events"]);
+    //   approvalEvents.add(approverID);
+    //   await orgRef.update({"approval_events": approvalEvents});
+
+    //   print("approval_events: $approvalEvents");
+    // }
+
+    await firestore.collection("Clubs").doc(club.clubId).set(obj);
+
+    //update club events
+    // final clubref = firestore.collection("Clubs").doc(event.clubId);
+    // final club = await clubref.get();
+    // Map<String, dynamic> clubData = club.data()!;
+    // List<String> events = List<String>.from(clubData["events"]);
+    // events.add(event.eventId);
+    // await clubref.update({"events": events});
+  }
+
 
   Future<void> addApproval(Approval approval) async {
     print(approval);
