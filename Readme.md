@@ -44,6 +44,11 @@ E-NaVIT is a comprehensive event management platform designed to address key cha
 - **Real-Time Database:** Ensures instant updates across devices.
 - **Scalability:** Automatically scales with event size.
 
+
+## Roles & Responsibilities
+
+![Roles and Responsibilities Chart](INFO\ROLES.png)
+
 ### Student Roles:
 
 - **Participant:** Join events and view participation history.
@@ -61,14 +66,6 @@ E-NaVIT is a comprehensive event management platform designed to address key cha
 - **Events:** Track event attendance, budgets, coordinators, descriptions, etc.
 - **Clubs:** Manage club-related data including events, followers, expenses, and revenue.
 - **Approvals:** Manage the event approval process with relevant details like budget, coordinators, and event type.
-
-## Roles & Responsibilities
-
-![Roles and Responsibilities Chart](INFO\ROLES.png)
-
-- **Approver:** Monitor performance, approve events, assign roles, and create updates.
-- **Captain:** Lead the club by proposing events, managing the team, and publishing events after approval.
-- **Organizer/Club Member/Participant:** Organize, track, and participate in events with access to relevant statistics.
 
 ## How to Use
 
