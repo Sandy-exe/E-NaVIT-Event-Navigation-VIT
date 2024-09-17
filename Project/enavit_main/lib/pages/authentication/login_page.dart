@@ -374,6 +374,7 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> currentUserData =
           jsonDecode(currentUserDataString); //null not checked properly
       userRole = currentUserData["role"];
+      print(userRole);
     }
 
     if (result == "success") {
@@ -403,7 +404,17 @@ class _LoginPageState extends State<LoginPage> {
                 false, // This predicate removes all routes
           );
         }
-      } else {
+      } else if (userRole == 5) {
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/dean_index',
+            (Route<dynamic> route) =>
+                false, // This predicate removes all routes
+          );
+        }
+      }
+      else {
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,
