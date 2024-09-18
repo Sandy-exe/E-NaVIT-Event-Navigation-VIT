@@ -47,7 +47,7 @@ E-NaVIT is a comprehensive event management platform designed to address key cha
 
 ## Roles & Responsibilities
 
-![Roles and Responsibilities Chart](INFO\ROLES.png)
+![Roles and Responsibilities Chart](INFO/ROLES.png)
 
 ### Student Roles:
 
@@ -73,4 +73,4 @@ E-NaVIT is a comprehensive event management platform designed to address key cha
 2. Manage or participate in events based on your role.
 3. Stay updated with notifications about upcoming events, approvals, and important changes.
 
-[View PDF Presentation](INFO\PPT_ENAVIT.pdf) for More INFO.
+[View PDF Presentation](INFO/PPT_ENAVIT.pdf) for More INFO.
