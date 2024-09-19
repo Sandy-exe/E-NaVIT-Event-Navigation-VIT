@@ -37,7 +37,7 @@ dependencies:
   firebase_core:
   cloud_firestore:
   firebase_auth:
-
+  flutter_nfc_kit: ^3.1.1
   google_nav_bar:
   provider:
   google_fonts:
