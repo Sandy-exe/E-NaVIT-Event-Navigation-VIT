@@ -354,7 +354,7 @@ class _AboutEventState extends State<AboutEvent> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => TakeAttendance(
-                                          qrData: widget.event.eventId,
+                                          // qrData: widget.event.eventId,
                                         )));
                           } else if (value == 5) {
                             // Navigator.push(

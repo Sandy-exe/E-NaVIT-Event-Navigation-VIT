@@ -37,7 +37,6 @@ dependencies:
   firebase_core:
   cloud_firestore:
   firebase_auth:
-
   google_nav_bar:
   provider:
   google_fonts:
@@ -62,6 +61,7 @@ dependencies:
   flutter_svg: ^2.0.5
   fl_chart: ^0.69.0
   flutter_timezone: ^3.0.1
+  flutter_nfc_kit: ^3.5.2
   rxdart: ^0.28.0
   intl:
   omni_datetime_picker:
