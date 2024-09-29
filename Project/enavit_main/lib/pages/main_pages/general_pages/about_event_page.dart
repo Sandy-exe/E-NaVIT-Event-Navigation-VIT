@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:enavit_main/components/send_event_announcement.dart';
 import 'package:enavit_main/components/view_event_announcement.dart';
 import 'package:enavit_main/dashboard/dashboard_screen.dart';
-// import 'package:enavit_main/pages/main_pages/attendance/give_attendance.dart';
+import 'package:enavit_main/pages/main_pages/attendance/give_attendance.dart';
 import 'package:enavit_main/pages/main_pages/attendance/take_attendance.dart';
+// import 'package:enavit_main/pages/main_pages/attendance/give_attendance.dart';
+
 import 'package:enavit_main/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:enavit_main/models/og_models.dart';
@@ -353,15 +355,14 @@ class _AboutEventState extends State<AboutEvent> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TakeAttendance(
-                                          // qrData: widget.event.eventId,
-                                        )));
+                                    builder: (context) =>
+                                        TakeAttendancePage()));
                           } else if (value == 5) {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             const GiveAttendance()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        GiveAttendancePage()));
                           }
                         },
                       ),

@@ -57,11 +57,12 @@ dependencies:
   yaml:
 
   lite_rolling_switch:
+  awesome_notifications:
 
   flutter_svg: ^2.0.5
   fl_chart: ^0.69.0
   flutter_timezone: ^3.0.1
-  flutter_nfc_kit: ^3.5.2
+
   rxdart: ^0.28.0
   intl:
   omni_datetime_picker:
@@ -79,8 +80,8 @@ dependencies:
   csv:
   permission_handler:
   qr_flutter: ^4.1.0
+  nfc_manager: ^3.5.0
 
-  awesome_notifications:
   # // qr_code_scanner: ^1.0.1
 
 dev_dependencies:

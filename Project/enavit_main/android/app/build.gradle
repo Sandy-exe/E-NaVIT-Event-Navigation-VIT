@@ -7,6 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.enavit_main"
+    testNamespace = "com.example.testenavit_main"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
