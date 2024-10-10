@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 
@@ -62,6 +63,7 @@ class _TakeAttendanceState extends State<TakeAttendance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(title: Text('Taking attendance')),
       body: ListView.builder(
         itemCount: scannedDevices.length,
@@ -72,6 +74,8 @@ class _TakeAttendanceState extends State<TakeAttendance> {
             onTap: () => connectToDevice(scannedDevices[index].device),
           );
         },
+
+      
       ),
     );
   }
