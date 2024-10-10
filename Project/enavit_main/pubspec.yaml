@@ -37,6 +37,8 @@ dependencies:
   firebase_core:
   cloud_firestore:
   firebase_auth:
+
+flutter_blue_plus: ^1.32.12
   google_nav_bar:
   provider:
   google_fonts:
