@@ -1,43 +1,91 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 
 class TakeAttendance extends StatefulWidget {
-  // final String qrData;
-  // final String? embeddedImagePath;
-
-  const TakeAttendance({
-    super.key,
-    // required this.qrData,
-    // this.embeddedImagePath,
-  });
+  const TakeAttendance({super.key});
 
   @override
   _TakeAttendanceState createState() => _TakeAttendanceState();
 }
 
 class _TakeAttendanceState extends State<TakeAttendance> {
-  // FlutterBluePlus flutterBlue = FlutterBluePlus;
   List<ScanResult> scannedDevices = [];
+  late StreamSubscription<List<ScanResult>> subscription;
+  bool isScanning = false; // Track scanning state
 
   @override
   void initState() {
     super.initState();
-    scanForDevices();
+    requestPermissions(); // Request permissions at startup
   }
 
-  void scanForDevices() {
-    FlutterBluePlus.startScan(timeout: Duration(seconds: 10));
+  Future<void> requestPermissions() async {
+    print("Requesting permissions...");
+    if (await Permission.bluetoothScan.request().isGranted &&
+        await Permission.bluetoothConnect.request().isGranted &&
+        await Permission.locationWhenInUse.request().isGranted) {
+      // Permissions granted, start the scan
+      print("Permissions granted, starting scan...");
+      scanForDevices();
+    } else {
+      // Handle the case when permissions are not granted
+      print('Permissions not granted');
+    }
+  }
 
-    FlutterBluePlus.scanResults.listen((results) {
-      setState(() {
-        scannedDevices = results;
-      });
+  void scanForDevices() async {
+    setState(() {
+      scannedDevices.clear(); // Clear the list before scanning
+      isScanning = true; // Update scanning state
     });
 
-    FlutterBluePlus.stopScan();
+    // Wait for Bluetooth to be enabled
+    await FlutterBluePlus.adapterState
+        .where((val) => val == BluetoothAdapterState.on)
+        .first;
+
+    // Start scanning
+    var scanResult = FlutterBluePlus.onScanResults.listen(
+      (results) {
+        try {
+          if (results.isNotEmpty) {
+            ScanResult r = results.last; // the most recently found device
+            print(
+                '${r.device.remoteId}: "${r.advertisementData.advName}" found!');
+
+            setState(() {
+              // Update scanned devices with the new result
+              scannedDevices.add(r);
+            });
+          }
+        } catch (e) {
+          print('Error updating scanned devices: $e'); // Handle any errors here
+        }
+      },
+      onError: (e) => print(e),
+    );
+
+    // Cleanup: cancel subscription when scanning stops
+    FlutterBluePlus.cancelWhenScanComplete(scanResult);
+
+    // Start scanning with a timeout
+    await FlutterBluePlus.startScan(
+      timeout: Duration(seconds: 15),
+    );
+
+    // Wait for scanning to stop
+    await FlutterBluePlus.isScanning.where((val) => val == false).first;
+
+    // Stop scanning
+    await FlutterBluePlus.stopScan();
+
+    setState(() {
+      isScanning = false; // Update scanning state to false
+    });
+
+    print("Scanning stopped. Total scanned devices: ${scannedDevices.length}");
   }
 
   void connectToDevice(BluetoothDevice device) async {
@@ -63,55 +111,30 @@ class _TakeAttendanceState extends State<TakeAttendance> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: AppBar(title: Text('Taking attendance')),
-      body: ListView.builder(
-        itemCount: scannedDevices.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(scannedDevices[index].device.name),
-            subtitle: Text(scannedDevices[index].device.id.toString()),
-            onTap: () => connectToDevice(scannedDevices[index].device),
-          );
-        },
-
-      
+      appBar: AppBar(title: const Text('Taking Attendance')),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: requestPermissions, // Just call requestPermissions
+            child: isScanning
+                ? const CircularProgressIndicator() // Show loading indicator while scanning
+                : const Text('Scan for Devices'), // Default button text
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: scannedDevices.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(scannedDevices[index].device.advName),
+                  subtitle:
+                      Text(scannedDevices[index].device.remoteId.toString()),
+                  onTap: () => connectToDevice(scannedDevices[index].device),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('QR Code'),
-//       ),
-//       body: Center(
-//         child: QrImageView(
-//           data: widget.qrData,
-//           version: QrVersions.auto,
-//           size: 320,
-//           gapless: false,
-//           embeddedImage: widget.embeddedImagePath != null
-//               ? AssetImage(widget.embeddedImagePath!)
-//               : null,
-//           embeddedImageStyle: widget.embeddedImagePath != null
-//               ? const QrEmbeddedImageStyle(
-//                   size: Size(80, 80),
-//                 )
-//               : null,
-//           errorStateBuilder: (context, error) {
-//             return const Center(
-//               child: Text(
-//                 'Uh oh! Something went wrong...',
-//                 textAlign: TextAlign.center,
-//               ),
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
