@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:nearby_service/nearby_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:async';
 
-/// A widget to handle attendance sending from a student to a teacher via Bluetooth.
 class GiveAttendance extends StatefulWidget {
   const GiveAttendance({super.key});
 
@@ -11,114 +11,185 @@ class GiveAttendance extends StatefulWidget {
 }
 
 class _GiveAttendanceState extends State<GiveAttendance> {
-  /// The Bluetooth device representing the teacher's device.
-  BluetoothDevice? teacherDevice;
-
-  /// Unique ID for the student.
+  late NearbyService nearbyService;
+  List<NearbyDevice> nearbyDevices = [];
   final String studentId = '21BCE0666';
-
-  /// Tracks whether the scanning for devices is ongoing.
-  bool isScanning = false;
+  String message = 'Welcome! Searching for teacher devices...';
+  bool isSearching = false;
+  Timer? searchTimer;
+  int timeLeft = 20; // Time in seconds
 
   @override
   void initState() {
     super.initState();
-    requestPermissionsAndStartAdvertising();
+    requestPermissionsAndStartSearching();
   }
 
-  /// Requests necessary Bluetooth permissions and starts advertising (scanning for the teacher's device).
-  Future<void> requestPermissionsAndStartAdvertising() async {
-    if (await Permission.bluetoothScan.request().isGranted &&
-        await Permission.bluetoothConnect.request().isGranted &&
-        await Permission.locationWhenInUse.request().isGranted) {
-      // If permissions are granted, start the scan
-      startAdvertising();
+  Future<void> requestPermissionsAndStartSearching() async {
+    if (await Permission.locationWhenInUse.request().isGranted &&
+        await Permission.bluetooth.request().isGranted) {
+      startSearching();
     } else {
-      // Handle the case when permissions are not granted
-      print('Bluetooth permissions not granted');
-    }
-  }
-
-  /// Starts scanning for the teacher's Bluetooth device.
-  void startAdvertising() {
-    setState(() {
-      isScanning = true; // Set scanning state to true
-    });
-
-    // Start scanning for Bluetooth devices
-    FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
-
-    // Listen for scan results
-    FlutterBluePlus.scanResults.listen((results) {
-      for (ScanResult r in results) {
-        // Check if the scanned device is the teacher's device
-        if (r.device.name == 'TeacherDevice') {
-          setState(() {
-            teacherDevice = r.device; // Store the teacher's device
-          });
-        }
-      }
-    }).onDone(() {
-      // Set scanning state to false when done
       setState(() {
-        isScanning = false;
+        message = 'Please enable location and Bluetooth permissions.';
       });
+    }
+  }
+
+  void startSearching() async {
+    nearbyService = NearbyService.getInstance();
+    await nearbyService.initialize();
+
+    nearbyService.android?.requestPermissions();
+    final isWifiEnabled = await nearbyService.android?.checkWifiService();
+    if (isWifiEnabled ?? false) {
+      setState(() {
+        isSearching = true;
+        message = 'Searching for teacher devices...';
+        timeLeft = 20; // Reset timer
+      });
+
+      final result = await nearbyService.discover();
+      if (result) {
+        nearbyService.getPeersStream().listen((devicesList) {
+          setState(() {
+            nearbyDevices = devicesList;
+            message = nearbyDevices.isNotEmpty
+                ? 'Found ${nearbyDevices.length} teacher device(s)'
+                : 'No devices found';
+          });
+        });
+      } else {
+        setState(() {
+          message = 'Failed to discover nearby devices';
+        });
+      }
+
+      // Start the countdown timer
+      startCountdown();
+    }
+  }
+
+  void startCountdown() {
+    searchTimer?.cancel(); // Cancel any previous timer
+    searchTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timeLeft > 0) {
+        setState(() {
+          timeLeft--;
+        });
+      } else {
+        timer.cancel();
+        stopSearching();
+      }
     });
   }
 
-  /// Sends the student's attendance ID to the teacher's device.
-  void sendAttendance() async {
-    if (teacherDevice != null) {
-      try {
-        // Connect to the teacher's Bluetooth device
-        await teacherDevice!.connect();
-        List<BluetoothService> services =
-            await teacherDevice!.discoverServices();
+  void stopSearching() {
+    setState(() {
+      isSearching = false;
+      message = 'Search ended';
+    });
+    nearbyService.stopDiscovery();
+    searchTimer?.cancel();
+  }
 
-        // Iterate through the services and characteristics to find the writable characteristic
-        for (BluetoothService service in services) {
-          for (BluetoothCharacteristic characteristic
-              in service.characteristics) {
-            if (characteristic.properties.write) {
-              // Write the student ID to the characteristic
-              await characteristic.write(studentId.codeUnits);
-              print('Attendance sent: $studentId');
-              await teacherDevice!.disconnect(); // Disconnect after sending
-              return; // Exit after sending attendance
-            }
-          }
-        }
-      } catch (e) {
-        print('Error sending attendance: $e'); // Handle any errors that occur
+  void sendAttendance() async {
+    if (nearbyDevices.isNotEmpty) {
+      for (var teacherDevice in nearbyDevices) {
+        await nearbyService.send(
+          OutgoingNearbyMessage(
+            content: NearbyMessageTextRequest.create(value: studentId),
+            receiver: teacherDevice.info,
+          ),
+        );
+        setState(() {
+          message =
+              'Attendance sent to: ${teacherDevice.info.displayName} (ID: $studentId)';
+        });
       }
     } else {
-      print('No teacher device found'); // Inform user if no device is found
+      setState(() {
+        message = 'No teacher devices found to send attendance';
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    searchTimer?.cancel();
+    nearbyService.stopDiscovery();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Student - Attendance Sender')),
-      body: Center(
-        child: ElevatedButton(
-          // Disable button while scanning
-          onPressed: isScanning ? null : sendAttendance,
-          child: isScanning
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      strokeWidth: 2,
-                    ),
-                    const SizedBox(
-                        width: 10), // Spacing between loader and text
-                    const Text('Scanning...'), // Indicate scanning state
-                  ],
-                )
-              : const Text('Send Attendance'), // Default button text
-        ),
+      appBar: AppBar(title: const Text('Student - Give Attendance')),
+      body: Column(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: CircularProgressIndicator(
+                          value: timeLeft / 20,
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.blue),
+                          strokeWidth: 12.0,
+                          backgroundColor: Colors.blue.withOpacity(0.3),
+                        ),
+                      ),
+                      Text(
+                        '$timeLeft',
+                        style: const TextStyle(
+                          fontSize: 40,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: Text(message,
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: nearbyDevices.length,
+                    itemBuilder: (context, index) {
+                      final device = nearbyDevices[index];
+                      return ListTile(
+                        title:
+                            Text(device.info.displayName ?? 'Unknown Device'),
+                        subtitle: Text('ID: ${device.info.id}'),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: isSearching ? null : sendAttendance,
+              child: isSearching
+                  ? const Text('Searching...')
+                  : const Text('Send Attendance'),
+            ),
+          ),
+        ],
       ),
     );
   }
