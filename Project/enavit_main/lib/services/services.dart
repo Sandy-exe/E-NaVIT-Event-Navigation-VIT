@@ -1542,45 +1542,6 @@ class Services {
     }
   }
 
-  Future<String> checkAttendance(String eventId) async {
-    final eventRef = firestore.collection("Events").doc(eventId);
-    final event = await eventRef.get();
-    Map<String, dynamic> eventData = event.data()!;
-
-    SecureStorage secureStorage = SecureStorage();
-    Map<String, dynamic> currentUserData = jsonDecode(
-        await secureStorage.reader(key: "currentUserData") ?? "null");
-
-    final userRef =
-        firestore.collection("app_users").doc(currentUserData['userid']);
-    final userSnapshot = await userRef.get();
-    Map<String, dynamic> userData = userSnapshot.data()!;
-    print(userData);
-
-    List<String> EventParticipants =
-        List<String>.from(eventData['participants']);
-
-    if (EventParticipants.contains(currentUserData['userid'])) {
-      if (eventData['attendancePresent'].contains(currentUserData['userid'])) {
-        return "Already attended";
-      }
-
-      List<String> attendedEvents =
-          List<String>.from(userData['attendedEvents']);
-      attendedEvents.add(eventId);
-      await userRef.update({"attendedEvents": attendedEvents});
-
-      //offline data is not updated
-
-      List<String> attendancePresent =
-          List<String>.from(eventData['attendancePresent']);
-      attendancePresent.add(userData['userid']);
-      await eventRef.update({"attendancePresent": attendancePresent});
-      return "success";
-    } else {
-      return "Not a participant";
-    }
-  }
 
   Future<void> updateUserRecords() async {
     try {

@@ -1,180 +1,158 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:nearby_service/nearby_service.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:enavit_main/services/db_helper.dart';
+import 'package:enavit_main/services/firebase_sync.dart';
 
 class TakeAttendance extends StatefulWidget {
-  const TakeAttendance({Key? key}) : super(key: key);
+  final String eventId; // Pass eventId as a parameter
+
+  const TakeAttendance({super.key, required this.eventId});
 
   @override
   _TakeAttendanceState createState() => _TakeAttendanceState();
 }
 
 class _TakeAttendanceState extends State<TakeAttendance> {
-  late NearbyService nearbyService;
-  List<NearbyDevice> studentDevices = [];
-  String message = 'Welcome! Please start searching for student devices.';
-  bool isSearching = false;
-  Timer? searchTimer;
-  int remainingTime = 20; // 20-second countdown
-
-  @override
-  void initState() {
-    super.initState();
-    requestPermissionsAndStartSearching();
-  }
-
-  Future<void> requestPermissionsAndStartSearching() async {
-    if (await Permission.locationWhenInUse.request().isGranted &&
-        await Permission.bluetooth.request().isGranted) {
-      startSearching();
-    } else {
-      updateMessage(
-          'Please enable location and Bluetooth permissions in settings.');
-    }
-  }
-
-  void startSearching() async {
-    nearbyService = NearbyService.getInstance();
-    await nearbyService.initialize();
-
-    nearbyService.android?.requestPermissions();
-    final isWifiEnabled = await nearbyService.android?.checkWifiService();
-
-    if (isWifiEnabled ?? false) {
-      setState(() {
-        isSearching = true;
-        remainingTime = 20; // Reset the timer to 20 seconds
-        message = 'Searching for student devices...';
-      });
-
-      // Start the 20-second countdown timer
-      searchTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        setState(() {
-          remainingTime--;
-          if (remainingTime <= 0) {
-            stopSearching();
-          }
-        });
-      });
-
-      // Start discovering nearby devices
-      try {
-        final result = await nearbyService.discover();
-        if (result) {
-          nearbyService.getPeersStream().listen((devicesList) {
-            setState(() {
-              studentDevices = devicesList;
-              if (devicesList.isNotEmpty) {
-                updateMessage('Found ${studentDevices.length} student(s)');
-              } else {
-                updateMessage('No student devices found.');
-              }
-            });
-          });
-        } else {
-          updateMessage('Discovery failed. Please check your device settings.');
-        }
-      } catch (e) {
-        print(e);
-        updateMessage('An error occurred: $e');
-      }
-    } else {
-      updateMessage('Wi-Fi is not enabled. Please enable Wi-Fi to continue.');
-    }
-  }
-
-  void stopSearching() {
-    setState(() {
-      isSearching = false;
-      message = 'Search stopped after 20 seconds.';
-      remainingTime = 0;
-    });
-    nearbyService.stopDiscovery();
-    searchTimer?.cancel();
-  }
-
-  void updateMessage(String newMessage) {
-    setState(() {
-      message = newMessage;
-    });
-  }
+  final MobileScannerController controller = MobileScannerController();
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  final SyncService syncService = SyncService(); // Instance of SyncService
+  String? result;
+  bool isSyncing = false; // Track syncing state
 
   @override
   void dispose() {
-    searchTimer?.cancel();
+    controller.dispose();
     super.dispose();
+  }
+
+  void _onDetect(BarcodeCapture barcode) {
+    print(barcode);
+    final Barcode userId_barcode = barcode.barcodes.first;
+    final String? userId = userId_barcode.rawValue;
+    print(userId);
+    if (userId != null && userId != result) {
+      setState(() {
+        result = userId;
+      });
+      _handleScan(userId);
+    }
+  }
+
+  Future<void> _handleScan(String userId) async {
+    final attendee = await dbHelper.getAttendee(widget.eventId, userId);
+
+    if (attendee != null) {
+      await dbHelper.markAttendance(widget.eventId, userId);
+      _showDialog(
+        title: 'Attendance Marked',
+        message: 'User: ${attendee['name']} (ID: $userId) marked as attended.',
+      );
+    } else {
+      _showDialog(
+        title: 'Not Registered',
+        message: 'User ID $userId is not registered for this event.',
+      );
+    }
+  }
+
+  Future<void> _syncData() async {
+    setState(() {
+      isSyncing = true; // Start syncing
+    });
+
+    bool success = await syncService.syncAndCheckAttendance(widget.eventId);
+
+    setState(() {
+      isSyncing = false; // End syncing
+    });
+
+    if (success) {
+      _showDialog(
+        title: 'Sync Completed',
+        message: 'Data synced successfully for event ID: ${widget.eventId}',
+      );
+    } else {
+      _showDialog(
+        title: 'Sync Failed',
+        message: 'Failed to sync data. Please try again.',
+      );
+    }
+  }
+
+  void _showDialog({required String title, required String message}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Teacher - Taking Attendance')),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Center(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.blue,
-                      width: 4,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '$remainingTime',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        title: const Text('Scan QR Code'),
+        actions: [
+          ElevatedButton(
+            onPressed: isSyncing ? null : _syncData,
+            child: isSyncing
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(
+                        value: null,
+                        strokeWidth: 2,
+                        color: Colors.white,
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: studentDevices.isEmpty
-                ? Center(
-                    child: Text(
-                      message,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                      const SizedBox(width: 10),
+                      const Text('Syncing...'),
+                    ],
                   )
-                : ListView.builder(
-                    itemCount: studentDevices.length,
-                    itemBuilder: (context, index) {
-                      final device = studentDevices[index];
-                      return ListTile(
-                        title: Text(
-                          device.info.displayName ?? 'Unknown Device',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(device.info.id),
-                      );
-                    },
-                  ),
+                : const Text('Sync Data'),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed:
-                  isSearching ? null : requestPermissionsAndStartSearching,
-              child: isSearching
-                  ? const Text('Searching...')
-                  : const Text('Start Taking Attendance'),
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 4,
+            child: MobileScanner(
+              controller: controller,
+              onDetect: (capture) => _onDetect(capture),
+              fit: BoxFit.cover,
+              overlayBuilder: (context, constraints) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.red,
+                      width: 10,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
+                );
+              },
             ),
           ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text('Scanned Data: $result')
+                  : const Text('Scan a QR code'),
+            ),
+          ),
+          // Sync Button
+          
         ],
       ),
     );

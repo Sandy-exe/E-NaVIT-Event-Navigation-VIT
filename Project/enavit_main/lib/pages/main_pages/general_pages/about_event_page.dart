@@ -355,7 +355,7 @@ class _AboutEventState extends State<AboutEvent> {
                                 context,
                                 MaterialPageRoute(
 
-                                    builder: (context) => const TakeAttendance(
+                                    builder: (context) => TakeAttendance(eventId: widget.event.eventId,
 
                                           // qrData: widget.event.eventId,
                                         )));
@@ -364,7 +364,7 @@ class _AboutEventState extends State<AboutEvent> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const GiveAttendance()));
+                                        GiveAttendance(userId: currentUserData['userid'])));
                           }
                         },
                       ),
