@@ -74,3 +74,14 @@ E-NaVIT is a comprehensive event management platform designed to address key cha
 3. Stay updated with notifications about upcoming events, approvals, and important changes.
 
 [View PDF Presentation](INFO/PPT_ENAVIT.pdf) for More INFO.
+
+### To Run the Application
+
+To install the application on your Android device, use the following APK file:
+
+- **APK File**: Enavit.apk
+
+1. Download the `Enavit.apk` file.
+2. Allow installation of apps from unknown sources in your device settings.
+3. Locate the downloaded APK file and tap to install.
+4. Once installed, you can launch the app and use it as intended.
